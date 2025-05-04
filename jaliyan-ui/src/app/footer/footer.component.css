@@ -1,0 +1,47 @@
+/* Footer Styling */
+footer {
+  background-color: #333333; /* Dark Charcoal Gray */
+  color: #FFFFFF; /* White Text */
+  padding: 10px 30px; /* Reduced padding to half the original height */
+  text-align: center; /* Center the footer content */
+  font-size: 1rem; /* Default font size for footer text */
+  margin-top: 30px; /* Add a margin above to separate it from other content */
+  position: relative;
+  width: 100%;
+  bottom: 0;
+}
+
+/* Footer Links */
+footer a {
+  color: #F4A300; /* Gold color for footer links */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+  margin: 0 15px; /* Space out the links */
+}
+
+footer a:hover {
+  color: #FFFFFF; /* Change to teal on hover */
+}
+
+/* Copyright Text */
+footer p {
+  font-size: 0.875rem; /* Slightly smaller font size for copyright text */
+  color: #FFFFFF; /* White text */
+  margin-top: 15px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+  footer {
+    padding: 10px 20px; /* Adjust padding for smaller screens */
+  }
+
+  footer .footer-content {
+    display: block; /* Stack the links vertically on small screens */
+  }
+
+  footer a {
+    margin: 10px 0; /* Space out links vertically */
+  }
+}

@@ -1,0 +1,44 @@
+/* Reset margin and padding for body and html */
+body, html {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* This will wrap the header, carousel, and footer */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;  /* Make the main content fill the full height of the viewport */
+  }
+  
+  /* Header should be at the top, fixed height */
+  app-header {
+    height: 60px;  /* Adjust based on your design */
+    background-color: #333;
+    color: white;
+    text-align: center;
+    line-height: 60px;  /* Vertically center text */
+  }
+  
+  /* Footer should be at the bottom, fixed height */
+  app-footer {
+    height: 60px;  /* Adjust based on your design */
+    background-color: #333;
+    color: white;
+    text-align: center;
+    line-height: 60px;  /* Vertically center text */
+    margin-top: auto;  /* Push footer to the bottom */
+  }
+  
+  /* This ensures the carousel takes up remaining space */
+  .carousel-container {
+    flex-grow: 1;  /* The carousel takes up the remaining space between header and footer */
+    overflow-y: auto;  /* Enable scrolling if the carousel content overflows */
+  }
+  
+  /* You can also add some custom styles for the carousel if needed */
+  .carousel-container img {
+    width: 100%;  /* Make images fill the container */
+    height: auto;
+  }
+  

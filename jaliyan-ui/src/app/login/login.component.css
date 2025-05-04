@@ -1,0 +1,45 @@
+/* Ensure full height login screen */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f6f9;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Custom styles for input fields and form */
+  .form-label {
+    font-size: 14px;
+  }
+  
+  .form-control {
+    border-radius: 4px;
+  }
+  
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+  
+  a {
+    font-size: 14px;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,37 @@
+<header>
+  <div class="logo">
+    <a routerLink="/">Jalaram Padyatra</a>
+  </div>
+  <nav class="menu">
+    <!-- Hamburger Icon -->
+    <div class="hamburger" (click)="toggleMenu()">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <!-- Menu List -->
+    <ul [class.active]="isMenuOpen">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      </li>
+      <li>
+        <a routerLink="/about" routerLinkActive="active">About</a>
+      </li>
+      <li>
+        <a routerLink="/events" routerLinkActive="active">Events</a>
+      </li>
+      <li>
+        <a routerLink="/donations" routerLinkActive="active">Donations</a>
+      </li>
+      <li>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a href="#" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</header>
