@@ -1,22 +1,57 @@
-<div class="container">
-    <h2 class="text-center mt-5">Welcome to Your Dashboard, {{ username }}</h2>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Upcoming Events</h5>
-            <p>View upcoming events for the Jalaram Padyatra.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Your Donations</h5>
-            <p>Track your donations and contributions.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container mt-5">
+  <div class="header">
+    <span>Attendance Marking</span>
   </div>
-  
+
+  <!-- Stop Selection Dropdown -->
+  <div class="form-group mt-4">
+    <label for="stopSelect">Select Stop</label>
+    <select [(ngModel)]="selectedStop" class="form-control" id="stopSelect">
+      <option value="0" disabled>Select a Stop</option> <!-- Option for unselected state -->
+      <option *ngFor="let stop of stops" [value]="stop.stopId">{{ stop.stopName }}</option>
+    </select>
+  </div>
+
+  <!-- Batch Search Input -->
+  <div class="form-group mt-4">
+    <input
+      [(ngModel)]="batchSearch"
+      (input)="onBatchSearch()"
+      type="number"
+      class="form-control"
+      placeholder="Search by Batch ID (Number)"
+      [disabled]="selectedStop === 0" 
+    />
+  </div>
+
+  <!-- Users Table -->
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Batch ID</th>
+        <th>Contact</th>
+        <th>Attendance Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredPadyatri">
+        <td>
+          <a [routerLink]="['/user-detail', user.padyatriId]">{{ user.firstName }}</a>
+        </td>
+        <td>{{ user.batchId }}</td>
+        <td>{{ user.mobile }}</td>
+        <td>
+          <button (click)="markAttendance(user, 'Present')" class="btn btn-success" [disabled]="selectedStop === 0">Present</button>
+          <button (click)="markAttendance(user, 'Absent')" class="btn btn-danger" [disabled]="selectedStop === 0">Absent</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Toasts for success/error messages -->
+  <app-toast></app-toast>
+  <!-- <div *ngFor="let toast of toasts" class="toast" [ngClass]="toast.class">
+    <strong>{{ toast.title }}</strong> - {{ toast.message }}
+  </div> -->
+</div>

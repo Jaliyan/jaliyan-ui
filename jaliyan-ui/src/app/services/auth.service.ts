@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { isTokenExpired } from '../common/token.utils';
+import { getUserDetails, isTokenExpired } from '../common/token.utils';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 
@@ -52,6 +52,11 @@ export class AuthService {
 
   isAuthenticated(): Observable<boolean> {
     return this.isLoggedInSubject.asObservable();  // Return the observable to subscribe to
+  }
+
+  getUsername() {
+    const userDetails = getUserDetails(this.authToken);
+    return userDetails ? userDetails.sub : null;  // Extract username from the decoded payload
   }
 
   refreshToken() {

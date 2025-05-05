@@ -13,3 +13,12 @@ export function isTokenExpired(token: string): boolean {
   console.log("Vishal New Date " + new Date());
   return expirationDate < new Date();
 }
+
+export function getUserDetails(authToken : string) {
+  const token = localStorage.getItem(authToken);
+  if (token) {
+    const decodedToken: any = decodeToken(token);
+    return decodedToken; // This will contain the decoded JWT payload
+  }
+  return null;
+}

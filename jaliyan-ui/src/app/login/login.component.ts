@@ -19,7 +19,7 @@ export class LoginComponent {
     this.authService.login(this.username, this.password)
       .subscribe({
         next: (data) => { 
-          this.router.navigate(['/']);  // Navigate to a secure page
+          this.router.navigate(['/attendance']);  // Navigate to a secure page
         },
         error: (err) => {
           alert('Login failed!');

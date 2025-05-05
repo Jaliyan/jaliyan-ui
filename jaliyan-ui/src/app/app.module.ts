@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { CommonModule } from '@angular/common';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CommonModule } from '@angular/common';
     FooterComponent,
     AttendanceComponent,
     SpinnerComponent,
-    HomeComponent
+    HomeComponent,
+
   ],
   imports: [
     BrowserModule,

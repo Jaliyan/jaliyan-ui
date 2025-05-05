@@ -30,6 +30,9 @@
         <a routerLink="/login" routerLinkActive="active">Login</a>
       </li>
       <li *ngIf="isLoggedIn">
+        <a routerLink="/attendance" routerLinkActive="active">Attendance</a>
+      </li>
+      <li *ngIf="isLoggedIn">
         <a href="#" (click)="logout()">Logout</a>
       </li>
     </ul>
