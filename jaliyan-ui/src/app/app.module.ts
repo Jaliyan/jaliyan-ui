@@ -14,7 +14,8 @@ import { HomeComponent } from './home/home.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { CommonModule } from '@angular/common';
-import { ToastComponent } from './toast/toast.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from './services/toast.service';
 
 @NgModule({
   declarations: [
@@ -25,10 +26,11 @@ import { ToastComponent } from './toast/toast.component';
     AttendanceComponent,
     SpinnerComponent,
     HomeComponent,
-
+    
   ],
   imports: [
     BrowserModule,
+    MatSnackBarModule,
     AppRoutingModule,
     FormsModule,
     CommonModule,
@@ -36,7 +38,8 @@ import { ToastComponent } from './toast/toast.component';
     
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    ToastService,
   ],
   bootstrap: [AppComponent]
 })

@@ -27,12 +27,15 @@ export class AttendanceComponent {
   ngOnInit(): void {
     // Load stops and user data on component load
     this.loadStops();
-    this.loadPadyatri();
+    this.loadPadyatri();   
   }
 
   loadStops() {
     this.padyatriService.getStops().subscribe((stops: any[]) => {
       this.stops = stops;
+    },
+  (err) => {
+     this.toastService.show('Failed to load stops.', 'error');
     });
   }
 
@@ -40,12 +43,15 @@ export class AttendanceComponent {
     this.padyatriService.getPadyatris().subscribe((padyatri: Padyatri[]) => {
       this.padyatri = padyatri;
       this.filteredPadyatri = padyatri;
+    },
+  (err) => {
+     this.toastService.show('Failed to load padyatri.', 'error');
     });
   }
 
   onBatchSearch() {
     if (this.selectedStop === 0) {
-      this.toastService.showToast('Please select a stop first to search users.', 'Error', 'danger');
+      this.toastService.show('Please select a stop first to search users.', 'error');
       return; // Prevent further search if stop is not selected
     }
     // If batchSearch is a number, filter by batchNumber; otherwise, filter by batchId (string)
@@ -62,18 +68,18 @@ export class AttendanceComponent {
   markAttendance(padyatri: Padyatri, status: string) {
     
     if (this.selectedStop === 0) {
-      this.toastService.showToast('Please select a stop first to mark attendance.', 'Error', 'danger');
+      this.toastService.show('Please select a stop first to mark attendance.', 'error');
       return; // Prevent marking attendance if stop is not selected
     }
 
     this.attendanceService.markAttendance(padyatri.padyatraId, status.toLowerCase() == "present",this.selectedStop ).subscribe(
       () => {
         // Show individual toast for each update
-        this.toastService.showToast(`Marked ${status} for ${padyatri.firstName}`, 'Success', 'success');
+       this.toastService.show(`Marked ${status} for ${padyatri.firstName}`, 'success');
       },
       (error: { message: any; }) => {
         // Handle error and show toast
-        this.toastService.showToast(`Error: ${error.message}`, 'Error', 'danger');
+        this.toastService.show(`Error: ${error.message}`, 'error');
       }
     );
   }

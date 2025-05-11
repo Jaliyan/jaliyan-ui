@@ -1,22 +1,48 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { MatSnackBar,  
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition, } from '@angular/material/snack-bar';
 
 export interface Toast {
   title: string;
   message: string;
-  class: string;  // Success, Error, Info, etc.
+  type: 'success' | 'error' | 'info' | 'warning';  // Success, Error, Info, etc.
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  private toastSubject = new Subject<Toast>();
-  toast$ = this.toastSubject.asObservable();
+  
+  constructor(private snackBar: MatSnackBar) {}
 
-  constructor() {}
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  
+  show(message: string, type: 'success' | 'error' | 'warning' | 'info') {
+    const config = {
+      duration: 2000, // Duration for snack bar
+      horizontalPosition : this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: this.getPanelClass(type)
+    };
 
-  showToast(title: string, message: string, className: string) {
-    this.toastSubject.next({ title, message, class: className });
+    this.snackBar.open(message, 'X', config);
   }
+
+  private getPanelClass(type: 'success' | 'error' | 'warning' | 'info') {
+    switch (type) {
+      case 'success':
+        return ['snackbar-success'];
+      case 'error':
+        return ['snackbar-error'];
+      case 'warning':
+        return ['snackbar-warning'];
+      case 'info':
+        return ['snackbar-info'];
+      default:
+        return ['snackbar-info'];
+    }
+  }
+
 }
