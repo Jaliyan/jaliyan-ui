@@ -1,0 +1,63 @@
+<mat-sidenav-container class="drawer-container">
+  <mat-sidenav-content>
+
+    <!-- <button mat-raised-button color="primary" (click)="openDrawer()">+ Add Item</button> -->
+
+
+    <!-- <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+        <button mat-raised-button color="primary" (click)="openDrawer()">+ Add Item</button>
+    </div> -->
+
+    <!-- Filter + Add Button -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+  <!-- Filter Input -->
+  <mat-form-field style="flex: 1; max-width: 300px;">
+    <mat-label>Filter items</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Enter keyword" />
+  </mat-form-field>
+
+  <!-- Add Item Button -->
+  <button mat-raised-button color="primary" (click)="openDrawer()">+ Add Item</button>
+</div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+  </mat-sidenav-content>
+
+  <!-- Drawer -->
+  <mat-sidenav #drawer position="end" mode="over" class="drawer">
+    <h3>Add New Item</h3>
+    <form #form="ngForm" (ngSubmit)="addItem(form)">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Item Name</mat-label>
+        <input matInput name="name" [(ngModel)]="newItem.name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Description</mat-label>
+        <input matInput name="description" [(ngModel)]="newItem.description" required />
+      </mat-form-field>
+
+      <div class="btn-group">
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Add</button>
+        <button mat-stroked-button type="button" (click)="closeDrawer()">Cancel</button>
+      </div>
+    </form>
+  </mat-sidenav>
+</mat-sidenav-container>

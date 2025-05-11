@@ -1,0 +1,36 @@
+.drawer-container {
+  height: 100vh;
+  padding: 20px;
+}
+
+.drawer {
+  width: 320px;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* ::ng-deep .mat-form-field--filled .mat-form-field-flex {
+  background-color: white !important;
+}
+
+.mdc-text-field--filled {
+     background-color: white !important;
+} */
+
+/* ::ng-deep .mat-mdc-form-field.mat-form-field-appearance-fill .mdc-text-field {
+  background-color: white !important;
+} */

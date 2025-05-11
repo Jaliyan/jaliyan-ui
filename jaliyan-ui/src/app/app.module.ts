@@ -16,6 +16,14 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ToastService } from './services/toast.service';
+import { FoodMenuComponent } from './food-menu/food-menu.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -26,11 +34,19 @@ import { ToastService } from './services/toast.service';
     AttendanceComponent,
     SpinnerComponent,
     HomeComponent,
+    FoodMenuComponent,
     
   ],
   imports: [
     BrowserModule,
     MatSnackBarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
     AppRoutingModule,
     FormsModule,
     CommonModule,
