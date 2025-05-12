@@ -32,6 +32,18 @@
         <td mat-cell *matCellDef="let element"> {{element.description}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editItem(element)">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteItem(element)">
+            <mat-icon>delete</mat-icon>
+        </button>
+  </td>
+</ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
@@ -42,8 +54,8 @@
 
   <!-- Drawer -->
   <mat-sidenav #drawer position="end" mode="over" class="drawer">
-    <h3>Add New Item</h3>
-    <form #form="ngForm" (ngSubmit)="addItem(form)">
+    <h3>{{ isEditMode ? 'Update Item' : 'Add New Item' }}</h3>
+    <form #form="ngForm" (ngSubmit)="isEditMode ? updateItem(form) : addItem(form)">
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Item Name</mat-label>
         <input matInput name="name" [(ngModel)]="newItem.name" required />
