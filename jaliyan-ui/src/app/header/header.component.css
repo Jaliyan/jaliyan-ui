@@ -1,102 +1,139 @@
-/* General Header and Menu Styling */
-header {
-  background-color: #1A2A6C; /* Navy Blue */
-  color: #FFFFFF; /* White Text */
-  padding: 8px 30px; /* Reduced padding to halve the header height */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+/* Ensure sidenav takes the full height */
+.sidenav-container {
+  height: 100vh; /* Full viewport height */
+  display: flex; /* Flexbox layout for proper distribution */
+  flex-direction: column;
 }
 
-header .logo a {
-  font-size: 1.6rem;
+.mat-sidenav {
+  width: 250px; /* Width of sidenav */
+  background-color: #fffaf0;
+}
+
+.mat-sidenav-content {
+  flex: 1; /* Ensures the content fills the remaining space */
+}
+
+/* Toolbar background and text */
+.mat-toolbar {
+  background-color: #f57c00;
+  color: white;
+}
+
+/* Logo styling */
+.logo-text {
   font-weight: bold;
-  color: #FFFFFF;
+  color: #ffffff;
+  font-size: 20px;
   text-decoration: none;
 }
 
-/* Navigation Menu */
-nav ul {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
+.spacer {
+  flex: 1 1 auto;
 }
 
-nav ul li {
-  margin-right: 25px;
-  /* Remove background color from the parent li element */
-  background-color: transparent; /* Ensure no background color on the li */
+
+/* Desktop menu buttons */
+.desktop-menu a.mat-button {
+  color: #ffffff;
+  font-weight: 500;
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: #FFFFFF; /* White text by default */
-  font-weight: bold;
-  padding: 10px 15px;
+.desktop-menu a.mat-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  display: block; /* Ensure the link fills the entire li */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Ensure only background-color changes */
+  color: #FFD700;
 }
 
-/* Hover Effect: Only Change Background Color of the Link */
-nav ul li a:hover {
-  background-color: #00B5B8; /* Teal on hover */
-  color: #FFFFFF; /* Ensure text color stays white */
+/* Logout button in desktop menu */
+.desktop-menu a.logout-link {
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-/* Active Link */
-nav ul li a.active {
-  background-color: #F4A300; /* Gold color for active link */
-  color: #FFFFFF; /* Ensure active link color stays white */
+.desktop-menu a.logout-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFD700;
+  border-radius: 4px;
 }
 
-/* Hamburger Menu for Mobile */
-.hamburger {
+/* Sidenav (mobile) styles */
+.mat-sidenav {
+  background-color: #fffaf0;
+}
+
+/* Sidenav menu items */
+.mat-nav-list a {
+  color: #5D4037;
+  font-weight: 500;
+}
+
+.mat-nav-list a:hover {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+/* Logout button in sidenav */
+.mat-nav-list a.logout-link {
+  color: #5D4037;
+  font-weight: bold;
+}
+
+.mat-nav-list a.logout-link:hover {
+  background-color: rgba(245, 124, 0, 0.15);
+  color: #f57c00;
+}
+
+/* Ensure Material buttons (default) use white text */
+.mat-mdc-button:not(:disabled) {
+  color: #ffffff;
+}
+
+/* Icon color and behavior */
+.mat-icon {
+  color: white;
+  height: 24px;
+  width: 24px;
+  display: inline-flex;
+  fill: currentColor;
+  user-select: none;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  margin-right: 1px;
+}
+
+/* Responsive visibility */
+.mobile-toggle {
   display: none;
-  cursor: pointer;
 }
 
-.hamburger div {
-  background-color: #FFFFFF;
-  height: 4px;
-  width: 30px;
-  margin: 5px;
-  transition: all 0.3s;
-}
-
-/* Mobile Menu Styling */
-@media screen and (max-width: 768px) {
-  nav ul {
+@media (max-width: 768px) {
+  .desktop-menu {
     display: none;
-    flex-direction: column;
-    width: 100%;
-    text-align: center;
-    background-color: #1A2A6C; /* Navy Blue background for mobile */
   }
 
-  nav ul.active {
-    display: flex;
-  }
-
-  .hamburger {
-    display: block;
-  }
-  
-  .hamburger.open div:nth-child(1) {
-    transform: rotate(45deg);
-    position: relative;
-    top: 10px;
-  }
-
-  .hamburger.open div:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.open div:nth-child(3) {
-    transform: rotate(-45deg);
-    position: relative;
-    bottom: 10px;
+  .mobile-toggle {
+    display: inline-flex;
   }
 }
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Highlight the active toolbar link */
+.desktop-menu a.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  color: #ffeb3b !important; /* Keep white for contrast */
+  font-weight: 600;
+  text-shadow: 0 0 2px #00000088; /* subtle shadow for clarity */
+}
+
+.desktop-menu a.mat-button {
+  padding: 6px 12px;
+}
+

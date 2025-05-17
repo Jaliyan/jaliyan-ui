@@ -1,43 +1,77 @@
-<header>
-  <div class="logo">
-    <a routerLink="/">Jalaram Padyatra</a>
-  </div>
-  <nav class="menu">
-    <!-- Hamburger Icon -->
-    <div class="hamburger" (click)="toggleMenu()">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-    <!-- Menu List -->
-    <ul [class.active]="isMenuOpen">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      </li>
-      <li>
-        <a routerLink="/about" routerLinkActive="active">About</a>
-      </li>
-      <li>
-        <a routerLink="/events" routerLinkActive="active">Events</a>
-      </li>
-      <li>
-        <a routerLink="/donations" routerLinkActive="active">Donations</a>
-      </li>
-      <li>
-        <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      </li>
-      <li *ngIf="!isLoggedIn">
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/attendance" routerLinkActive="active">Attendance</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/foodmenu">Food</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a href="#" (click)="logout()">Logout</a>
-      </li>
-    </ul>
-  </nav>
-</header>
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidenav (Mobile View) -->
+  <mat-sidenav #drawer mode="over" class="sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>home</mat-icon>Home
+      </a>
+      <a mat-list-item routerLink="/about" routerLinkActive="active">
+         <mat-icon matListIcon>info</mat-icon> About
+      </a>
+      <a mat-list-item routerLink="/events" routerLinkActive="active">
+        <mat-icon>event</mat-icon> Events
+      </a>
+      <a mat-list-item routerLink="/donations" routerLinkActive="active">Donations</a>
+      <a mat-list-item routerLink="/contact" routerLinkActive="active">
+        <mat-icon>contact_mail</mat-icon> Contact
+      </a>
+      <a mat-list-item *ngIf="!isLoggedIn" routerLink="/login">Login</a>
+      <a mat-list-item *ngIf="isLoggedIn" routerLink="/attendance">Attendance</a>
+      <a mat-list-item *ngIf="isLoggedIn" routerLink="/foodmenu">
+        <mat-icon>restaurant_menu</mat-icon> Food Item
+      </a>
+      <a mat-list-item class="logout-link" *ngIf="isLoggedIn" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Sidenav Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="main-toolbar">
+      <div class="page-wrapper toolbar-content">
+      <button mat-icon-button (click)="drawer.toggle()" class="mobile-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <a routerLink="/" class="logo-text">Jalaram Padyatra</a>
+      <span class="spacer"></span>
+      <nav class="desktop-menu">
+        <a mat-button routerLink="/" routerLinkActive="active" 
+        [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>home</mat-icon> Home
+        </a>
+        <a mat-button routerLink="/about">
+          <mat-icon>info</mat-icon> About  
+        </a>
+        <a mat-button routerLink="/events">
+          <mat-icon>event</mat-icon> Events
+        </a>
+        <a mat-button routerLink="/donations">
+          <mat-icon>volunteer_activism</mat-icon> Donations
+        </a>
+        <a mat-button routerLink="/contact">
+          <mat-icon>mail</mat-icon> Contact
+        </a>
+        <a mat-button *ngIf="!isLoggedIn" routerLink="/login">
+          <mat-icon>login</mat-icon>Login
+        </a>
+        <a mat-button *ngIf="isLoggedIn" routerLink="/attendance" routerLinkActive="active" 
+        [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>how_to_reg</mat-icon> Attendance
+        </a>
+        <a mat-button *ngIf="isLoggedIn" routerLink="/foodmenu" routerLinkActive="active" 
+        [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>restaurant</mat-icon> Food Item
+        </a>
+        <a mat-button class="logout-link" *ngIf="isLoggedIn" (click)="logout()">
+          <mat-icon>logout</mat-icon> Logout
+        </a>
+      </nav>
+      </div>
+    </mat-toolbar>
+
+    <!-- Page content goes here -->
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

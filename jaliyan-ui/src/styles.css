@@ -1,30 +1,3 @@
-button {
-  background-color: #ffb84d;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-button:hover {
-  background-color: #e6953b;
-  transform: scale(1.05); /* Subtle scaling effect */
-}
-
-nav ul li {
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-nav ul li:hover {
-  background-color: #e6953b;
-  color: #fff;
-}
-
 /* styles.css or styles.scss */
 .snackbar-success .mdc-snackbar__surface {
   background-color: #4caf50 !important;
@@ -46,3 +19,54 @@ nav ul li:hover {
   color: white !important;
 }
 
+.page-wrapper {
+  padding: 0 clamp(16px, 4vw, 32px);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+
+/* .sidenav-container {
+  height: 100%;
+} */
+
+/* .mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-text {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.desktop-menu {
+  display: flex;
+  gap: 8px;
+}
+
+.mobile-toggle {
+  display: none;
+} */
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+  .mobile-toggle {
+    display: inline-flex;
+  }
+}
+
+
+/* ::ng-deep .mat-toolbar {
+  background-color: #f57c00; 
+} */
