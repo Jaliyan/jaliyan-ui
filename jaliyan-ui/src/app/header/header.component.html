@@ -1,33 +1,55 @@
 <mat-sidenav-container class="sidenav-container">
-  <!-- Sidenav (Mobile View) -->
-  <mat-sidenav #drawer mode="over" class="sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>home</mat-icon> Home
-      </a>
-      <a mat-list-item routerLink="/about" routerLinkActive="active">
-         <mat-icon matListIcon>info</mat-icon> About
-      </a>
-      <a mat-list-item routerLink="/events" routerLinkActive="active">
-        <mat-icon>event</mat-icon> Events
-      </a>
-      <a mat-list-item routerLink="/donations" routerLinkActive="active">Donations</a>
-      <a mat-list-item routerLink="/contact" routerLinkActive="active">
-        <mat-icon>contact_mail</mat-icon> Contact
-      </a>
-      <a mat-list-item *ngIf="!isLoggedIn" routerLink="/login">Login</a>
-      <a mat-list-item *ngIf="isLoggedIn" routerLink="/attendance">Attendance</a>
-      <a mat-list-item *ngIf="isLoggedIn" routerLink="/foodmenu">
-        <mat-icon>restaurant_menu</mat-icon> Food Item
-      </a>
-      <a mat-list-item class="logout-link" *ngIf="isLoggedIn" (click)="logout()">
-        <mat-icon>logout</mat-icon> Logout
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
 
-  <!-- Sidenav Content -->
+<!-- Sidenav (Mobile View) -->
+<mat-sidenav #drawer mode="over" class="mat-sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
+  <!-- User Info in Sidebar -->
+  <div class="sidebar-user-info" *ngIf="isLoggedIn">
+    <div class="user-avatar-wrapper">
+      <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="sidebar-avatar" />
+    </div>
+    <div class="sidebar-user-text">
+      <span class="welcome-label">Welcome,</span>
+      <span class="username">User</span>
+    </div>
+  </div>
+
+  <mat-nav-list>
+    <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>home</mat-icon> Home
+    </a>
+    <a mat-list-item routerLink="/about">
+      <mat-icon>info</mat-icon> About
+    </a>
+    <a mat-list-item routerLink="/events">
+      <mat-icon>event</mat-icon> Events
+    </a>
+    <a mat-list-item routerLink="/donations">
+      <mat-icon>volunteer_activism</mat-icon> Donations
+    </a>
+    <a mat-list-item routerLink="/contact">
+      <mat-icon>contact_mail</mat-icon> Contact
+    </a>
+    <a mat-list-item *ngIf="!isLoggedIn" routerLink="/login">
+      <mat-icon>login</mat-icon> Login
+    </a>
+    <a mat-list-item *ngIf="isLoggedIn" routerLink="/attendance">
+      <mat-icon>how_to_reg</mat-icon> Attendance
+    </a>
+    <a mat-list-item *ngIf="isLoggedIn" routerLink="/foodmenu">
+      <mat-icon>restaurant_menu</mat-icon> Food Item
+    </a>
+    <a mat-list-item *ngIf="isLoggedIn" (click)="logout()" class="logout-link">
+      <mat-icon>logout</mat-icon> Logout
+    </a>
+  </mat-nav-list>
+</mat-sidenav>
+
+
+
+
+  <!-- Main Content Area -->
   <mat-sidenav-content>
+    <!-- Toolbar (Desktop Menu) -->
     <mat-toolbar color="primary" class="main-toolbar">
       <button mat-icon-button (click)="drawer.toggle()" class="mobile-toggle">
         <mat-icon>menu</mat-icon>
@@ -42,7 +64,7 @@
           <mat-icon>home</mat-icon> Home
         </a>
         <a mat-button routerLink="/about">
-          <mat-icon>info</mat-icon> About  
+          <mat-icon>info</mat-icon> About
         </a>
         <a mat-button routerLink="/events">
           <mat-icon>event</mat-icon> Events
@@ -56,8 +78,8 @@
         <a mat-button *ngIf="!isLoggedIn" routerLink="/login">
           <mat-icon>login</mat-icon> Login
         </a>
-        
-        <!-- User Menu -->
+
+        <!-- User Menu Dropdown -->
         <mat-menu #userMenu="matMenu">
           <button mat-menu-item *ngIf="isLoggedIn" routerLink="/attendance">
             <mat-icon>how_to_reg</mat-icon> Attendance
@@ -78,8 +100,7 @@
       </nav>
     </mat-toolbar>
 
-    <!-- Page content goes here -->
+    <!-- Page content -->
     <ng-content></ng-content>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

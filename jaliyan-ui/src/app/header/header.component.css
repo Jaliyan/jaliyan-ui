@@ -63,11 +63,6 @@
   border-radius: 4px;
 }
 
-/* Sidenav (mobile) styles */
-.mat-sidenav {
-  background-color: #fffaf0;
-}
-
 /* Sidenav menu items */
 .mat-nav-list a {
   color: #5D4037;
@@ -79,22 +74,43 @@
   color: #f57c00;
 }
 
-/* Ensure Material buttons (default) use white text */
-.mat-mdc-button:not(:disabled) {
-  color: #ffffff;
+/* Sidebar Icon color for visibility */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
 }
 
-/* Icon color and behavior */
-.mat-icon {
-  color: white;
-  height: 24px;
-  width: 24px;
-  display: inline-flex;
-  fill: currentColor;
-  user-select: none;
-  background-repeat: no-repeat;
-  overflow: hidden;
-  margin-right: 1px;
+/* Sidebar Item Hover Effect */
+.mat-sidenav .mat-nav-list a:hover {
+  background-color: rgba(245, 124, 0, 0.1); /* Highlight background */
+  color: #f57c00;
+}
+
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Change icon color to highlight color on hover */
+}
+
+/* Modify only the icons in the sidebar */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker color for sidebar icons */
+}
+
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Highlight color on hover */
+}
+
+/* For desktop, keep the icons white */
+.desktop-menu .mat-button mat-icon {
+  color: white; /* Keep desktop icons white */
+}
+
+/* Desktop Icon Hover Color */
+.desktop-menu .mat-button:hover mat-icon {
+  color: #FFD700; /* Change icon color on hover */
+}
+
+/* Ensure hamburger icon is always white */
+.mobile-toggle mat-icon {
+  color: white !important; /* Keep the hamburger icon white */
 }
 
 /* Mobile toggle for sidenav (hamburger) */
@@ -140,43 +156,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.sidenav-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.mat-toolbar {
-  background-color: #f57c00;
-  color: white;
-  padding: 10px;
-}
-
-.logo-text {
-  font-weight: bold;
-  color: #ffffff;
-  font-size: 20px;
-  text-decoration: none;
-}
-
-.desktop-menu {
-  display: inline-block;
-  gap: 8px;
-  padding-right: 20px;
-}
-
-.desktop-menu a {
-  color: white;
-  text-decoration: none;
-  padding: 6px 12px;
-}
-
-.desktop-menu a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  color: #FFD700;
-}
-
 /* Mobile Styles */
 @media (max-width: 768px) {
   .desktop-menu {
@@ -210,15 +189,121 @@ body {
   }
 }
 
-.mat-menu {
-  background-color: #fffaf0;
+/* Sidebar User Info */
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5e0b3;
+  border-bottom: 1px solid #f57c00;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
-.mat-menu-item {
+.user-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.sidebar-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f57c00;
+}
+
+.sidebar-user-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.welcome-label {
+  font-size: 14px;
+  color: #6d4c41;
+  margin: 0;
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4e342e;
+  margin: 0;
+}
+
+/* For mobile devices, stack avatar and text */
+@media (max-width: 768px) {
+  .sidebar-user-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sidebar-user-info .sidebar-avatar {
+    margin: 0 0 8px 0;
+  }
+
+  .sidebar-user-text {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Sidebar Nav List */
+.mat-nav-list a {
+  color: #3E2723; /* Darker text color for sidebar */
   font-weight: 500;
 }
 
-.mat-menu-item:hover {
+/* Sidebar Item Hover Effect */
+.mat-nav-list a:hover {
   background-color: rgba(245, 124, 0, 0.1);
   color: #f57c00;
+}
+
+/* Sidebar Icon Color */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
+}
+
+/* Icon color change on hover */
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Highlight icon color on hover in sidebar */
+}
+
+/* User Info Text Color */
+.sidebar-user-text .welcome-label {
+  color: #6d4c41; /* Slightly darker color for welcome text */
+}
+
+.sidebar-user-text .username {
+  color: #4e342e; /* Dark color for username */
+}
+
+/* Ensure Material buttons use proper colors */
+.mat-mdc-button:not(:disabled) {
+  color: #ffffff; /* Button text should be white */
+}
+
+/* For mobile devices, ensure visibility of text and icons */
+@media (max-width: 768px) {
+  .mat-nav-list a {
+    color: #3E2723; /* Dark text color on mobile */
+  }
+
+  .mat-nav-list a:hover {
+    background-color: rgba(245, 124, 0, 0.1);
+    color: #f57c00;
+  }
+
+  .mat-nav-list mat-icon {
+    color: #3E2723; /* Dark icon color for mobile sidebar */
+  }
+
+  .mat-nav-list a:hover mat-icon {
+    color: #f57c00; /* Icon color change on hover in mobile sidebar */
+  }
 }
