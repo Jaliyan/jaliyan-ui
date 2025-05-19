@@ -1,23 +1,24 @@
 /* Ensure sidenav takes the full height */
 .sidenav-container {
-  height: 100vh; /* Full viewport height */
-  display: flex; /* Flexbox layout for proper distribution */
+  height: 100vh;
+  display: flex;
   flex-direction: column;
 }
 
 .mat-sidenav {
-  width: 250px; /* Width of sidenav */
+  width: 250px;
   background-color: #fffaf0;
 }
 
 .mat-sidenav-content {
-  flex: 1; /* Ensures the content fills the remaining space */
+  flex: 1;
 }
 
 /* Toolbar background and text */
 .mat-toolbar {
   background-color: #f57c00;
   color: white;
+  padding: 10px;
 }
 
 /* Logo styling */
@@ -32,11 +33,15 @@
   flex: 1 1 auto;
 }
 
+/* Desktop menu */
+.desktop-menu {
+  display: inline-block;
+}
 
-/* Desktop menu buttons */
 .desktop-menu a.mat-button {
-  color: #ffffff;
+  color: white;
   font-weight: 500;
+  padding: 6px 12px;
 }
 
 .desktop-menu a.mat-button:hover {
@@ -74,17 +79,6 @@
   color: #f57c00;
 }
 
-/* Logout button in sidenav */
-.mat-nav-list a.logout-link {
-  color: #5D4037;
-  font-weight: bold;
-}
-
-.mat-nav-list a.logout-link:hover {
-  background-color: rgba(245, 124, 0, 0.15);
-  color: #f57c00;
-}
-
 /* Ensure Material buttons (default) use white text */
 .mat-mdc-button:not(:disabled) {
   color: #ffffff;
@@ -103,11 +97,87 @@
   margin-right: 1px;
 }
 
-/* Responsive visibility */
+/* Mobile toggle for sidenav (hamburger) */
 .mobile-toggle {
   display: none;
 }
 
+@media (max-width: 1024px) {
+  .desktop-menu a.mat-button:nth-child(n+6) {
+    display: none;
+  }
+
+  .more-menu-button {
+    display: inline-flex;
+  }
+}
+
+/* User Menu Button */
+.user-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+}
+
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-icon {
+  color: white;
+  font-size: 20px;
+}
+
+/* Base Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.sidenav-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.mat-toolbar {
+  background-color: #f57c00;
+  color: white;
+  padding: 10px;
+}
+
+.logo-text {
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.desktop-menu {
+  display: inline-block;
+  gap: 8px;
+  padding-right: 20px;
+}
+
+.desktop-menu a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+}
+
+.desktop-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #FFD700;
+}
+
+/* Mobile Styles */
 @media (max-width: 768px) {
   .desktop-menu {
     display: none;
@@ -116,24 +186,39 @@
   .mobile-toggle {
     display: inline-flex;
   }
+
+  .mat-sidenav {
+    width: 200px;
+  }
+
+  .mat-sidenav-content {
+    margin-left: 0;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .desktop-menu a {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .more-menu-button {
+    display: inline-flex;
+  }
 }
 
-.toolbar-content {
-  display: flex;
-  align-items: center;
-  width: 100%;
+.mat-menu {
+  background-color: #fffaf0;
 }
 
-/* Highlight the active toolbar link */
-.desktop-menu a.active {
-  background-color: rgba(255, 255, 255, 0.25);
-  border-radius: 4px;
-  color: #ffeb3b !important; /* Keep white for contrast */
-  font-weight: 600;
-  text-shadow: 0 0 2px #00000088; /* subtle shadow for clarity */
+.mat-menu-item {
+  font-weight: 500;
 }
 
-.desktop-menu a.mat-button {
-  padding: 6px 12px;
+.mat-menu-item:hover {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
 }
-

@@ -27,6 +27,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { MatListModule } from '@angular/material/list';
     MatPaginatorModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     AppRoutingModule,
     FormsModule,
     CommonModule,
