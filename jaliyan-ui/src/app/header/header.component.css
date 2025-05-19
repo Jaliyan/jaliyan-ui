@@ -306,4 +306,68 @@ body {
   .mat-nav-list a:hover mat-icon {
     color: #f57c00; /* Icon color change on hover in mobile sidebar */
   }
+
+  .mat-sidenav .mat-list-item {
+    padding: 10px 16px;
+  }
+
+  .mat-sidenav .mat-list-item mat-icon {
+    font-size: 22px;
+  }
+}
+
+/* Highlight active links */
+a.active {
+  color: #f57c00 !important;
+  font-weight: bold;
+  background-color: rgba(245, 124, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Better contrast for active desktop menu item */
+.desktop-menu a.active {
+  background-color: #ffffff;         /* Light background */
+  color: #f57c00 !important;         /* Match theme orange for text */
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+
+.mat-nav-list a.active {
+  color: #f57c00;
+  background-color: rgba(245, 124, 0, 0.1);
+}
+
+a.active mat-icon {
+  color: #f57c00 !important;
+}
+
+.desktop-menu a.active mat-icon {
+  color: #f57c00 !important;
+}
+
+/* .desktop-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFD700;
+  border-radius: 4px;
+} */
+
+/* Fix icon and text alignment in sidenav */
+.mat-sidenav .mat-list-item {
+  display: flex;
+  align-items: center;
+}
+
+.mat-sidenav .mat-list-item mat-icon {
+  margin-right: 12px; /* space between icon and text */
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.mat-sidenav .mat-list-item span {
+  vertical-align: middle;
+}
+
+.mat-sidenav .mat-list-item .mat-list-item-content {
+  padding: 0 !important;
 }

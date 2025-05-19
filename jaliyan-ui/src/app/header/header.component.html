@@ -1,58 +1,62 @@
 <mat-sidenav-container class="sidenav-container">
 
-<!-- Sidenav (Mobile View) -->
-<mat-sidenav #drawer mode="over" class="mat-sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
-  <!-- User Info in Sidebar -->
-  <div class="sidebar-user-info" *ngIf="isLoggedIn">
-    <div class="user-avatar-wrapper">
-      <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="sidebar-avatar" />
+  <!-- Sidebar (Mobile View) -->
+  <mat-sidenav #drawer mode="over" class="mat-sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
+    <div class="sidebar-user-info" *ngIf="isLoggedIn">
+      <div class="user-avatar-wrapper">
+        <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="sidebar-avatar" />
+      </div>
+      <div class="sidebar-user-text">
+        <span class="welcome-label">Welcome,</span>
+        <span class="username">User</span>
+      </div>
     </div>
-    <div class="sidebar-user-text">
-      <span class="welcome-label">Welcome,</span>
-      <span class="username">User</span>
-    </div>
-  </div>
 
-  <mat-nav-list>
-    <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <mat-icon>home</mat-icon> Home
-    </a>
-    <a mat-list-item routerLink="/about">
-      <mat-icon>info</mat-icon> About
-    </a>
-    <a mat-list-item routerLink="/events">
-      <mat-icon>event</mat-icon> Events
-    </a>
-    <a mat-list-item routerLink="/donations">
-      <mat-icon>volunteer_activism</mat-icon> Donations
-    </a>
-    <a mat-list-item routerLink="/contact">
-      <mat-icon>contact_mail</mat-icon> Contact
-    </a>
-    <a mat-list-item *ngIf="!isLoggedIn" routerLink="/login">
-      <mat-icon>login</mat-icon> Login
-    </a>
-    <a mat-list-item *ngIf="isLoggedIn" routerLink="/attendance">
-      <mat-icon>how_to_reg</mat-icon> Attendance
-    </a>
-    <a mat-list-item *ngIf="isLoggedIn" routerLink="/foodmenu">
-      <mat-icon>restaurant_menu</mat-icon> Food Item
-    </a>
-    <a mat-list-item *ngIf="isLoggedIn" (click)="logout()" class="logout-link">
-      <mat-icon>logout</mat-icon> Logout
-    </a>
-  </mat-nav-list>
-</mat-sidenav>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>home</mat-icon> Home
+      </a>
+      <a mat-list-item routerLink="/about" routerLinkActive="active">
+        <mat-icon>info</mat-icon> About
+      </a>
 
+      <!-- Always show Events and Donations in sidebar -->
+      <a mat-list-item routerLink="/events" routerLinkActive="active">
+        <mat-icon>event</mat-icon> Events
+      </a>
+      <a mat-list-item routerLink="/donations" routerLinkActive="active">
+        <mat-icon>volunteer_activism</mat-icon> Donations
+      </a>
 
+      <a mat-list-item routerLink="/contact" routerLinkActive="active">
+        <mat-icon>contact_mail</mat-icon> Contact
+      </a>
 
+      <ng-container *ngIf="!isLoggedIn">
+        <a mat-list-item routerLink="/login" routerLinkActive="active">
+          <mat-icon>login</mat-icon> Login
+        </a>
+      </ng-container>
 
-  <!-- Main Content Area -->
+      <ng-container *ngIf="isLoggedIn">
+        <a mat-list-item routerLink="/attendance" routerLinkActive="active">
+          <mat-icon>how_to_reg</mat-icon> Attendance
+        </a>
+        <a mat-list-item routerLink="/foodmenu" routerLinkActive="active">
+          <mat-icon>restaurant_menu</mat-icon> Food Item
+        </a>
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon> Logout
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
   <mat-sidenav-content>
-    <!-- Toolbar (Desktop Menu) -->
     <mat-toolbar color="primary" class="main-toolbar">
       <button mat-icon-button (click)="drawer.toggle()" class="mobile-toggle">
-        <mat-icon>menu</mat-icon>
+        <mat-icon class="hamburger-icon">menu</mat-icon>
       </button>
 
       <a routerLink="/" class="logo-text">Jalaram Padyatra</a>
@@ -63,44 +67,57 @@
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>home</mat-icon> Home
         </a>
-        <a mat-button routerLink="/about">
+        <a mat-button routerLink="/about" routerLinkActive="active">
           <mat-icon>info</mat-icon> About
         </a>
-        <a mat-button routerLink="/events">
-          <mat-icon>event</mat-icon> Events
-        </a>
-        <a mat-button routerLink="/donations">
-          <mat-icon>volunteer_activism</mat-icon> Donations
-        </a>
-        <a mat-button routerLink="/contact">
-          <mat-icon>mail</mat-icon> Contact
-        </a>
-        <a mat-button *ngIf="!isLoggedIn" routerLink="/login">
-          <mat-icon>login</mat-icon> Login
+        <a mat-button routerLink="/contact" routerLinkActive="active">
+          <mat-icon>contact_mail</mat-icon> Contact
         </a>
 
-        <!-- User Menu Dropdown -->
-        <mat-menu #userMenu="matMenu">
-          <button mat-menu-item *ngIf="isLoggedIn" routerLink="/attendance">
+        <ng-container *ngIf="!isLoggedIn">
+          <a mat-button routerLink="/events" routerLinkActive="active">
+            <mat-icon>event</mat-icon> Events
+          </a>
+          <a mat-button routerLink="/donations" routerLinkActive="active">
+            <mat-icon>volunteer_activism</mat-icon> Donations
+          </a>
+          <a mat-button routerLink="/login" routerLinkActive="active">
+            <mat-icon>login</mat-icon> Login
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <a mat-button routerLink="/attendance" routerLinkActive="active">
             <mat-icon>how_to_reg</mat-icon> Attendance
-          </button>
-          <button mat-menu-item *ngIf="isLoggedIn" routerLink="/foodmenu">
-            <mat-icon>restaurant</mat-icon> Food Item
-          </button>
-          <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
-            <mat-icon>logout</mat-icon> Logout
-          </button>
-        </mat-menu>
+          </a>
+          <a mat-button routerLink="/foodmenu" routerLinkActive="active">
+            <mat-icon>restaurant_menu</mat-icon> Food Item
+          </a>
 
-        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button" *ngIf="isLoggedIn">
-          <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="avatar-img" />
-          <span>Welcome, User</span>
-          <mat-icon class="dropdown-icon">expand_more</mat-icon>
-        </button>
+          <!-- Dropdown Menu Trigger -->
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+            <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="avatar-img" />
+            <span>Welcome, User</span>
+            <mat-icon class="dropdown-icon">expand_more</mat-icon>
+          </button>
+        </ng-container>
       </nav>
     </mat-toolbar>
 
-    <!-- Page content -->
+    <!-- Dropdown Menu (Only when logged in) -->
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/events">
+        <mat-icon>event</mat-icon> Events
+      </button>
+      <button mat-menu-item routerLink="/donations">
+        <mat-icon>volunteer_activism</mat-icon> Donations
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </mat-menu>
+
+    <!-- Page Content -->
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
