@@ -1,0 +1,76 @@
+<div class="container">
+  <h2>Menu Planner</h2>
+
+  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+
+    <!-- Menu Date Dropdown -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Menu Date</mat-label>
+      <mat-select formControlName="mealDateId">
+        <mat-option *ngFor="let date of menuDates" [value]="date.mealDateId">
+          {{ date.menuDate | date: 'fullDate' }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Meal Type Dropdown -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Meal Type</mat-label>
+      <mat-select formControlName="mealTypeId">
+        <mat-option *ngFor="let meal of mealTypes" [value]="meal.mealTypeId">
+          {{ meal.name }} ({{ meal.fromTime }} - {{ meal.toTime }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Menu Item Dropdown with Search -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Menu Items</mat-label>
+      <mat-select formControlName="menuItemIds" multiple>
+        <ngx-mat-select-search
+          [formControl]="itemFilterCtrl"
+          placeholderLabel="Search menu items"
+          noEntriesFoundLabel="No matching items found">
+        </ngx-mat-select-search>
+        <mat-option *ngFor="let item of filteredMenuItems" [value]="item.menuItemId">
+          {{ item.name }} - {{ item.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="menuForm.invalid">
+      Save Menu
+    </button>
+  </form>
+
+  <hr />
+
+<h2>Planned Menus</h2>
+<p *ngIf="plannedMenus.length === 0">No menus planned yet.</p>
+
+<mat-accordion *ngIf="plannedMenus.length > 0">
+  <mat-expansion-panel *ngFor="let menu of plannedMenus" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ menu.menuDate | date: 'fullDate' }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <mat-card>
+  <div class="meals-row">
+    <div class="meal-block" *ngFor="let meal of menu.mealTypes">
+      <strong>{{ meal.mealType }} ({{ meal.fromTime }} - {{ meal.toTime }}):</strong>
+      <ul>
+        <li *ngFor="let item of meal.menuItems">
+          {{ item.menuItemName }} - {{ item.description }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</mat-card>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+
+</div>

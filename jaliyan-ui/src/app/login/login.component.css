@@ -1,45 +1,105 @@
-/* Ensure full height login screen */
-html, body {
-    height: 100%;
-    margin: 0;
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 320px;
+  width: 100%; 
+}
+
+input:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0px 1000px #f3f4f6 inset !important; 
+  box-shadow: 0 0 0px 1000px #f3f4f6 inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+  box-shadow: 0 0 0px 1000px #fff inset !important;
+}
+
+input:-internal-autofill-selected {
+  appearance: none !important;
+}
+
+
+
+
+.login-logo img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+}
+
+.login-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 14px;
+
+  .forgot-password {
+    text-decoration: none;
+    color: #3f51b5;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f6f9;
+}
+
+.login-button {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  position: relative;
+
+  .spinner {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
   }
-  
+}
+
+@media (min-width: 600px) {
   .login-card {
-    width: 100%;
+    max-width: 360px;
+  }
+}
+
+@media (min-width: 960px) {
+  .login-card {
     max-width: 400px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
-  
-  /* Custom styles for input fields and form */
-  .form-label {
-    font-size: 14px;
-  }
-  
-  .form-control {
-    border-radius: 4px;
-  }
-  
-  button {
-    font-size: 16px;
-    padding: 12px;
-  }
-  
-  a {
-    font-size: 14px;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
+}
+

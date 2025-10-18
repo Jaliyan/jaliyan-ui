@@ -1,52 +1,97 @@
-<div class="container mt-5">
-  <div class="header">
-    <span>Attendance Marking</span>
-  </div>
+<div class="attendance-container">
 
-  <!-- Stop Selection Dropdown -->
-  <div class="form-group mt-4">
-    <label for="stopSelect">Select Stop</label>
-    <select [(ngModel)]="selectedStop" class="form-control" id="stopSelect">
-      <option value="0" disabled>Select a Stop</option> <!-- Option for unselected state -->
-      <option *ngFor="let stop of stops" [value]="stop.stopId">{{ stop.stopName }}</option>
-    </select>
-  </div>
+  <!-- Header Toolbar -->
+  <mat-toolbar color="primary" class="header">Attendance</mat-toolbar>
 
-  <!-- Batch Search Input -->
-  <div class="form-group mt-4">
-    <input
-      [(ngModel)]="batchSearch"
-      (input)="onBatchSearch()"
-      type="number"
-      class="form-control"
-      placeholder="Search by Batch ID (Number)"
-      [disabled]="selectedStop === 0" 
-    />
-  </div>
+  <!-- Filter Form -->
+  <form [formGroup]="filterForm" class="filters" (ngSubmit)="applyFilters()">
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Select Stop</mat-label>
+      <mat-select formControlName="selectedStop">
+        <mat-option [value]="0" disabled>Select a Stop</mat-option>
+        <mat-option *ngFor="let stop of stops" [value]="stop.stopId">{{ stop.stopName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- Users Table -->
-  <table class="table table-bordered mt-4">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Batch ID</th>
-        <th>Contact</th>
-        <th>Attendance Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of filteredPadyatri">
-        <td>
-          <a [routerLink]="['/user-detail', user.padyatriId]">{{ user.firstName }}</a>
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Batch ID</mat-label>
+      <input matInput type="number" formControlName="batchSearch" placeholder="Batch ID" />
+      <button *ngIf="filterForm.get('batchSearch')?.value"
+              matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearBatchSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+      Search <mat-icon>search</mat-icon>
+    </button>
+  </form>
+
+  <!-- Desktop Table View -->
+  <div class="table-container" *ngIf="!isMobile && filteredPadyatri.length > 0">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <!-- Name -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let user">
+          <a class="user-link" (click)="goToUserDetail(user)">{{ user.firstName }}</a>
         </td>
-        <td>{{ user.batchId }}</td>
-        <td>{{ user.mobile }}</td>
-        <td>
-          <button (click)="markAttendance(user, 'Present')" class="btn btn-success" [disabled]="selectedStop === 0">Present</button>
-          <button (click)="markAttendance(user, 'Absent')" class="btn btn-danger" [disabled]="selectedStop === 0">Absent</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      </ng-container>
 
+      <!-- Batch ID -->
+      <ng-container matColumnDef="batchId">
+        <th mat-header-cell *matHeaderCellDef>Batch</th>
+        <td mat-cell *matCellDef="let user">{{ user.batchId }}</td>
+      </ng-container>
+
+      <!-- Contact -->
+      <ng-container matColumnDef="contact">
+        <th mat-header-cell *matHeaderCellDef>Mobile</th>
+        <td mat-cell *matCellDef="let user">{{ user.mobile }}</td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="attendance">
+        <th mat-header-cell *matHeaderCellDef>Attendance</th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-mini-fab color="primary" (click)="markAttendance(user, 'Present')">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button mat-mini-fab color="warn" (click)="markAttendance(user, 'Absent')">
+            <mat-icon>close</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+  </div>
+
+  <!-- Mobile / Tablet Card View -->
+  <div class="attendance-grid" *ngIf="isMobile && filteredPadyatri.length > 0">
+    <mat-card *ngFor="let user of filteredPadyatri" class="attendance-item">
+      <div class="info">
+        <div class="name">{{ user.firstName }}</div>
+        <div class="details">Batch {{ user.batchId }} · {{ user.mobile }}</div>
+      </div>
+      <div class="actions">
+        <button mat-icon-button color="primary" (click)="markAttendance(user, 'Present')">
+          <mat-icon>check_circle</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="markAttendance(user, 'Absent')">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- No Data Message -->
+  <p class="no-data-text" *ngIf="!filteredPadyatri.length">
+    {{ filterForm.get('selectedStop')?.value ? 'No matching records found.' : 'Please select a stop.' }}
+  </p>
 </div>

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './common/auth.interceptor';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -28,6 +28,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MenuPlannerComponent } from './menu-planner/menu-planner.component';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -40,6 +47,7 @@ import { MatMenuModule } from '@angular/material/menu';
     SpinnerComponent,
     HomeComponent,
     FoodMenuComponent,
+    MenuPlannerComponent,
     
   ],
   imports: [
@@ -49,6 +57,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSidenavModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     MatInputModule,
     MatTableModule,
     MatSortModule,
@@ -59,6 +69,11 @@ import { MatMenuModule } from '@angular/material/menu';
     AppRoutingModule,
     FormsModule,
     CommonModule,
+    NgxMatSelectSearchModule,
+     MatCardModule,
+    MatExpansionModule,
+    MatDividerModule,
+    MatProgressSpinner,
     HttpClientModule
     
   ],

@@ -1,80 +1,182 @@
-/* home.component.css */
-.carousel-container {
-  position: relative;
-  width: 100%;
-  max-width: 1000px;
-  margin: auto;
+/* Home wrapper */
+.home-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 48px;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.carousel {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide {
-  min-width: 100%;
-  display: none;
-  position: relative;
-}
-
-.carousel-slide.active {
-  display: block;
-}
-
-.carousel-slide img {
-  width: 100%;
+.hero-image {
+  flex: 1 1 300px;
+  max-width: 400px;
   height: auto;
+  object-fit: cover;
+  border-radius: 0 12px 12px 0;
 }
 
-.carousel-caption {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
+.hero-text {
+  flex: 1 1 300px;
+  padding: 24px 32px;
 }
 
-.carousel-controls {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
+.hero-text h1 {
+  color: #f57c00; /* match your orange header */
+  font-size: 2.8rem;
+  margin-bottom: 12px;
 }
 
-.carousel-controls button {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
-  border: none;
+.hero-text p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 600;
+  padding: 12px 24px;
+  margin-right: 12px;
+  border-radius: 6px;
+  text-decoration: none;
   cursor: pointer;
-  font-size: 18px;
-  border-radius: 50%;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.carousel-controls button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+.btn-primary {
+  background-color: #f57c00;
+  color: white;
 }
 
-/* home.component.css - Update to include responsiveness */
-.carousel-container {
-  width: 100%;
-  max-width: 1000px;
-  margin: auto;
-  overflow: hidden;
+.btn-primary:hover {
+  background-color: #e65a00;
 }
 
-.carousel-slide img {
-  width: 100%;
-  height: auto;
+.btn-secondary {
+  background-color: #43a047;
+  color: white;
 }
 
+.btn-secondary:hover {
+  background-color: #388e3c;
+}
+
+/* Overview Section */
+.overview {
+  margin-bottom: 48px;
+}
+
+.overview h2 {
+  font-size: 2rem;
+  color: #f57c00;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.card h3 {
+  color: #f57c00;
+  margin-bottom: 8px;
+  font-size: 1.25rem;
+}
+
+.card p {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Timeline Section */
+.timeline {
+  margin-bottom: 48px;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.timeline h2 {
+  color: #f57c00;
+  margin-bottom: 16px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.timeline ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1.1rem;
+  color: #444;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.timeline li {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.timeline li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.5rem;
+  color: #f57c00;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .carousel-caption {
-    font-size: 14px;
+  .hero {
+    flex-direction: column;
+  }
+
+  .hero-image,
+  .hero-text {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .hero-text {
+    padding: 16px 24px;
+    text-align: center;
+  }
+
+  .btn {
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .overview-cards {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,18 +1,57 @@
-<!-- 
-<div class="carousel-container">
-    <div class="carousel">
-      <div *ngFor="let slide of slides; let i = index" class="carousel-slide" [ngClass]="{ 'active': i === activeIndex }">
-        <img [src]="slide.image" [alt]="slide.altText" />
-        <div class="carousel-caption">
-          <h3>{{ slide.title }}</h3>
-          <p>{{ slide.description }}</p>
-        </div>
+<div class="home-wrapper">
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="../../assets/images/jalarambapa.jpg" alt="Padyatra Pilgrimage" class="hero-image" />
+    <div class="hero-text">
+      <h1>Shree Jalaram Padyatra</h1>
+      <p>
+        Join the sacred 126km journey from Porbandar to Virpur.<br />
+        A spiritual walk of devotion spanning 4 days.<br />
+        Organize menus, track attendance, and make this pilgrimage memorable.
+      </p>
+      <!-- <a routerLink="/attendance" class="btn btn-primary">Mark Attendance</a>
+      <a routerLink="/menu" class="btn btn-secondary">Manage Menu</a> -->
+    </div>
+  </section>
+
+  <!-- Event Overview Section -->
+  <section class="overview">
+    <h2>Event Overview</h2>
+    <div class="overview-cards">
+      <div class="card">
+        <h3>4 Days Journey</h3>
+        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
       </div>
+
+      <div class="card">
+        <h3>4 Days Journey</h3>
+        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
+      </div>
+
+      <div class="card">
+        <h3>4 Days Journey</h3>
+        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
+      </div>
+
     </div>
-  
-    <div class="carousel-controls">
-      <button (click)="prevSlide()">&#10094;</button>
-      <button (click)="nextSlide()">&#10095;</button>
-    </div>
-  </div>
-   -->
+  </section>
+
+  <!-- Daily Stops Timeline -->
+  <section class="timeline">
+    <h2>Journey Timeline</h2>
+    <ul>
+      <li>
+        <strong>Day 1:</strong> Porbandar → Stop 1
+      </li>
+      <li>
+        <strong>Day 2:</strong> Stop 1 → Stop 2
+      </li>
+      <li>
+        <strong>Day 3:</strong> Stop 2 → Stop 3
+      </li>
+      <li>
+        <strong>Day 4:</strong> Stop 3 → Virpur (Destination)
+      </li>
+    </ul>
+  </section>
+</div>

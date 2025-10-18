@@ -1,86 +1,118 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 import { AttendanceService } from '../services/attendance.service';
 import { PadyatriService } from '../services/padyatri.service';
-import { Padyatri } from '../common/padyatri.model';
 import { ToastService } from '../services/toast.service';
+import { Padyatri } from '../common/padyatri.model';
 
 @Component({
   selector: 'app-attendance',
-  standalone: false,
   templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.css'
+  styleUrls: ['./attendance.component.css'],
+  standalone: false
 })
-export class AttendanceComponent {
+export class AttendanceComponent implements OnInit {
+  filterForm!: FormGroup;
   stops: any[] = [];
   padyatri: Padyatri[] = [];
   filteredPadyatri: Padyatri[] = [];
-  batchSearch: number = 0 ;
-  selectedStop: number = 0;
-  toasts: any[] = [];
+  displayedColumns: string[] = ['name', 'batchId', 'contact', 'attendance'];
+  dataSource = new MatTableDataSource<Padyatri>([]);
+  isMobile = false;
 
-  constructor(private padyatriService: PadyatriService,  // Using PadyatriService
-    private attendanceService: AttendanceService,  // Using AttendanceService
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    private fb: FormBuilder,
+    private padyatriService: PadyatriService,
+    private attendanceService: AttendanceService,
+    private toastService: ToastService,
     private router: Router,
-    private toastService: ToastService) {}
+    private breakpointObserver: BreakpointObserver
+  ) {}
 
   ngOnInit(): void {
-    // Load stops and user data on component load
+    this.initForm();
     this.loadStops();
-    this.loadPadyatri();   
+    this.loadPadyatris();
+
+    // Detect screen size
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  }
+
+  initForm() {
+    this.filterForm = this.fb.group({
+      selectedStop: [0],
+      batchSearch: ['']
+    });
   }
 
   loadStops() {
-    this.padyatriService.getStops().subscribe((stops: any[]) => {
-      this.stops = stops;
-    },
-  (err) => {
-     this.toastService.show('Failed to load stops.', 'error');
-    });
-  }
-
-  loadPadyatri() {
-    this.padyatriService.getPadyatris().subscribe((padyatri: Padyatri[]) => {
-      this.padyatri = padyatri;
-      this.filteredPadyatri = padyatri;
-    },
-  (err) => {
-     this.toastService.show('Failed to load padyatri.', 'error');
-    });
-  }
-
-  onBatchSearch() {
-    if (this.selectedStop === 0) {
-      this.toastService.show('Please select a stop first to search users.', 'error');
-      return; // Prevent further search if stop is not selected
-    }
-    // If batchSearch is a number, filter by batchNumber; otherwise, filter by batchId (string)
-    if (this.batchSearch > 0) {
-      if (typeof this.batchSearch === 'number') {
-        this.filteredPadyatri = this.padyatri.filter(user => user.batchId === this.batchSearch);
-      }
-    } else {
-      this.filteredPadyatri = this.padyatri;  // Reset the filtered list if no search input
-    }
-  }
-
-  
-  markAttendance(padyatri: Padyatri, status: string) {
-    
-    if (this.selectedStop === 0) {
-      this.toastService.show('Please select a stop first to mark attendance.', 'error');
-      return; // Prevent marking attendance if stop is not selected
-    }
-
-    this.attendanceService.markAttendance(padyatri.padyatraId, status.toLowerCase() == "present",this.selectedStop ).subscribe(
-      () => {
-        // Show individual toast for each update
-       this.toastService.show(`Marked ${status} for ${padyatri.firstName}`, 'success');
-      },
-      (error: { message: any; }) => {
-        // Handle error and show toast
-        this.toastService.show(`Error: ${error.message}`, 'error');
-      }
+    this.padyatriService.getStops().subscribe(
+      (stops) => (this.stops = stops),
+      () => this.toastService.show('Failed to load stops.', 'error')
     );
+  }
+
+  loadPadyatris() {
+    this.padyatriService.getPadyatris().subscribe(
+      (data) => {
+        this.padyatri = data;
+        this.filteredPadyatri = data;
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      () => this.toastService.show('Failed to load padyatri data.', 'error')
+    );
+  }
+
+  applyFilters(): void {
+    const stopId = this.filterForm.get('selectedStop')?.value;
+    const batchSearch = this.filterForm.get('batchSearch')?.value;
+
+    if (stopId === 0) {
+      this.toastService.show('Please select a stop first.', 'warning');
+      return;
+    }
+
+    this.filteredPadyatri = this.padyatri.filter((user) => {
+      const matchesStop = stopId ? true : false;
+      const matchesBatch = batchSearch ? user.batchId === +batchSearch : true;
+      return matchesStop && matchesBatch;
+    });
+
+    this.dataSource.data = this.filteredPadyatri;
+  }
+
+  clearBatchSearch(): void {
+    this.filterForm.get('batchSearch')?.setValue('');
+    this.applyFilters();
+  }
+
+  markAttendance(user: Padyatri, status: 'Present' | 'Absent'): void {
+    const stopId = this.filterForm.get('selectedStop')?.value;
+
+    if (stopId === 0) {
+      this.toastService.show('Please select a stop before marking attendance.', 'warning');
+      return;
+    }
+
+    const isPresent = status === 'Present';
+
+    this.attendanceService.markAttendance(user.padyatriId, isPresent, stopId).subscribe(
+      () => this.toastService.show(`Marked ${status} for ${user.firstName}`, 'success'),
+      (error) => this.toastService.show(`Failed to mark attendance. ${error.message}`, 'error')
+    );
+  }
+
+  goToUserDetail(user: Padyatri): void {
+    this.router.navigate(['/user-detail', user.padyatriId]);
   }
 }

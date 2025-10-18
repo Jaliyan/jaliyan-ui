@@ -5,6 +5,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
 import { FoodMenuComponent } from './food-menu/food-menu.component';
+import { MenuPlannerComponent } from './menu-planner/menu-planner.component';
 
 const routes: Routes = [
   // { path: 'schedule', component: ScheduleComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'attendance', component:  AttendanceComponent,canActivate: [AuthGuard] },
   { path: 'foodmenu', component:  FoodMenuComponent,canActivate: [AuthGuard] },
+  { path: 'menuplanner', component:  MenuPlannerComponent,canActivate: [AuthGuard] },
 ];
 
 @NgModule({
