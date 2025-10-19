@@ -21,7 +21,7 @@ export class ToastService {
   
   show(message: string, type: 'success' | 'error' | 'warning' | 'info') {
     const config = {
-      duration: 2000, // Duration for snack bar
+      duration: 5000, // Duration for snack bar
       horizontalPosition : this.horizontalPosition,
       verticalPosition: this.verticalPosition,
       panelClass: this.getPanelClass(type)

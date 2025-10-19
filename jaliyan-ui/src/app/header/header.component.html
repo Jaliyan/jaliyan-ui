@@ -39,6 +39,9 @@
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn">
+        <a mat-list-item routerLink="/padyatri/register" routerLinkActive="active">
+          <mat-icon>person_add</mat-icon> Register Padyatri
+        </a>
         <a mat-list-item routerLink="/attendance" routerLinkActive="active">
           <mat-icon>how_to_reg</mat-icon> Attendance
         </a>
@@ -91,6 +94,9 @@
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn">
+          <a mat-button routerLink="/padyatri/register" routerLinkActive="active">
+            <mat-icon>person_add</mat-icon> Register
+          </a>
           <a mat-button routerLink="/attendance" routerLinkActive="active">
             <mat-icon>how_to_reg</mat-icon> Attendance
           </a>

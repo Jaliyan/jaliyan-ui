@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Padyatri } from '../common/padyatri.model'; // Import the Padyatri model
 import { environment } from '../environments/environment';
+import { CreatePadyatriDto, Padyatri } from '../common/padyatri.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +31,8 @@ export class PadyatriService {
    * Add a new Padyatri (padyatri).
    * @param Padyatri - The Padyatri data to be added.
    */
-  addPadyatri(padyatri: Padyatri): Observable<Padyatri> {
-    return this.http.post<Padyatri>(`${this.baseUrl}/padyatris/createPadyatri`, padyatri);
+  addPadyatri(padyatri: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Padyatri/createPadyatri`, padyatri);
   }
 
   /**

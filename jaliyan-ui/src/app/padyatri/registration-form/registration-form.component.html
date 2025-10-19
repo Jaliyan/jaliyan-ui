@@ -1,0 +1,143 @@
+<div class="registration-container">
+  <mat-card class="registration-card">
+    <div class="form-title">
+      <img src="../../assets/images/Logo1.jpg" alt="Logo" />
+      <h2>Padyatri Registration</h2>
+    </div>
+
+    <form [formGroup]="padyatriForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <!-- First Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" required />
+          <mat-error
+            *ngIf="padyatriForm.get('firstName')?.hasError('required') && padyatriForm.get('firstName')?.touched">
+            First Name is required
+          </mat-error>
+          <mat-error *ngIf="padyatriForm.get('firstName')?.hasError('maxlength')">
+            Max 100 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" required />
+          <mat-error
+            *ngIf="padyatriForm.get('lastName')?.hasError('required') && padyatriForm.get('lastName')?.touched">
+            Last Name is required
+          </mat-error>
+          <mat-error *ngIf="padyatriForm.get('lastName')?.hasError('maxlength')">
+            Max 100 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Second Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" required />
+          <mat-error *ngIf="padyatriForm.get('age')?.hasError('required') && padyatriForm.get('age')?.touched">
+            Age is required
+          </mat-error>
+          <mat-error *ngIf="padyatriForm.get('age')?.hasError('min')">
+            Minimum age is 0
+          </mat-error>
+          <mat-error *ngIf="padyatriForm.get('age')?.hasError('max')">
+            Maximum age is 150
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender" required>
+            <mat-option value="">-- Select Gender --</mat-option>
+            <mat-option value="Male">Male</mat-option>
+            <mat-option value="Female">Female</mat-option>
+            <mat-option value="Other">Other</mat-option>
+          </mat-select>
+          <mat-error *ngIf="padyatriForm.get('gender')?.hasError('required')">
+            Gender is required.
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <!-- Third Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Mobile</mat-label>
+          <input matInput formControlName="mobile" required />
+          <mat-error *ngIf="padyatriForm.get('mobile')?.hasError('required') && padyatriForm.get('mobile')?.touched">
+            Mobile is required
+          </mat-error>
+          <mat-error *ngIf="padyatriForm.get('mobile')?.hasError('maxlength')">
+            Max 15 digits allowed
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Alternate Number</mat-label>
+          <input matInput formControlName="alternateNumber" />
+          <mat-error *ngIf="padyatriForm.get('alternateNumber')?.hasError('maxlength')">
+            Max 15 digits allowed
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fourth Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Emergency Contact Name</mat-label>
+          <input matInput formControlName="emergencyContactName" />
+          <mat-error *ngIf="padyatriForm.get('emergencyContactName')?.hasError('maxlength')">
+            Max 100 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Emergency Contact Number</mat-label>
+          <input matInput formControlName="emergencyContactNumber" />
+          <mat-error *ngIf="padyatriForm.get('emergencyContactNumber')?.hasError('maxlength')">
+            Max 15 digits allowed
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fifth Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Address</mat-label>
+          <textarea matInput formControlName="address"></textarea>
+          <mat-error *ngIf="padyatriForm.get('address')?.hasError('maxlength')">
+            Max 255 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Sixth Row: Photo Upload -->
+      <div class="form-row">
+        <div class="form-field photo-upload-wrapper">
+          <button type="button" class="upload-button" (click)="fileInput.click()">
+            Choose Photo
+          </button>
+
+          <span class="file-name" *ngIf="selectedPhotoFile">
+            {{ selectedPhotoFile.name }}
+          </span>
+
+          <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display: none;" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
+          Register
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

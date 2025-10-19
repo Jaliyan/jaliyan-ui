@@ -15,6 +15,10 @@ const routes: Routes = [
   { path: 'attendance', component:  AttendanceComponent,canActivate: [AuthGuard] },
   { path: 'foodmenu', component:  FoodMenuComponent,canActivate: [AuthGuard] },
   { path: 'menuplanner', component:  MenuPlannerComponent,canActivate: [AuthGuard] },
+  {
+    path: 'padyatri',
+    loadChildren: () => import('./padyatri/padyatri.module').then(m => m.PadyatriModule)
+  },
 ];
 
 @NgModule({

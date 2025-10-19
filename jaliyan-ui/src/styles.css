@@ -1,24 +1,36 @@
-/* styles.css or styles.scss */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll globally */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Snackbar Styles */
 .snackbar-success .mdc-snackbar__surface {
   background-color: #4caf50 !important;
   color: white !important;
 }
 
-.snackbar-error .mdc-snackbar__surface{
+.snackbar-error .mdc-snackbar__surface {
   background-color: #f44336 !important;
   color: white !important;
 }
 
-.snackbar-warning .mdc-snackbar__surface{
+.snackbar-warning .mdc-snackbar__surface {
   background-color: #ff9800 !important;
   color: white !important;
 }
 
-.snackbar-info .mdc-snackbar__surface{
+.snackbar-info .mdc-snackbar__surface {
   background-color: #2196f3 !important;
   color: white !important;
 }
 
+/* Page Wrapper */
 .page-wrapper {
   padding: 0 clamp(16px, 4vw, 32px);
   max-width: 1200px;
@@ -26,37 +38,7 @@
   width: 100%;
 }
 
-
-/* .sidenav-container {
-  height: 100%;
-} */
-
-/* .mat-toolbar {
-  display: flex;
-  justify-content: space-between;
-}
-
-.logo-text {
-  text-decoration: none;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-  margin-left: 8px;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.desktop-menu {
-  display: flex;
-  gap: 8px;
-}
-
-.mobile-toggle {
-  display: none;
-} */
-
+/* Responsive menu toggle (unrelated to form but included) */
 @media (max-width: 768px) {
   .desktop-menu {
     display: none;
@@ -65,8 +47,3 @@
     display: inline-flex;
   }
 }
-
-
-/* ::ng-deep .mat-toolbar {
-  background-color: #f57c00; 
-} */
