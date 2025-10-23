@@ -1,0 +1,18 @@
+<div class="print-dialog-container">
+
+  <!-- Screen-only toolbar -->
+  <div class="print-toolbar no-print">
+    <button mat-raised-button color="primary" (click)="printAll()">🖨️ Print All</button>
+  </div>
+
+  <!-- Print-only header -->
+  <div class="print-header only-print">
+    <h2>ID Cards - Shri Jalaram Padyatra Sangh</h2>
+  </div>
+
+  <div class="cards-grid">
+    <div class="printable-card" *ngFor="let padyatri of padyatris">
+      <app-id-card [padyatri]="padyatri" [showActions]="false"></app-id-card>
+    </div>
+  </div>
+</div>

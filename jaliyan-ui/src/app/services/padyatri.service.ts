@@ -23,8 +23,8 @@ export class PadyatriService {
    * Fetch a specific Padyatri (padyatri) by ID.
    * @param padyatriId - The ID of the Padyatri to fetch.
    */
-  getPadyatriById(padyatriId: string): Observable<Padyatri> {
-    return this.http.get<Padyatri>(`${this.baseUrl}/padyatris/${padyatriId}`);
+  getPadyatriById(padyatriId: number): Observable<Padyatri> {
+    return this.http.get<Padyatri>(`${this.baseUrl}/padyatri/getPadyatriById/${padyatriId}`);
   }
 
   /**
@@ -40,15 +40,15 @@ export class PadyatriService {
    * @param padyatriId - The ID of the Padyatri to update.
    * @param updatedPadyatri - The updated Padyatri data.
    */
-  updatePadyatri(updatedPadyatri: Padyatri): Observable<Padyatri> {
-    return this.http.put<Padyatri>(`${this.baseUrl}/padyatris/updatePadyatri`, updatedPadyatri);
+  updatePadyatri(updatedPadyatri: FormData): Observable<Padyatri> {
+    return this.http.put<Padyatri>(`${this.baseUrl}/padyatri/updatePadyatri`, updatedPadyatri);
   }
 
   /**
    * Delete a Padyatri (padyatri) by ID.
    * @param PadyatriId - The ID of the Padyatri to delete.
    */
-  deletePadyatri(padyatriId: string,updatedBy: string): Observable<any> {
+  deletePadyatri(padyatriId: number,updatedBy: string): Observable<any> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export class PadyatriService {
         updatedBy: updatedBy,
       },
     };
-  return this.http.delete(`${this.baseUrl}/padyatris/deletePadyatri`, options);
+  return this.http.delete(`${this.baseUrl}/padyatri/deletePadyatri`, options);
   }
 
   /**
@@ -66,5 +66,11 @@ export class PadyatriService {
    */
   getStops(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/stops`);
+  }
+
+  getPadyatriImageAsBlob(fileName: string) {
+    return this.http.get(`${this.baseUrl}/padyatri/getPadyatriImage/${fileName}`, {
+      responseType: 'blob',
+    });
   }
 }

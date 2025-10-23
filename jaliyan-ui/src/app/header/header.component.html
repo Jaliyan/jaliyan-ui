@@ -19,15 +19,6 @@
       <a mat-list-item routerLink="/about" routerLinkActive="active">
         <mat-icon>info</mat-icon> About
       </a>
-
-      <!-- Always show Events and Donations in sidebar -->
-      <a mat-list-item routerLink="/events" routerLinkActive="active">
-        <mat-icon>event</mat-icon> Events
-      </a>
-      <a mat-list-item routerLink="/donations" routerLinkActive="active">
-        <mat-icon>volunteer_activism</mat-icon> Donations
-      </a>
-
       <a mat-list-item routerLink="/contact" routerLinkActive="active">
         <mat-icon>contact_mail</mat-icon> Contact
       </a>
@@ -39,10 +30,10 @@
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn">
-        <a mat-list-item routerLink="/padyatri/register" routerLinkActive="active">
-          <mat-icon>person_add</mat-icon> Register Padyatri
+        <a mat-list-item routerLink="/padyatri/list" routerLinkActive="active">
+          <mat-icon>dashboard-cards</mat-icon> Dashboard
         </a>
-        <a mat-list-item routerLink="/attendance" routerLinkActive="active">
+        <a mat-list-item routerLink="/qrscan" routerLinkActive="active">
           <mat-icon>how_to_reg</mat-icon> Attendance
         </a>
         <a mat-list-item routerLink="/foodmenu" routerLinkActive="active">
@@ -82,22 +73,16 @@
         </a>
 
         <ng-container *ngIf="!isLoggedIn">
-          <a mat-button routerLink="/events" routerLinkActive="active">
-            <mat-icon>event</mat-icon> Events
-          </a>
-          <a mat-button routerLink="/donations" routerLinkActive="active">
-            <mat-icon>volunteer_activism</mat-icon> Donations
-          </a>
           <a mat-button routerLink="/login" routerLinkActive="active">
             <mat-icon>login</mat-icon> Login
           </a>
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn">
-          <a mat-button routerLink="/padyatri/register" routerLinkActive="active">
-            <mat-icon>person_add</mat-icon> Register
+          <a mat-button routerLink="/padyatri/list" routerLinkActive="active">
+            <mat-icon>dashboard-cards</mat-icon> Dashboard
           </a>
-          <a mat-button routerLink="/attendance" routerLinkActive="active">
+          <a mat-button routerLink="/qrscan" routerLinkActive="active">
             <mat-icon>how_to_reg</mat-icon> Attendance
           </a>
           <a mat-button routerLink="/foodmenu" routerLinkActive="active">
@@ -119,12 +104,6 @@
 
     <!-- Dropdown Menu (Only when logged in) -->
     <mat-menu #userMenu="matMenu">
-      <button mat-menu-item routerLink="/events">
-        <mat-icon>event</mat-icon> Events
-      </button>
-      <button mat-menu-item routerLink="/donations">
-        <mat-icon>volunteer_activism</mat-icon> Donations
-      </button>
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon> Logout
       </button>

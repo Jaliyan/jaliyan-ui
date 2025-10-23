@@ -1,0 +1,50 @@
+<div class="dashboard-wrapper">
+  <h1 class="dashboard-header">Meal Itinerary</h1>
+
+  <mat-accordion multi>
+    <mat-expansion-panel *ngFor="let day of itinerary">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="date-header">
+          {{ day.date | date: 'dd-MM.yyyy' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <table
+        class="dashboard-table"
+        role="table"
+        [attr.aria-label]="'Meal Itinerary for ' + (day.date | date: 'fullDate')"
+      >
+        <thead>
+          <tr>
+            <th>Meal</th>
+            <th>Menu</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let meal of day.meals | keyvalue">
+            <td>{{ mealTypeLabel(meal.key) }}</td>
+            <td>
+              <ng-container *ngIf="meal.value.menu?.length; else noMenu">
+                {{ meal.value.menu?.join(', ') }}
+              </ng-container>
+              <ng-template #noMenu>No menu available</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="meal.value.location; else noLocation">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query={{ meal.value.location.lat }},{{ meal.value.location.lng }}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ meal.value.location.name }}
+                </a>
+              </ng-container>
+              <ng-template #noLocation>No location available</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

@@ -314,6 +314,41 @@ body {
   .mat-sidenav .mat-list-item mat-icon {
     font-size: 22px;
   }
+  .mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
+  justify-content: flex-start !important;
+}
+
+/* Ensure all anchor links in sidenav align to left */
+.mat-sidenav .mat-mdc-list-item {
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+.mat-sidenav .mdc-list-item__content {
+  justify-content: flex-start !important;
+  text-align: left;
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.mat-sidenav .mat-icon {
+  margin-right: 12px;
+  font-size: 24px;
+  min-width: 24px;
+}
+
+.mat-sidenav .mdc-list-item__primary-text {
+  text-align: left;
+  white-space: normal; /* Allow line wrap if label is too long */
+}
+
+/* Optional: prevent text truncation */
+.mat-sidenav .mdc-list-item__primary-text {
+  overflow: visible;
+  text-overflow: initial;
+}
+
 }
 
 /* Highlight active links */
@@ -370,4 +405,22 @@ a.active mat-icon {
 
 .mat-sidenav .mat-list-item .mat-list-item-content {
   padding: 0 !important;
+}
+
+/* FIX: Force all sidebar items (icon + text) to align left properly */
+.mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
+  justify-content: flex-start !important; /* Align content to the left */
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.mat-sidenav .mat-mdc-list-item .mat-icon {
+  font-size: 24px;
+  min-width: 24px;
+  margin-right: 8px;
+}
+
+.mat-sidenav .mat-mdc-list-item .mdc-list-item__primary-text {
+  text-align: left;
 }

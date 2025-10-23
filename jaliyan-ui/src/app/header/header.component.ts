@@ -14,7 +14,7 @@ export class HeaderComponent {
   
   constructor(private authService: AuthService) { 
 
-    this.authSubscription = this.authService.isAuthenticated().subscribe(isLoggedIn => {
+    this.authSubscription = this.authService.isLoggedIn$.subscribe((isLoggedIn: boolean) => {
       this.isLoggedIn = isLoggedIn;  // Update the login status when the auth state changes
     });
   }

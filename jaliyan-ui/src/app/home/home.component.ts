@@ -1,4 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { isTokenExpired } from '../common/token.utils';
 
 @Component({
   selector: 'app-home',
@@ -6,42 +9,27 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
   standalone: false,
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit,OnDestroy {
-
-  activeIndex = 0; // Index of the active slide
-  interval: any; 
-
-  slides = [
-    { image: 'assets/images/slide1.jpg', altText: 'Slide 1', title: 'Jalaram Padyatra', description: 'Join the sacred journey' },
-    { image: 'assets/images/slide2.jpg', altText: 'Slide 2', title: 'Spiritual Journey', description: 'Experience peace and devotion' },
-    { image: 'assets/images/slide1.jpg', altText: 'Slide 3', title: 'Faith and Devotion', description: 'Feel the divine blessings' }
-  ];
-
+export class HomeComponent implements OnInit {
+  constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
-    // Optionally start automatic slide transitions
-    this.interval = setInterval(() => {
-      this.nextSlide();
-    }, 5000); // Automatically change slides every 5 seconds
 
-    console.log("Interval " + this.interval);
-  }
+    const data = this.route.snapshot.queryParamMap.get('data');
 
-  ngOnDestroy() {
-    // Clear the interval when the component is destroyed
-    console.log("Interval Destroy before" + this.interval);
-    if (this.interval) {
-      clearInterval(this.interval);
+    if (!data) {
+      this.router.navigate(['/home']); // fallback public page
+      return;
     }
-    console.log("Interval After" + this.interval);
+
+    const token = this.auth.getJwtToken();
+    const isValid = token && !isTokenExpired(token);
+
+    if (!isValid) {
+      // Redirect to login with data param
+      this.router.navigate(['/infodashboard']);
+      return; // IMPORTANT: stop further execution in this component
+    }
   }
 
-  nextSlide() {
-    this.activeIndex = (this.activeIndex + 1) % this.slides.length;
-  }
-
-
-  prevSlide() {
-    this.activeIndex = (this.activeIndex - 1 + this.slides.length) % this.slides.length;
-  }
+  
 }

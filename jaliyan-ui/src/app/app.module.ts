@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { AttendanceComponent } from './attendance/attendance.component';
 import { HomeComponent } from './home/home.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpinnerComponent } from './spinner/spinner.component';
@@ -35,6 +34,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { QrModule } from './qr/qr.module';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { PublicInfoDashboardComponent } from './public-info-dashboard/public-info-dashboard.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -43,11 +47,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     LoginComponent,
     HeaderComponent,
     FooterComponent,
-    AttendanceComponent,
     SpinnerComponent,
     HomeComponent,
     FoodMenuComponent,
     MenuPlannerComponent,
+    PublicInfoDashboardComponent,
     
   ],
   imports: [
@@ -74,7 +78,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatExpansionModule,
     MatDividerModule,
     MatProgressSpinner,
-    HttpClientModule
+    HttpClientModule,
+    MatCheckboxModule,
+    QrModule,
+    ZXingScannerModule,
+    MatTooltipModule
     
   ],
   providers: [

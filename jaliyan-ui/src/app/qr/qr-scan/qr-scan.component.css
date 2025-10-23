@@ -1,0 +1,277 @@
+.attendance-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #f4f6f8;
+  min-height: 77vh;
+}
+
+.header {
+  background-color: #ffffff;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 6px solid #f57c00; /* Orange accent */
+}
+
+.header::before {
+  content: '📝';
+  font-size: 1.8rem;
+  margin-right: 12px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap; /* responsive wrap */
+  margin-bottom: 16px;
+}
+
+.filter-item {
+  flex: 1 1 0;
+  min-width: 200px; /* minimum width per filter */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+
+  .table-container {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .attendance-grid {
+    display: none;
+  }
+}
+
+.mode-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.mode-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  white-space: nowrap;
+}
+
+.mode-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;  /* Allow items to wrap but keep content inline */
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  font-weight: 600;
+  min-width: 140px;
+  user-select: none;
+}
+
+.mode-option.selected,
+.mat-radio-button.mat-radio-checked.mode-option {
+  border-color: #f57c00;
+  background-color: #fff3e0;
+}
+
+.mode-option:hover:not(.disabled):not(.mat-radio-disabled) {
+  border-color: #f57c00;
+  background-color: #fff8e1;
+}
+
+.mode-option.disabled,
+.mode-option[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .mode-option {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-option {
+    font-size: 0.9rem;
+  }
+}
+
+.scanner-disabled-text {
+  color: #d32f2f; /* error red */
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.manual-batch {
+  max-width: 300px;
+  margin-right: 12px;
+}
+
+.table-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.attendance-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.attendance-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info .name {
+  font-weight: 600;
+  color: #333;
+}
+
+.actions button {
+  margin-left: 8px;
+}
+
+.qr-scanner-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.qr-mode {
+  width: 100%;
+  max-width: 500px;
+  height: 300px; /* Default desktop height */
+  border: 3px solid #f57c00;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.qr-mode.qr-success {
+  border-color: #4caf50; /* Green */
+  box-shadow: 0 0 12px #4caf50;
+}
+
+.qr-mode.qr-error {
+  border-color: #f44336; /* Red */
+  box-shadow: 0 0 12px #f44336;
+}
+
+.qr-feedback-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-success {
+  font-size: 64px;
+  color: #4caf50;
+  animation: pop 0.3s ease-in-out;
+}
+
+.icon-error {
+  font-size: 64px;
+  color: #f44336;
+  animation: pop 0.3s ease-in-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.cooldown-active {
+  border-width: 4px;
+}
+
+.scanner-feedback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  z-index: 10;
+  pointer-events: none;
+  text-align: center;
+}
+
+.scanner-feedback mat-icon {
+  font-size: 3rem;
+  margin-top: 8px;
+  color: inherit;
+}
+
+@media (max-width: 600px) {
+  .scanner-feedback {
+    font-size: 1rem;
+  }
+
+  .scanner-feedback mat-icon {
+    font-size: 2rem;
+  }
+}
+
+/* Hide default radio circle from Angular Material radios */
+.mat-radio-outer-circle,
+.mat-radio-inner-circle {
+  display: none !important;
+}
+
+.mat-radio-button {
+  padding-left: 0 !important; /* Remove space reserved for the circle */
+}

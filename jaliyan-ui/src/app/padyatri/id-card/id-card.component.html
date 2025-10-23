@@ -1,0 +1,32 @@
+<div id="id-card" class="id-card-wrapper">
+  <div class="id-card">
+    <div class="header">
+      <h3>Shri Jalaram Padyatra Sangh - 2025</h3>
+    </div>
+
+    <div class="photo-section photo-wrapper">
+      <img [src]="photoUrl || '../../assets/images/Logo1.jpg'" alt="Padyatri Photo" class="photo">
+
+    </div>
+
+    <div class="info-section">
+      <p><strong>Name:</strong> {{ padyatri.firstName }} {{ padyatri.lastName }}</p>
+      <p><strong>Mobile:</strong> {{ padyatri.mobile }}</p>
+      <p><strong>Age:</strong> {{ padyatri.age }}</p>
+      <p><strong>Batch ID:</strong> {{ padyatri.batchId }}</p>
+    </div>
+
+<div class="qr-section" #qrContainer>
+  <qrcode [qrdata]="qrData" [width]="80" errorCorrectionLevel="M" [elementType]="'canvas'"></qrcode>
+</div>
+
+
+
+  </div>
+
+  <div class="id-card-actions" *ngIf="showActions">
+  <button mat-raised-button color="primary" (click)="printCard()">Print</button>
+  <button mat-raised-button color="accent" (click)="downloadCard()">Download</button>
+</div>
+
+</div>

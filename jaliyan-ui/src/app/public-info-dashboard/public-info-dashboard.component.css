@@ -1,0 +1,94 @@
+/* Container to match home page spacing */
+.home-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Accordion header style */
+.custom-expansion-header {
+  background-color: #f57c00;
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(245, 124, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-expansion-header:hover {
+  background-color: #e65a00;
+}
+
+/* Rotate expand icon */
+.custom-expansion-header .mat-expansion-indicator {
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.day-panel.mat-expanded .custom-expansion-header .mat-expansion-indicator {
+  transform: rotate(180deg);
+}
+
+/* Margin between header and content */
+.day-panel.mat-expanded .mat-expansion-panel-content {
+  margin-top: 12px;
+}
+
+/* Table styles */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  table-layout: fixed; /* important to wrap text */
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1rem;
+  word-wrap: break-word; /* wrap long text */
+  white-space: normal;   /* allow wrapping */
+}
+
+.dashboard-table thead {
+  background-color: #f57c00;
+  color: white;
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #fff3e0;
+}
+
+/* Menu text wrap nicely */
+.menu-text {
+  white-space: normal;
+  word-break: break-word;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-expansion-header {
+    font-size: 1.1rem;
+    padding: 12px 16px;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+}

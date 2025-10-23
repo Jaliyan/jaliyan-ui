@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private toastService: ToastService,
   ) {}
 
   onLogin(): void {
@@ -37,14 +38,11 @@ export class LoginComponent {
           sessionStorage.setItem('token', data.token);
         }
 
-        this.router.navigate(['/attendance']); // Redirect after login
+        this.router.navigate(['/padyatri/list']); // Redirect after login
       },
       error: (err) => {
         this.loading = false;
-        this.snackBar.open('Login failed! Please check credentials.', 'Close', {
-          duration: 3000,
-          verticalPosition: 'top',
-        });
+        this.toastService.show("Login failed! Please check the credentials.","error")
       }
     });
   }

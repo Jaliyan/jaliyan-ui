@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +12,9 @@ export class AppComponent {
   title = 'jaliyan-ui';
   isLoading: boolean = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private authService: AuthService) {}
   
   ngOnInit() {
-    setTimeout(() => {
-      this.isLoading = false; // Hide the spinner
-      this.router.navigate(['/home']); // Navigate to Home Component after spinner hides
-    }, 2000); // Simulate loading for 2 seconds
+  this.authService.initializeSession();
   }
 }

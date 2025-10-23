@@ -13,10 +13,11 @@
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstName" required />
           <mat-error
-            *ngIf="padyatriForm.get('firstName')?.hasError('required') && padyatriForm.get('firstName')?.touched">
+            *ngIf="padyatriForm.get('firstName')?.hasError('required') && (padyatriForm.get('firstName')?.touched || formSubmitted)">
             First Name is required
           </mat-error>
-          <mat-error *ngIf="padyatriForm.get('firstName')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('firstName')?.hasError('maxlength') && (padyatriForm.get('firstName')?.touched || formSubmitted)">
             Max 100 characters
           </mat-error>
         </mat-form-field>
@@ -25,10 +26,11 @@
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="lastName" required />
           <mat-error
-            *ngIf="padyatriForm.get('lastName')?.hasError('required') && padyatriForm.get('lastName')?.touched">
+            *ngIf="padyatriForm.get('lastName')?.hasError('required') && (padyatriForm.get('lastName')?.touched || formSubmitted)">
             Last Name is required
           </mat-error>
-          <mat-error *ngIf="padyatriForm.get('lastName')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('lastName')?.hasError('maxlength') && (padyatriForm.get('lastName')?.touched || formSubmitted)">
             Max 100 characters
           </mat-error>
         </mat-form-field>
@@ -39,13 +41,16 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Age</mat-label>
           <input matInput type="number" formControlName="age" required />
-          <mat-error *ngIf="padyatriForm.get('age')?.hasError('required') && padyatriForm.get('age')?.touched">
+          <mat-error
+            *ngIf="padyatriForm.get('age')?.hasError('required') && (padyatriForm.get('age')?.touched || formSubmitted)">
             Age is required
           </mat-error>
-          <mat-error *ngIf="padyatriForm.get('age')?.hasError('min')">
+          <mat-error
+            *ngIf="padyatriForm.get('age')?.hasError('min') && (padyatriForm.get('age')?.touched || formSubmitted)">
             Minimum age is 0
           </mat-error>
-          <mat-error *ngIf="padyatriForm.get('age')?.hasError('max')">
+          <mat-error
+            *ngIf="padyatriForm.get('age')?.hasError('max') && (padyatriForm.get('age')?.touched || formSubmitted)">
             Maximum age is 150
           </mat-error>
         </mat-form-field>
@@ -58,11 +63,11 @@
             <mat-option value="Female">Female</mat-option>
             <mat-option value="Other">Other</mat-option>
           </mat-select>
-          <mat-error *ngIf="padyatriForm.get('gender')?.hasError('required')">
+          <mat-error
+            *ngIf="padyatriForm.get('gender')?.hasError('required') && (padyatriForm.get('gender')?.touched || formSubmitted)">
             Gender is required.
           </mat-error>
         </mat-form-field>
-
       </div>
 
       <!-- Third Row -->
@@ -70,10 +75,12 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Mobile</mat-label>
           <input matInput formControlName="mobile" required />
-          <mat-error *ngIf="padyatriForm.get('mobile')?.hasError('required') && padyatriForm.get('mobile')?.touched">
+          <mat-error
+            *ngIf="padyatriForm.get('mobile')?.hasError('required') && (padyatriForm.get('mobile')?.touched || formSubmitted)">
             Mobile is required
           </mat-error>
-          <mat-error *ngIf="padyatriForm.get('mobile')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('mobile')?.hasError('maxlength') && (padyatriForm.get('mobile')?.touched || formSubmitted)">
             Max 15 digits allowed
           </mat-error>
         </mat-form-field>
@@ -81,7 +88,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Alternate Number</mat-label>
           <input matInput formControlName="alternateNumber" />
-          <mat-error *ngIf="padyatriForm.get('alternateNumber')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('alternateNumber')?.hasError('maxlength') && (padyatriForm.get('alternateNumber')?.touched || formSubmitted)">
             Max 15 digits allowed
           </mat-error>
         </mat-form-field>
@@ -92,7 +100,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Emergency Contact Name</mat-label>
           <input matInput formControlName="emergencyContactName" />
-          <mat-error *ngIf="padyatriForm.get('emergencyContactName')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('emergencyContactName')?.hasError('maxlength') && (padyatriForm.get('emergencyContactName')?.touched || formSubmitted)">
             Max 100 characters
           </mat-error>
         </mat-form-field>
@@ -100,7 +109,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Emergency Contact Number</mat-label>
           <input matInput formControlName="emergencyContactNumber" />
-          <mat-error *ngIf="padyatriForm.get('emergencyContactNumber')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('emergencyContactNumber')?.hasError('maxlength') && (padyatriForm.get('emergencyContactNumber')?.touched || formSubmitted)">
             Max 15 digits allowed
           </mat-error>
         </mat-form-field>
@@ -111,7 +121,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Address</mat-label>
           <textarea matInput formControlName="address"></textarea>
-          <mat-error *ngIf="padyatriForm.get('address')?.hasError('maxlength')">
+          <mat-error
+            *ngIf="padyatriForm.get('address')?.hasError('maxlength') && (padyatriForm.get('address')?.touched || formSubmitted)">
             Max 255 characters
           </mat-error>
         </mat-form-field>
@@ -130,12 +141,15 @@
 
           <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display: none;" />
         </div>
+        <div class="photo-upload-container" *ngIf="preview">
+          <img [src]="preview" class="photo-preview" />
+        </div>
       </div>
 
       <!-- Actions -->
       <div class="form-actions">
         <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
-          Register
+          {{ editingId ? 'Update' : 'Register' }}
         </button>
       </div>
     </form>

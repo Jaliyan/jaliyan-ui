@@ -1,0 +1,125 @@
+<div class="attendance-container">
+  <!-- Header -->
+  <mat-toolbar color="primary" class="header">Attendance Marking</mat-toolbar>
+
+  <form [formGroup]="attendanceForm" class="filters">
+    <!-- Row 1: Filters -->
+    <div class="filters-row">
+      <mat-form-field appearance="outline" class="filter-item">
+        <mat-label>Location / Stop</mat-label>
+        <mat-select formControlName="selectedStop">
+          <mat-option *ngFor="let stop of stops" [value]="stop.stopId">{{ stop.stopName }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 2: Mode selector -->
+    <!-- Row 2: Mode selector -->
+    <div class="mode-row">
+
+      <div class="mode-group">
+        <div class="mode-option" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'manual'"
+          [class.disabled]="!canScan()" (click)="setMode('manual')">
+          <mat-icon color="primary">edit</mat-icon>
+          <span>Manual Entry</span>
+        </div>
+
+        <div class="mode-option" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'qr'"
+          [class.disabled]="!canScan()" (click)="setMode('qr')">
+          <mat-icon color="primary">qr_code_scanner</mat-icon>
+          <span>QR Code Scan</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Disabled message -->
+    <p *ngIf="!canScan()" class="scanner-disabled-text">
+      Please select a location to proceed.
+    </p>
+  </form>
+
+  <!-- Manual Mode UI -->
+  <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'" class="manual-mode">
+    <form class="filters" [formGroup]="attendanceForm" (ngSubmit)="applyFilters()">
+      <mat-form-field appearance="outline" class="filter-item">
+        <mat-label>Batch ID</mat-label>
+        <input matInput type="number" formControlName="batchSearch" placeholder="Batch ID" />
+        <button *ngIf="attendanceForm.get('batchSearch')?.value" matSuffix mat-icon-button aria-label="Clear"
+          (click)="clearBatchSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">Search</button>
+    </form>
+
+    <!-- Table View -->
+    <div class="table-container" *ngIf="!isMobile && filteredPadyatri.length">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let user">{{ user.firstName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="batchId">
+          <th mat-header-cell *matHeaderCellDef>Batch ID</th>
+          <td mat-cell *matCellDef="let user">{{ user.batchId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobile">
+          <th mat-header-cell *matHeaderCellDef>Mobile</th>
+          <td mat-cell *matCellDef="let user">{{ user.mobile }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-icon-button color="primary" (click)="markAttendance(user, true)">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="markAttendance(user, false)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="attendance-grid" *ngIf="isMobile && filteredPadyatri.length">
+      <mat-card *ngFor="let user of filteredPadyatri" class="attendance-item">
+        <div class="info">
+          <div class="name">{{ user.firstName }}</div>
+          <div class="details">Batch: {{ user.batchId }} | {{ user.mobile }}</div>
+        </div>
+        <div class="actions">
+          <button mat-icon-button color="primary" (click)="markAttendance(user, true)">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="markAttendance(user, false)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- QR Scanner Mode -->
+  <div class="qr-scanner-container" *ngIf="attendanceForm.get('attendanceMode')?.value === 'qr' && canScan()">
+  <div class="qr-mode" [ngClass]="{ 'cooldown-active': cooldownActive }" [style.border-color]="cooldownBorderColor">
+    <zxing-scanner (scanSuccess)="onQrScanned($event)"></zxing-scanner>
+
+    <!-- Overlay feedback -->
+    <div class="scanner-feedback" *ngIf="cooldownActive">
+      <div class="message">{{ cooldownMessage }}</div>
+      <mat-icon *ngIf="cooldownMessage === 'Marked Present'">check_circle</mat-icon>
+      <mat-icon *ngIf="cooldownMessage !== 'Marked Present'">error</mat-icon>
+    </div>
+  </div>
+</div>
+
+</div>
