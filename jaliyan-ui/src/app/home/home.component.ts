@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { isTokenExpired } from '../common/token.utils';
-
+interface JourneyStep {
+  day: number;
+  from: string;
+  to: string;
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,24 +15,17 @@ import { isTokenExpired } from '../common/token.utils';
 })
 export class HomeComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
+  currentYear = new Date().getFullYear();
+
+  journeyTimeline: JourneyStep[] = [
+    { day: 1, from: 'Porbandar', to: 'Stop 1' },
+    { day: 2, from: 'Stop 1', to: 'Stop 2' },
+    { day: 3, from: 'Stop 2', to: 'Stop 3' },
+    { day: 4, from: 'Stop 3', to: 'Virpur' }
+  ];
 
   ngOnInit() {
 
-    const data = this.route.snapshot.queryParamMap.get('data');
-
-    if (!data) {
-      this.router.navigate(['/home']); // fallback public page
-      return;
-    }
-
-    const token = this.auth.getJwtToken();
-    const isValid = token && !isTokenExpired(token);
-
-    if (!isValid) {
-      // Redirect to login with data param
-      this.router.navigate(['/infodashboard']);
-      return; // IMPORTANT: stop further execution in this component
-    }
   }
 
   

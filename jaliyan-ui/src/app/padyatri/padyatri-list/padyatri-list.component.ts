@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PadyatriService } from '../../services/padyatri.service';
 import { ToastService } from '../../services/toast.service';
@@ -34,7 +34,8 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private padyatriService: PadyatriService,
     private toastService: ToastService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -127,35 +128,71 @@ printSelectedIDCards(): void {
 
 
 async downloadBulkIDCards(): Promise<void> {
-  const containerEl = this.bulkCardContainer?.nativeElement;
+    if (!this.selectedPadyatris.length) {
+      alert('Please select at least one Padyatri');
+      return;
+    }
 
-  if (!containerEl || this.selectedPadyatris.length === 0) return;
+    // Wait for Angular to render cards
+    this.cdr.detectChanges();
+    await new Promise((r) => setTimeout(r, 400));
 
-  const cardElements = containerEl.querySelectorAll('app-id-card');
+    const containerEl = this.bulkCardContainer?.nativeElement;
+    if (!containerEl) {
+      console.error('Bulk card container not found');
+      return;
+    }
 
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  let isFirstPage = true;
+    // Wait for images in ID cards to load
+    await this.waitForImagesToLoad(containerEl);
 
-  for (const cardEl of Array.from(cardElements)) {
-    const canvas = await html2canvas(cardEl as HTMLElement, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: null
-    });
+    const cardElements = containerEl.querySelectorAll('app-id-card');
+    if (!cardElements.length) {
+      console.error('No ID cards found in container');
+      return;
+    }
 
-    const imgData = canvas.toDataURL('image/png');
-    const imgProps = pdf.getImageProperties(imgData);
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    let isFirstPage = true;
 
-    const pdfWidth = 180; // mm
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    for (const cardEl of Array.from(cardElements)) {
+      const canvas = await html2canvas(cardEl as HTMLElement, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
 
-    if (!isFirstPage) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight);
-    isFirstPage = false;
+      const imgData = canvas.toDataURL('image/png');
+      if (!imgData.startsWith('data:image/')) continue;
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = 180;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      if (!isFirstPage) pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight);
+      isFirstPage = false;
+    }
+
+    pdf.save('padyatri-id-cards.pdf');
   }
 
-  pdf.save('padyatri-id-cards.pdf');
-}
+  /** Utility to wait for all images */
+  private async waitForImagesToLoad(container: HTMLElement): Promise<void> {
+    const imgs = container.querySelectorAll('img');
+    const promises = Array.from(imgs).map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          if (img.complete) resolve();
+          else {
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+          }
+        })
+    );
+    await Promise.all(promises);
+  }
+
 
 
 async getPhotoDataURL(photoPath: string): Promise<string> {

@@ -3,11 +3,14 @@ import {
   HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, filter, switchMap, take } from 'rxjs/operators';
+import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { isTokenExpired } from '../common/token.utils';
 import { environment } from '../environments/environment';
+import { ToastService } from '../services/toast.service';
+import { QueryParamsService } from '../services/queryparams.service';
+import { LoaderService } from '../services/loader.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -15,10 +18,18 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastService: ToastService,
+    private queryParamsService: QueryParamsService,
+    private loaderService: LoaderService
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getJwtToken();
+    const isValid = token && !isTokenExpired(token);
+    const dataParam = this.queryParamsService.getCurrentQueryParam('data');
     const apiUrl = environment.apiUrl;
 
     let request = req;
@@ -26,9 +37,12 @@ export class AuthInterceptor implements HttpInterceptor {
       request = this.addTokenHeader(req, token);
     }
 
+    this.loaderService.show();
+    
     return next.handle(request).pipe(
+      finalize(() => this.loaderService.hide()),
       catchError(error => {
-        // 🔥 1️⃣ Ignore login and refreshToken endpoints
+        // Skip login/refreshToken APIs
         if (
           req.url.includes(`${apiUrl}/auth/login`) ||
           req.url.includes(`${apiUrl}/auth/refreshToken`)
@@ -36,15 +50,18 @@ export class AuthInterceptor implements HttpInterceptor {
           return throwError(() => error);
         }
 
-        // 🔥 2️⃣ Handle token-related errors only for protected routes
-        if (error instanceof HttpErrorResponse && error.status === 401) {
-          const currentToken = this.authService.getJwtToken();
+        // Case 1: ?data param present → redirect to info dashboard
+        if (dataParam && (!token || isTokenExpired(token))) {
+          this.router.navigate(['/infodashboard']);
+          return throwError(() => error);
+        }
 
-          if (currentToken && isTokenExpired(currentToken)) {
+        // Case 2: Unauthorized error (token invalid or expired)
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          if (token && isTokenExpired(token)) {
             return this.handle401Error(request, next);
           } else {
-            this.authService.logout();
-            return throwError(() => error);
+            this.handleInvalidSession();
           }
         }
 
@@ -55,9 +72,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private addTokenHeader(request: HttpRequest<any>, token: string): HttpRequest<any> {
     return request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
   }
 
@@ -74,17 +89,25 @@ export class AuthInterceptor implements HttpInterceptor {
         }),
         catchError(err => {
           this.isRefreshing = false;
-          this.authService.logout();
-          this.router.navigate(['/home']);
+          this.handleInvalidSession(true);
           return throwError(() => err);
         })
       );
     } else {
+      // Wait for refresh to complete
       return this.refreshTokenSubject.pipe(
         filter(token => token !== null),
         take(1),
         switchMap(token => next.handle(this.addTokenHeader(request, token!)))
       );
     }
+  }
+
+  private handleInvalidSession(showToast = false): void {
+    this.authService.logout();
+    if (showToast) {
+      this.toastService.show('Login expired. Please login again.', 'error');
+    }
+    this.router.navigate(['/login']);
   }
 }

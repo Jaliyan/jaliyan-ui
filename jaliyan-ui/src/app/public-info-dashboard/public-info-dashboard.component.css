@@ -1,5 +1,5 @@
-/* Container to match home page spacing */
-.home-wrapper {
+/* Container matching Home component */
+.dashboard-wrapper {
   max-width: 960px;
   margin: 0 auto;
   padding: 16px;
@@ -7,42 +7,60 @@
   color: #333;
 }
 
+/* Dashboard header styling like Home overview/timeline */
+.dashboard-header {
+  font-size: 2rem;
+  color: #f57c00;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Mat expansion panel styling for spacing and theme consistency */
+mat-expansion-panel {
+  margin-bottom: 24px; /* space between panels */
+  border-radius: 12px !important;
+  background: white;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #f57c00; /* subtle orange border */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+mat-expansion-panel:hover {
+  box-shadow: 0 8px 24px rgba(245, 124, 0, 0.3);
+  border-color: #e65a00;
+}
+
+mat-expansion-panel:last-child {
+  margin-bottom: 0;
+}
+
 /* Accordion header style */
-.custom-expansion-header {
-  background-color: #f57c00;
-  color: white;
+.mat-expansion-panel-header {
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+  border-radius: 12px 12px 0 0;
+  color: #f57c00;
   font-weight: 700;
-  font-size: 1.4rem;
   padding: 16px 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(245, 124, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.custom-expansion-header:hover {
-  background-color: #e65a00;
+.mat-expansion-panel-header:hover {
+  background-color: #faf3e0;
+  cursor: pointer;
 }
 
-/* Rotate expand icon */
-.custom-expansion-header .mat-expansion-indicator {
-  color: white;
+/* Expansion indicator color and rotation */
+.mat-expansion-indicator::after {
+  color: #f57c00 !important;
   transition: transform 0.3s ease;
 }
 
-.day-panel.mat-expanded .custom-expansion-header .mat-expansion-indicator {
+.mat-expanded .mat-expansion-indicator::after {
   transform: rotate(180deg);
 }
 
-/* Margin between header and content */
-.day-panel.mat-expanded .mat-expansion-panel-content {
-  margin-top: 12px;
-}
-
-/* Table styles */
+/* Table styling */
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
@@ -53,24 +71,45 @@
   table-layout: fixed; /* important to wrap text */
 }
 
+/* Updated table header with #f5e0b3 background and theme colors */
+.dashboard-table thead {
+  background-color: #f5e0b3;  /* soft warm yellow */
+  color: #000;             /* main orange text */
+  font-weight: 700;
+  border-bottom: 2px solid #f57c00;
+}
+
 .dashboard-table th,
 .dashboard-table td {
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   font-size: 1rem;
-  word-wrap: break-word; /* wrap long text */
-  white-space: normal;   /* allow wrapping */
-}
-
-.dashboard-table thead {
-  background-color: #f57c00;
-  color: white;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .dashboard-table tbody tr:hover {
   background-color: #fff3e0;
 }
+
+
+/* Control column widths and wrapping */
+.dashboard-table tbody tr td:nth-child(1), /* Meal */
+.dashboard-table thead tr th:nth-child(1) {
+  white-space: nowrap; /* keep meal text in one line */
+}
+
+.dashboard-table tbody tr td:nth-child(2), /* Menu */
+.dashboard-table thead tr th:nth-child(2) {
+  white-space: normal; /* allow menu text to wrap */
+}
+
+.dashboard-table tbody tr td:nth-child(3), /* Location */
+.dashboard-table thead tr th:nth-child(3) {
+  white-space: nowrap; /* keep location text in one line */
+}
+
 
 /* Menu text wrap nicely */
 .menu-text {
@@ -81,9 +120,13 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .custom-expansion-header {
-    font-size: 1.1rem;
+  mat-expansion-panel {
+    margin-bottom: 16px;
+  }
+
+  .mat-expansion-panel-header {
     padding: 12px 16px;
+    font-size: 1.1rem;
   }
 
   .dashboard-table th,

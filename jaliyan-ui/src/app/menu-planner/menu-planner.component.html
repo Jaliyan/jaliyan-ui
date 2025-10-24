@@ -24,19 +24,27 @@
     </mat-form-field>
 
     <!-- Menu Item Dropdown with Search -->
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Select Menu Items</mat-label>
-      <mat-select formControlName="menuItemIds" multiple>
-        <ngx-mat-select-search
-          [formControl]="itemFilterCtrl"
-          placeholderLabel="Search menu items"
-          noEntriesFoundLabel="No matching items found">
-        </ngx-mat-select-search>
-        <mat-option *ngFor="let item of filteredMenuItems" [value]="item.menuItemId">
-          {{ item.name }} - {{ item.description }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!-- Menu Item Dropdown with Search -->
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>Select Menu Items</mat-label>
+  <mat-select formControlName="menuItemIds" multiple>
+
+    <!-- ✅ ngx-mat-select-search must be inside a mat-option -->
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="itemFilterCtrl"
+        placeholderLabel="Search menu items"
+        noEntriesFoundLabel="No matching items found">
+      </ngx-mat-select-search>
+    </mat-option>
+
+    <mat-option *ngFor="let item of filteredMenuItems" [value]="item.menuItemId">
+      {{ item.name }} - {{ item.description }}
+    </mat-option>
+
+  </mat-select>
+</mat-form-field>
+
 
     <button mat-raised-button color="primary" type="submit" [disabled]="menuForm.invalid">
       Save Menu

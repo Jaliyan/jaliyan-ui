@@ -19,6 +19,7 @@ export class HeaderComponent {
     });
   }
 
+  
   isLoggedIn: boolean = false;
   isMenuOpen: boolean = false;  // Keeps track of whether the menu is open or closed
 

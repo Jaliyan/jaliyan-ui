@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly authTokenKey = 'auth_token';
-  private readonly refreshTokenKey = 'refresh_token'; // optional if your backend provides it
+  private readonly refreshTokenKey = 'refresh_token';
   private readonly apiUrl = environment.apiUrl;
 
   private tokenTimer: any;
@@ -38,7 +38,6 @@ export class AuthService {
           if (response?.token) {
             localStorage.setItem(this.authTokenKey, response.token);
 
-            // If your backend returns refresh token, store it too
             if (response.refreshToken) {
               localStorage.setItem(this.refreshTokenKey, response.refreshToken);
             }
@@ -49,9 +48,7 @@ export class AuthService {
           }
           return response;
         }),
-        catchError(error => {
-          return throwError(() => error);
-        })
+        catchError(error => throwError(() => error))
       );
   }
 
@@ -68,7 +65,7 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
 
-    this.router.navigate(['/home']); // go to home/login page
+    this.router.navigate(['/login'], { queryParamsHandling: 'preserve' });
   }
 
   /** ===================== TOKEN MANAGEMENT ===================== **/
@@ -92,7 +89,7 @@ export class AuthService {
 
     const expiresAt = decoded.exp * 1000;
     const now = Date.now();
-    const refreshTime = expiresAt - now - (60 * 1000); // refresh 1 min before expiry
+    const refreshTime = expiresAt - now - (60 * 1000); // refresh 1 minute before expiry
 
     if (refreshTime <= 0) {
       this.handleTokenExpiry();
@@ -101,9 +98,7 @@ export class AuthService {
 
     console.log(`⏳ Token will refresh in ${(refreshTime / 1000 / 60).toFixed(1)} minutes`);
 
-    if (this.tokenTimer) {
-      clearTimeout(this.tokenTimer);
-    }
+    if (this.tokenTimer) clearTimeout(this.tokenTimer);
 
     this.tokenTimer = setTimeout(() => this.handleTokenExpiry(), refreshTime);
   }
@@ -117,7 +112,6 @@ export class AuthService {
       return;
     }
 
-    // If refresh token is missing, just logout
     if (!refreshToken) {
       console.warn('⚠️ No refresh token found, logging out');
       this.logout();
@@ -168,7 +162,8 @@ export class AuthService {
       this.isLoggedInSubject.next(true);
       this.startTokenTimer(token);
     } else {
-      this.logout();
+      this.isLoggedInSubject.next(false);
+      // No auto logout — interceptor/guard will handle it
     }
   }
 }

@@ -1,6 +1,7 @@
 <app-header>
 <div>
   <main class="main-container">
+    <app-spinner [isLoading]="isLoading | async"></app-spinner>
   <router-outlet></router-outlet>
 </main>
 </div>

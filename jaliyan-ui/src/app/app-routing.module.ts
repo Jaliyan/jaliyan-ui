@@ -9,7 +9,7 @@ import { PublicInfoDashboardComponent } from './public-info-dashboard/public-inf
 
 const routes: Routes = [
   // { path: 'schedule', component: ScheduleComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'infodashboard', component: PublicInfoDashboardComponent },
@@ -23,6 +23,8 @@ const routes: Routes = [
     path: 'attendance',
     loadChildren: () => import('./qr/qr.module').then(m => m.QrModule)
   },
+
+  { path: '**', redirectTo: 'home' } // Wildcard route
 ];
 
 @NgModule({
