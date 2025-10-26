@@ -58,7 +58,7 @@ export class QrScanComponent implements OnInit {
   }
 
   loadStops() {
-    this.padyatriService.getStops().subscribe({
+    this.attendanceService.getStops().subscribe({
       next: res => (this.stops = res),
       error: () => this.toast.show('Failed to load stops', 'error')
     });

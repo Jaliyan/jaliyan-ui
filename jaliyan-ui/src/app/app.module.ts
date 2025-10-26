@@ -39,6 +39,7 @@ import { QrModule } from './qr/qr.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { PublicInfoDashboardComponent } from './public-info-dashboard/public-info-dashboard.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ReportComponent } from './report/report.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FoodMenuComponent,
     MenuPlannerComponent,
     PublicInfoDashboardComponent,
+    ReportComponent,
     
   ],
   imports: [

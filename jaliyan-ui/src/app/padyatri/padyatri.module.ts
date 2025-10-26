@@ -22,10 +22,11 @@ import { QRCodeComponent} from 'angularx-qrcode';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PrintAllIdCardsDialogComponent } from './print-all-id-cards-dialog/print-all-id-cards-dialog.component';
 import { MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
+import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-view-dialog.component';
 
 
 @NgModule({
-  declarations: [RegistrationFormComponent, PadyatriListComponent, IdCardComponent, PrintAllIdCardsDialogComponent],
+  declarations: [RegistrationFormComponent, PadyatriListComponent, IdCardComponent, PrintAllIdCardsDialogComponent, PadyatriViewDialogComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

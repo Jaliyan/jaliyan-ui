@@ -61,12 +61,6 @@ export class PadyatriService {
   return this.http.delete(`${this.baseUrl}/padyatri/deletePadyatri`, options);
   }
 
-  /**
-   * Fetch the list of stops (for selection purposes).
-   */
-  getStops(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/stops`);
-  }
 
   getPadyatriImageAsBlob(fileName: string) {
     return this.http.get(`${this.baseUrl}/padyatri/getPadyatriImage/${fileName}`, {

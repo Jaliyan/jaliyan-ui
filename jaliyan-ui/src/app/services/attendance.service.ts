@@ -37,4 +37,12 @@ export class AttendanceService {
   deletePadyatriByStop(padyatriId: number, stopId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/attendance/${padyatriId}/${stopId}`);
   }
+
+   /**
+   * Fetch the list of stops (for selection purposes).
+   */
+  getStops(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/stops`);
+  }
+
 }

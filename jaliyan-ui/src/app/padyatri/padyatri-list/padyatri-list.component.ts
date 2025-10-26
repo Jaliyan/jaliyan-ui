@@ -11,6 +11,8 @@ import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
 import { PrintAllIdCardsDialogComponent } from '../print-all-id-cards-dialog/print-all-id-cards-dialog.component';
 import { Router } from '@angular/router';
+import { PadyatriViewDialogComponent } from '../padyatri-view-dialog/padyatri-view-dialog.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 
 
@@ -35,7 +37,8 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +48,17 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+ viewPadyatri(padyatri: any) {
+    const isMobile = this.breakpointObserver.isMatched([Breakpoints.Handset, Breakpoints.Small]);
+    this.dialog.open(PadyatriViewDialogComponent, {
+      width: isMobile ? '100vw' : '500px',
+      height: isMobile ? '100vh' : 'auto',
+      maxHeight: '95vh',
+      data: padyatri,
+      panelClass: 'padyatri-dialog'
+    });
   }
 
   loadPadyatris(): void {

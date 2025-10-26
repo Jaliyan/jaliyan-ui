@@ -6,6 +6,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { FoodMenuComponent } from './food-menu/food-menu.component';
 import { MenuPlannerComponent } from './menu-planner/menu-planner.component';
 import { PublicInfoDashboardComponent } from './public-info-dashboard/public-info-dashboard.component';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   // { path: 'schedule', component: ScheduleComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'infodashboard', component: PublicInfoDashboardComponent },
   { path: 'foodmenu', component:  FoodMenuComponent,canActivate: [AuthGuard] },
   { path: 'menuplanner', component:  MenuPlannerComponent,canActivate: [AuthGuard] },
+  { path: 'report', component:  ReportComponent,canActivate: [AuthGuard] },
   {
     path: 'padyatri',
     loadChildren: () => import('./padyatri/padyatri.module').then(m => m.PadyatriModule)

@@ -33,6 +33,9 @@
         <a mat-list-item routerLink="/padyatri/list" routerLinkActive="active">
           <mat-icon>dashboard-cards</mat-icon> Dashboard
         </a>
+        <a mat-list-item routerLink="/report" routerLinkActive="active">
+          <mat-icon>dashboard-cards</mat-icon> Reports
+        </a>
         <a mat-list-item routerLink="/attendance/qrscan" routerLinkActive="active">
           <mat-icon>how_to_reg</mat-icon> Attendance
         </a>
@@ -81,6 +84,9 @@
         <ng-container *ngIf="isLoggedIn">
           <a mat-button routerLink="/padyatri/list" routerLinkActive="active">
             <mat-icon>dashboard-cards</mat-icon> Dashboard
+          </a>
+          <a mat-button routerLink="/report" routerLinkActive="active">
+            <mat-icon>dashboard-cards</mat-icon> Reports
           </a>
           <a mat-button routerLink="/attendance/qrscan" routerLinkActive="active">
             <mat-icon>how_to_reg</mat-icon> Attendance
