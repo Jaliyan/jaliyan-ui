@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { isTokenExpired } from '../common/token.utils';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 interface JourneyStep {
   day: number;
   from: string;
@@ -14,8 +14,13 @@ interface JourneyStep {
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
+  constructor(private route: ActivatedRoute, private router: Router,
+    private auth: AuthService, private sanitizer: DomSanitizer) { }
+
   currentYear = new Date().getFullYear();
+  videoId = 'bkYqvNDJY90'; // 🔹 Replace with your YouTube video ID
+  safeUrl!: SafeResourceUrl;
+  videoLoaded = false;
 
   journeyTimeline: JourneyStep[] = [
     { day: 1, from: 'Porbandar', to: 'Stop 1' },
@@ -28,5 +33,14 @@ export class HomeComponent implements OnInit {
 
   }
 
-  
+  get thumbnailUrl() {
+    return `https://img.youtube.com/vi/${this.videoId}/hqdefault.jpg`;
+  }
+
+  loadVideo() {
+    const url = `https://www.youtube.com/embed/${this.videoId}?autoplay=1&rel=0`;
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.videoLoaded = true;
+  }
+
 }

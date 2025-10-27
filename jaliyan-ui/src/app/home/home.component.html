@@ -54,4 +54,24 @@
       </li>
     </ul>
   </section>
+
+  <!-- 🎥 YouTube Video Section -->
+  <section class="video-section">
+    <h2>Watch Our Journey Video</h2>
+
+    <!-- Lazy load video: show thumbnail until user clicks -->
+    <div class="video-container" *ngIf="!videoLoaded" (click)="loadVideo()">
+      <img [src]="thumbnailUrl" alt="Video thumbnail" class="thumbnail" />
+      <div class="play-button">▶</div>
+    </div>
+
+    <div class="video-container" *ngIf="videoLoaded">
+      <iframe
+        [src]="safeUrl"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
 </div>
