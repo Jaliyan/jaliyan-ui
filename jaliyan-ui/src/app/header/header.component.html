@@ -14,7 +14,7 @@
 
     <mat-nav-list>
       <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>home</mat-icon> Home
+        <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
       </a>
       <a mat-list-item routerLink="/about" routerLinkActive="active">
         <mat-icon>info</mat-icon> About
@@ -63,10 +63,15 @@
       <a routerLink="/" class="logo-text">Jalaram Padyatra</a>
       <span class="spacer"></span>
 
+      <mat-select [(value)]="selectedLang" (selectionChange)="changeLanguage($event.value)" class="lang-select">
+    <mat-option value="en">English</mat-option>
+    <mat-option value="gu">ગુજરાતી</mat-option>
+  </mat-select>
+
       <!-- Desktop Menu -->
       <nav class="desktop-menu">
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon>home</mat-icon> Home
+          <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
         </a>
         <a mat-button routerLink="/about" routerLinkActive="active">
           <mat-icon>info</mat-icon> About

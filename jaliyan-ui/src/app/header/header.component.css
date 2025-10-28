@@ -424,3 +424,18 @@ a.active mat-icon {
 .mat-sidenav .mat-mdc-list-item .mdc-list-item__primary-text {
   text-align: left;
 }
+
+.lang-select {
+  color: white;
+  margin-left: 10px;
+  min-width: 110px;
+}
+.mat-mdc-select-value {
+  color: white !important;
+}
+@media (max-width: 768px) {
+  .lang-select {
+    min-width: 80px;
+    font-size: 13px;
+  }
+}

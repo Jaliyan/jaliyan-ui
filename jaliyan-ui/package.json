@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "@zxing/ngx-scanner": "^20.0.0",
     "angularx-qrcode": "^19.0.0",
     "bootstrap": "^5.3.5",
