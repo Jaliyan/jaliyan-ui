@@ -29,3 +29,27 @@ export interface Padyatri {
   padyatraId: number;
   createdBy: string;
 }
+
+
+export interface PadyatriAttendance {
+  padyatriId: number;
+  fullName: string;
+  batchId: number;
+  isPresent: boolean;
+  attendanceTime: string;
+}
+
+export interface PadyatriItem {
+  padyatriId: number;
+  fullName: string;
+  batchId: number;
+  items: { [key: string]: boolean };
+}
+
+export interface PadyatriReport {
+  padyatriId: number;
+  fullName: string;
+  batchId: number;
+  isPresent: boolean;
+  attendanceTime: string;
+}

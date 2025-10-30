@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     private auth: AuthService, private sanitizer: DomSanitizer) { }
 
   currentYear = new Date().getFullYear();
-  videoId = 'bkYqvNDJY90'; // 🔹 Replace with your YouTube video ID
+  videoId = 'eLOuHnONEao'; // 🔹 Replace with your YouTube video ID
   safeUrl!: SafeResourceUrl;
   videoLoaded = false;
 

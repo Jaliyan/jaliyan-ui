@@ -40,6 +40,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QrModule } from './qr/qr.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import {MatTabsModule} from '@angular/material/tabs';
 
 // Auth & toast
 import { AuthInterceptor } from './common/auth.interceptor';
@@ -96,6 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatTabsModule,
     QrModule,
     ZXingScannerModule,
     TranslateModule.forRoot({

@@ -22,6 +22,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 
 
 
@@ -51,7 +53,8 @@ import { MatRadioModule } from '@angular/material/radio';
     ZXingScannerModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatRadioModule
+    MatRadioModule,
+    MatButtonToggleModule
   ]
 })
 export class QrModule { }

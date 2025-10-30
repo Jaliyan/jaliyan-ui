@@ -6,72 +6,87 @@ import { AttendanceService } from '../../services/attendance.service';
 import { PadyatriService } from '../../services/padyatri.service';
 import { ToastService } from '../../services/toast.service';
 import { Padyatri } from '../../common/padyatri.model';
+import { DistributionService } from '../../services/distribution.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-qr-scan',
   templateUrl: './qr-scan.component.html',
   styleUrls: ['./qr-scan.component.css'],
-  standalone: false
+  standalone: false,
 })
 export class QrScanComponent implements OnInit {
   attendanceForm!: FormGroup;
-  stops: any[] = [];
   padyatri: Padyatri[] = [];
   filteredPadyatri: Padyatri[] = [];
+  stops: any[] = [];
+  itemList: any[] = [];
+
   dataSource = new MatTableDataSource<Padyatri>();
+  displayedColumns: string[] = ['name', 'batchId', 'mobile', 'actions'];
+
   isMobile = false;
-  qrSuccess = false;
-  qrError = false;
   lastScanTime = 0;
-  scanCooldown = 2000; // 2 seconds
+  scanCooldown = 2000;
+
   cooldownActive = false;
   cooldownMessage = '';
-  cooldownBorderColor = '#f57c00'; // Default orange border
+  cooldownBorderColor = '#f57c00';
 
-
-  displayedColumns: string[] = ['name', 'batchId', 'mobile', 'actions'];
+  userName: any;
 
   constructor(
     private fb: FormBuilder,
     private padyatriService: PadyatriService,
     private attendanceService: AttendanceService,
     private toast: ToastService,
-    private bpObserver: BreakpointObserver
-  ) { }
+    private bpObserver: BreakpointObserver,
+    private distributionService: DistributionService,
+    private authService: AuthService
+  ) {
+    this.userName = this.authService.getUsername();
+  }
 
   ngOnInit(): void {
     this.buildForm();
     this.loadStops();
     this.loadPadyatris();
 
-    this.bpObserver.observe([Breakpoints.Handset]).subscribe(result => {
+    this.bpObserver.observe([Breakpoints.Handset]).subscribe((result) => {
       this.isMobile = result.matches;
+    });
+
+    this.distributionService.getItems().subscribe({
+      next: (items) => (this.itemList = items),
+      error: (err: any) => console.error(err),
     });
   }
 
   buildForm() {
     this.attendanceForm = this.fb.group({
+      operationType: ['attendance'],
       selectedStop: [''],
+      selectedItem: [''],
       attendanceMode: [''],
-      batchSearch: ['']
+      batchSearch: [''],
     });
   }
 
   loadStops() {
     this.attendanceService.getStops().subscribe({
-      next: res => (this.stops = res),
-      error: () => this.toast.show('Failed to load stops', 'error')
+      next: (res) => (this.stops = res),
+      error: () => this.toast.show('Failed to load stops', 'error'),
     });
   }
 
   loadPadyatris() {
     this.padyatriService.getPadyatris().subscribe({
-      next: data => {
+      next: (data) => {
         this.padyatri = data;
         this.filteredPadyatri = data;
         this.dataSource.data = data;
       },
-      error: () => this.toast.show('Failed to load padyatris', 'error')
+      error: () => this.toast.show('Failed to load padyatris', 'error'),
     });
   }
 
@@ -82,11 +97,9 @@ export class QrScanComponent implements OnInit {
 
   applyFilters() {
     const batch = this.attendanceForm.get('batchSearch')?.value;
-
-    this.filteredPadyatri = this.padyatri.filter(p =>
+    this.filteredPadyatri = this.padyatri.filter((p) =>
       batch ? p.batchId === +batch : true
     );
-
     this.dataSource.data = this.filteredPadyatri;
   }
 
@@ -100,9 +113,43 @@ export class QrScanComponent implements OnInit {
     this.attendanceForm.get('attendanceMode')?.setValue(mode);
   }
 
+  onQrScanned(data: string) {
+    const now = Date.now();
+    if (now - this.lastScanTime < this.scanCooldown) {
+      this.toast.show('Please wait before scanning again', 'info');
+      return;
+    }
+    this.lastScanTime = now;
+
+    if (!this.canScan()) return;
+
+    const padyatriId = this.extractId(data);
+    if (!padyatriId) {
+      this.showCooldownEffect('error', 'Invalid QR');
+      return;
+    }
+
+    const found = this.padyatri.find((p) => p.padyatriId === padyatriId);
+    if (found) {
+      this.handleOperation(found);
+    } else {
+      this.showCooldownEffect('error', 'Padyatri not found');
+      this.toast.show('Padyatri not found for scanned QR', 'warning');
+    }
+  }
+
+  handleOperation(padyatri: Padyatri) {
+    const { operationType } = this.attendanceForm.value;
+
+    if (operationType === 'attendance') {
+      this.markAttendance(padyatri, true);
+    } else if (operationType === 'item') {
+      this.markItemGiven(padyatri);
+    }
+  }
+
   markAttendance(padyatri: Padyatri, isPresent: boolean) {
     const { selectedStop } = this.attendanceForm.value;
-
     if (!selectedStop) {
       this.toast.show('Please select Stop', 'warning');
       return;
@@ -111,103 +158,77 @@ export class QrScanComponent implements OnInit {
     const payload = {
       padyatriId: padyatri.padyatriId,
       stopId: selectedStop,
-      isPresent
+      isPresent,
     };
 
     this.attendanceService.markAttendance(payload).subscribe({
       next: () => {
-        this.toast.show(`Marked ${isPresent ? 'Present' : 'Absent'} for ${padyatri.firstName}`, 'success');
-        this.cooldownMessage = 'Marked Present';
-        this.showCooldownEffect('success');
+        this.toast.show(
+          `Marked ${isPresent ? 'Present' : 'Absent'} for ${padyatri.firstName}`,
+          'success'
+        );
+        this.showCooldownEffect('success', 'Marked Present');
       },
       error: () => {
-        this.toast.show('Failed to mark attendance', 'error');
-        this.cooldownMessage = 'Failed to mark attendance';
-        this.showCooldownEffect('error');
-      }
+        this.showCooldownEffect('error', 'Failed to mark attendance');
+      },
     });
   }
 
-  onQrScanned(data: string) {
-    const now = Date.now();
+  markItemGiven(padyatri: Padyatri) {
+    const { selectedStop, selectedItem } = this.attendanceForm.value;
 
-    if (now - this.lastScanTime < this.scanCooldown) {
-      this.cooldownMessage = 'Please wait before scanning again';
-      this.showCooldownEffect();
-      this.toast.show('Please wait before scanning again', 'info');
+    if (!selectedStop || !selectedItem) {
+      this.toast.show('Please select Stop and Item', 'warning');
       return;
     }
 
-    this.lastScanTime = now;
+    const payload = {
+      padyatriId: padyatri.padyatriId,
+      stopId: selectedStop,
+      itemId: selectedItem,
+      distributedBy: this.userName,
+    };
 
-    if (!this.canScan()) return;
+    this.distributionService.markItemDistribution(payload).subscribe({
+      next: () => {
+        this.toast.show(
+          `${selectedItem} given to ${padyatri.firstName}`,
+          'success'
+        );
+        this.showCooldownEffect('success', `${selectedItem} marked`);
+      },
+      error: () => {
+        this.showCooldownEffect('error', 'Failed to mark item');
+      },
+    });
+  }
 
-    const padyatriId = this.extractId(data);
-    if (!padyatriId) {
-      this.cooldownMessage = 'Invalid QR code';
-      this.showCooldownEffect('error');
-      return;
-    }
+  extractId(qrData: string): number | null {
+    try {
+      let encodedData = qrData;
+      if (qrData.startsWith('http')) {
+        const url = new URL(qrData);
+        encodedData = url.searchParams.get('data') || '';
+      }
 
-    const found = this.padyatri.find(p => p.padyatriId === padyatriId);
-    if (found) {
-      this.markAttendance(found, true);
-    } else {
-      this.cooldownMessage = 'Padyatri not found';
-      this.showCooldownEffect('error');
-      this.toast.show('Padyatri not found for scanned QR', 'warning');
+      const decoded = atob(encodedData);
+      const match = decoded.match(/^padyatri:(\d+)$/);
+      return match ? +match[1] : null;
+    } catch (e) {
+      console.error('Failed to decode QR', e);
+      return null;
     }
   }
 
-  showCooldownEffect(type: 'success' | 'error' = 'error') {
+  showCooldownEffect(type: 'success' | 'error', message: string) {
     this.cooldownActive = true;
-    this.cooldownBorderColor = type === 'success' ? '#4caf50' : '#f44336'; // green or red
+    this.cooldownMessage = message;
+    this.cooldownBorderColor = type === 'success' ? '#4caf50' : '#f44336';
 
     setTimeout(() => {
       this.cooldownActive = false;
       this.cooldownMessage = '';
-      this.cooldownBorderColor = '';
     }, 2000);
   }
-
-
-  showQrSuccess() {
-    this.qrSuccess = true;
-    this.qrError = false;
-
-    setTimeout(() => {
-      this.qrSuccess = false;
-    }, 3000);
-  }
-
-  showQrError() {
-    this.qrError = true;
-    this.qrSuccess = false;
-
-    setTimeout(() => {
-      this.qrError = false;
-    }, 3000);
-  }
-
-
-  extractId(qrData: string): number | null {
-  try {
-    let encodedData = qrData;
-    if (qrData.startsWith('http')) {
-      const url = new URL(qrData);
-      encodedData = url.searchParams.get('data') || '';
-      if (!encodedData) throw new Error('Missing data parameter');
-    }
-
-    const decoded = atob(encodedData);
-    const match = decoded.match(/^padyatri:(\d+)$/);
-    return match ? +match[1] : null;
-  } catch (e) {
-    console.error('Failed to decode QR', e);
-    this.showCooldownEffect('error');
-    this.toast.show(`Failed to decode QR ${e}`, 'warning');
-    return null;
-  }
-}
-
 }
