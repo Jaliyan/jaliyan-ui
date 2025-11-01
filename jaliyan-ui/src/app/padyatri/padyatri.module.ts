@@ -24,6 +24,16 @@ import { PrintAllIdCardsDialogComponent } from './print-all-id-cards-dialog/prin
 import { MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-view-dialog.component';
 
+// Translation
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+
+// Factory function for HTTP loader
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 
 @NgModule({
   declarations: [RegistrationFormComponent, PadyatriListComponent, IdCardComponent, PrintAllIdCardsDialogComponent, PadyatriViewDialogComponent],
@@ -47,7 +57,15 @@ import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-vie
     QRCodeComponent,
     MatCheckboxModule,
     MatSidenavContent,
-    MatSidenavContainer
+    MatSidenavContainer,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      defaultLanguage: 'en'
+    })
   ]
 })
 export class PadyatriModule { }
