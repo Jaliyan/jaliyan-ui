@@ -18,7 +18,7 @@
 
         <mat-form-field appearance="fill" class="filter-field">
           <mat-label>Search</mat-label>
-          <input matInput placeholder="Search by name, mobile, etc" (input)="applyFilter($event)" />
+          <input matInput placeholder="Search by Batch Id" (input)="applyFilter($event)" />
         </mat-form-field>
       </div>
 
@@ -41,10 +41,10 @@
 
           <!-- Batch ID -->
           <ng-container matColumnDef="batchId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Batch ID
-            </th>
-            <td mat-cell *matCellDef="let padyatri">{{ padyatri.batchId }}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+            <td mat-cell *matCellDef="let padyatri">
+              {{ toGujaratiDigits(padyatri.batchId) }}
+            </td>
           </ng-container>
 
           <!-- First Name -->
@@ -52,7 +52,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               First Name
             </th>
-            <td mat-cell *matCellDef="let padyatri">{{ padyatri.firstName }}</td>
+            <td mat-cell *matCellDef="let padyatri">{{ padyatri.firstName }} {{ padyatri.lastName }}</td>
           </ng-container>
 
           <!-- Mobile -->

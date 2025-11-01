@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { PadyatriViewDialogComponent } from '../padyatri-view-dialog/padyatri-view-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../services/auth.service';
+import { englishToGujaratiDigits, gujaratiToEnglishDigits } from '../../common/number-utils';
 
 
 
@@ -48,6 +49,18 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadPadyatris();
+
+    this.dataSource.filterPredicate = (data, filter) => {
+      const normalizedFilter = gujaratiToEnglishDigits(filter.toLowerCase());
+      const batchId = gujaratiToEnglishDigits(data.batchId.toString());
+      const name = data.firstName?.toLowerCase() || '';
+      const mobile = gujaratiToEnglishDigits(data.mobile?.toString() || '');
+      return (
+        batchId.includes(normalizedFilter) //||
+        // name.includes(normalizedFilter) ||
+        // mobile.includes(normalizedFilter)
+      );
+    };
   }
 
   ngAfterViewInit(): void {
@@ -77,9 +90,14 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  toGujaratiDigits(value: string | number): string {
+    return englishToGujaratiDigits(value);
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+    //this.dataSource.filter = filterValue;
+    this.dataSource.filter = gujaratiToEnglishDigits(filterValue);
   }
 
   addNewPadyatri(): void {

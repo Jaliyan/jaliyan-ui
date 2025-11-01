@@ -49,6 +49,8 @@ import { ToastService } from './services/toast.service';
 // Translation
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SharedModule } from './shared/shared.module';
+
 
 // Factory function for HTTP loader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -99,6 +101,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatTabsModule,
     QrModule,
+    SharedModule,
     ZXingScannerModule,
     TranslateModule.forRoot({
       loader: {

@@ -148,9 +148,14 @@
 
       <!-- Actions -->
       <div class="form-actions">
-        <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
-          {{ editingId ? 'Update' : 'Register' }}
-        </button>
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit" [routerLink]="['/padyatri/list']">
+            Back
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
+            {{ editingId ? 'Update' : 'Register' }}
+          </button>
+        </div>
       </div>
     </form>
   </mat-card>

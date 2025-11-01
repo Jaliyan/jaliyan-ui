@@ -8,15 +8,15 @@
       </ng-template>
     </div>
     <mat-card-title>{{ data.firstName }} {{ data.lastName }}</mat-card-title>
-    <mat-card-subtitle>Batch ID: {{ data.batchId }}</mat-card-subtitle>
+    <mat-card-subtitle>Batch ID: {{ data.batchId | gujaratiConversion }}</mat-card-subtitle>
   </mat-card-header>
 
   <!-- Main Content -->
   <mat-card-content>
     <section class="info-section">
       <h3>Personal Details</h3>
-      <div class="detail"><span class="label">Gender:</span><span class="value">{{ data.gender || '-' }}</span></div>
-      <div class="detail"><span class="label">Age:</span><span class="value">{{ data.age || '-' }}</span></div>
+      <div class="detail"><span class="label">Gender:</span><span class="value">{{ data.gender | gujaratiConversion }}</span></div>
+      <div class="detail"><span class="label">Age:</span><span class="value">{{ data.age | gujaratiConversion}}</span></div>
     </section>
 
     <section class="info-section">

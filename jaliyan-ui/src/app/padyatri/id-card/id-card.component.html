@@ -12,8 +12,8 @@
     <div class="info-section">
       <p><strong>Name:</strong> {{ padyatri.firstName }} {{ padyatri.lastName }}</p>
       <p><strong>Mobile:</strong> {{ padyatri.mobile }}</p>
-      <p><strong>Age:</strong> {{ padyatri.age }}</p>
-      <p><strong>Batch ID:</strong> {{ padyatri.batchId }}</p>
+      <p><strong>Age:</strong> {{ padyatri.age | gujaratiConversion }}</p>
+      <p><strong>Batch ID:</strong> {{ padyatri.batchId | gujaratiConversion }}</p>
     </div>
 
 <div class="qr-section" #qrContainer>

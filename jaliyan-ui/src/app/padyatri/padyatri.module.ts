@@ -28,6 +28,7 @@ import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-vie
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { SharedModule } from '../shared/shared.module';
 
 // Factory function for HTTP loader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,7 +37,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [RegistrationFormComponent, PadyatriListComponent, IdCardComponent, PrintAllIdCardsDialogComponent, PadyatriViewDialogComponent],
+  declarations: [RegistrationFormComponent, PadyatriListComponent, 
+    IdCardComponent, PrintAllIdCardsDialogComponent, 
+    PadyatriViewDialogComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -58,6 +61,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatCheckboxModule,
     MatSidenavContent,
     MatSidenavContainer,
+    SharedModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
