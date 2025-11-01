@@ -1,13 +1,11 @@
-/* Container matching Home component */
 .dashboard-wrapper {
   max-width: 960px;
   margin: 0 auto;
   padding: 16px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Noto Sans Gujarati', 'Segoe UI', sans-serif;
   color: #333;
 }
 
-/* Dashboard header styling like Home overview/timeline */
 .dashboard-header {
   font-size: 2rem;
   color: #f57c00;
@@ -15,14 +13,12 @@
   text-align: center;
 }
 
-/* Mat expansion panel styling for spacing and theme consistency */
 mat-expansion-panel {
-  margin-bottom: 24px; /* space between panels */
+  margin-bottom: 24px;
   border-radius: 12px !important;
   background: white;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  border: 1px solid #f57c00; /* subtle orange border */
+  border: 1px solid #f57c00;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -31,50 +27,26 @@ mat-expansion-panel:hover {
   border-color: #e65a00;
 }
 
-mat-expansion-panel:last-child {
-  margin-bottom: 0;
-}
-
-/* Accordion header style */
 .mat-expansion-panel-header {
   background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
-  border-radius: 12px 12px 0 0;
   color: #f57c00;
   font-weight: 700;
   padding: 16px 24px;
-  transition: background-color 0.3s ease;
 }
 
-.mat-expansion-panel-header:hover {
-  background-color: #faf3e0;
-  cursor: pointer;
-}
-
-/* Expansion indicator color and rotation */
-.mat-expansion-indicator::after {
-  color: #f57c00 !important;
-  transition: transform 0.3s ease;
-}
-
-.mat-expanded .mat-expansion-indicator::after {
-  transform: rotate(180deg);
-}
-
-/* Table styling */
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 32px;
+  margin-top: 3%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   overflow: hidden;
-  table-layout: fixed; /* important to wrap text */
+  table-layout: fixed;
 }
 
-/* Updated table header with #f5e0b3 background and theme colors */
 .dashboard-table thead {
-  background-color: #f5e0b3;  /* soft warm yellow */
-  color: #000;             /* main orange text */
+  background-color: #f5e0b3;
+  color: #000;
   font-weight: 700;
   border-bottom: 2px solid #f57c00;
 }
@@ -86,52 +58,70 @@ mat-expansion-panel:last-child {
   border-bottom: 1px solid #e0e0e0;
   font-size: 1rem;
   word-wrap: break-word;
-  white-space: normal;
 }
 
 .dashboard-table tbody tr:hover {
   background-color: #fff3e0;
 }
 
-
-/* Control column widths and wrapping */
-.dashboard-table tbody tr td:nth-child(1), /* Meal */
-.dashboard-table thead tr th:nth-child(1) {
-  white-space: nowrap; /* keep meal text in one line */
+.dashboard-table td:nth-child(1) {
+  white-space: nowrap;
 }
 
-.dashboard-table tbody tr td:nth-child(2), /* Menu */
-.dashboard-table thead tr th:nth-child(2) {
-  white-space: normal; /* allow menu text to wrap */
-}
-
-.dashboard-table tbody tr td:nth-child(3), /* Location */
-.dashboard-table thead tr th:nth-child(3) {
-  white-space: nowrap; /* keep location text in one line */
-}
-
-
-/* Menu text wrap nicely */
-.menu-text {
-  white-space: normal;
-  word-break: break-word;
-  display: block;
-}
-
-/* Responsive */
+/* Mobile Responsive */
 @media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
   mat-expansion-panel {
     margin-bottom: 16px;
   }
 
-  .mat-expansion-panel-header {
-    padding: 12px 16px;
-    font-size: 1.1rem;
+  .dashboard-table thead {
+    display: none;
   }
 
-  .dashboard-table th,
-  .dashboard-table td {
-    font-size: 0.9rem;
-    padding: 10px 12px;
+  .dashboard-table tbody tr {
+    display: block;
+    background: #fffdf8;
+    border: 1px solid #f5e0b3;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 0;
   }
+
+  .dashboard-table tbody tr td {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-table tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #f57c00;
+    flex: 0 0 40%;
+    text-align: left;
+    margin-right: 10px;
+  }
+
+  .dashboard-table tbody tr td span,
+  .dashboard-table tbody tr td a {
+    flex: 1;
+    word-break: break-word;
+  }
+}
+
+.loading, .error {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: red;
 }

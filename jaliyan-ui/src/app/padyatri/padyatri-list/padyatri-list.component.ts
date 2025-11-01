@@ -13,6 +13,7 @@ import { PrintAllIdCardsDialogComponent } from '../print-all-id-cards-dialog/pri
 import { Router } from '@angular/router';
 import { PadyatriViewDialogComponent } from '../padyatri-view-dialog/padyatri-view-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AuthService } from '../../services/auth.service';
 
 
 
@@ -27,6 +28,7 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
   selectedPadyatris: any[] = [];
 
   dataSource = new MatTableDataSource<any>([]);
+    userName: any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,8 +40,11 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver
-  ) {}
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService
+  ) {
+    this.userName = this.authService.getUsername();
+  }
 
   ngOnInit(): void {
     this.loadPadyatris();
@@ -231,5 +236,23 @@ async renderQRCode(data: string, elementId: string): Promise<void> {
   }
 }
 
+returnPadyatri(padyatriId: number, isreturn : boolean): void {
+
+  var returnMsg = isreturn ? "mark return for" : "active"
+  if (confirm('Are you sure you want to '+ returnMsg + ' this Padyatri?')) {
+     const payload = {
+      padyatriId: padyatriId,
+      updatedBy: "admin",
+      isreturn: isreturn,
+    };
+    this.padyatriService.returnPadyatri(payload).subscribe({
+      next: () => {
+        this.toastService.show('Marked successfully', 'success');
+        this.loadPadyatris();
+      },
+      error: () => this.toastService.show('Return failed', 'error')
+    });
+  }
+}
 
 }

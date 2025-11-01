@@ -14,6 +14,7 @@ export interface Padyatri {
   createdBy: string;
   photoPath : string;
   batchId: number;
+  isReturn: boolean;
   }
   
   export interface CreatePadyatriDto {

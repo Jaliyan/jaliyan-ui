@@ -1,5 +1,4 @@
 <div class="attendance-container">
-
   <mat-toolbar color="primary" class="header">
     Attendance & Item Distribution
   </mat-toolbar>
@@ -7,7 +6,12 @@
   <form [formGroup]="attendanceForm" class="filters">
     <!-- Operation Type -->
     <div class="filters-row mode-row">
-      <mat-button-toggle-group formControlName="operationType" appearance="legacy" color="primary" class="operation-toggle">
+      <mat-button-toggle-group
+        formControlName="operationType"
+        appearance="legacy"
+        color="primary"
+        class="operation-toggle"
+      >
         <mat-button-toggle value="attendance">Attendance</mat-button-toggle>
         <mat-button-toggle value="item">Item Distribution</mat-button-toggle>
       </mat-button-toggle-group>
@@ -18,17 +22,24 @@
       <mat-form-field appearance="outline" class="filter-item">
         <mat-label>Select Stop / Location</mat-label>
         <mat-select formControlName="selectedStop">
-          <mat-option *ngFor="let stop of stops" [value]="stop.stopId">{{ stop.stopName }}</mat-option>
+          <mat-option *ngFor="let stop of stops" [value]="stop.stopId">
+            {{ stop.stopName }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <!-- Item Selection -->
-    <div class="filters-row" *ngIf="attendanceForm.get('operationType')?.value === 'item'">
+    <div
+      class="filters-row"
+      *ngIf="attendanceForm.get('operationType')?.value === 'item'"
+    >
       <mat-form-field appearance="outline" class="filter-item">
         <mat-label>Select Item</mat-label>
         <mat-select formControlName="selectedItem">
-          <mat-option *ngFor="let item of itemList" [value]="item.itemId">{{ item.itemName }}</mat-option>
+          <mat-option *ngFor="let item of itemList" [value]="item.itemId">
+            {{ item.itemName }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -36,12 +47,22 @@
     <!-- Mode Selection -->
     <div class="mode-row">
       <div class="mode-group">
-        <div class="mode-option" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'manual'" [class.disabled]="!canScan()" (click)="setMode('manual')">
+        <div
+          class="mode-option"
+          [class.selected]="attendanceForm.get('attendanceMode')?.value === 'manual'"
+          [class.disabled]="!canScan()"
+          (click)="setMode('manual')"
+        >
           <mat-icon color="primary">edit</mat-icon>
           <span>Manual Entry</span>
         </div>
 
-        <div class="mode-option" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'qr'" [class.disabled]="!canScan()" (click)="setMode('qr')">
+        <div
+          class="mode-option"
+          [class.selected]="attendanceForm.get('attendanceMode')?.value === 'qr'"
+          [class.disabled]="!canScan()"
+          (click)="setMode('qr')"
+        >
           <mat-icon color="primary">qr_code_scanner</mat-icon>
           <span>QR Code Scan</span>
         </div>
@@ -54,8 +75,15 @@
   </form>
 
   <!-- QR Scan Mode -->
-  <div class="qr-scanner-container" *ngIf="attendanceForm.get('attendanceMode')?.value === 'qr' && canScan()">
-    <div class="qr-mode" [ngClass]="{ 'cooldown-active': cooldownActive }" [style.border-color]="cooldownBorderColor">
+  <div
+    class="qr-scanner-container"
+    *ngIf="attendanceForm.get('attendanceMode')?.value === 'qr' && canScan()"
+  >
+    <div
+      class="qr-mode"
+      [ngClass]="{ 'cooldown-active': cooldownActive }"
+      [style.border-color]="cooldownBorderColor"
+    >
       <zxing-scanner (scanSuccess)="onQrScanned($event)"></zxing-scanner>
       <div class="scanner-feedback" *ngIf="cooldownActive">
         {{ cooldownMessage }}
@@ -64,46 +92,100 @@
   </div>
 
   <!-- Manual Mode Table -->
-  <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'" class="manual-mode">
+  <div
+    *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'"
+    class="manual-mode"
+  >
     <form class="filters" [formGroup]="attendanceForm" (ngSubmit)="applyFilters()">
       <mat-form-field appearance="outline" class="filter-item">
         <mat-label>Batch Number</mat-label>
-        <input matInput type="number" formControlName="batchSearch" placeholder="Enter batch no">
-        <button mat-icon-button matSuffix *ngIf="attendanceForm.get('batchSearch')?.value" (click)="clearBatchSearch()" type="button">
+        <input
+          matInput
+          type="number"
+          formControlName="batchSearch"
+          placeholder="Enter batch no"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="attendanceForm.get('batchSearch')?.value"
+          (click)="clearBatchSearch()"
+          type="button"
+        >
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
     </form>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.firstName }} {{ element.lastName }}</td>
-      </ng-container>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.firstName }} {{ element.lastName }}
+          </td>
+        </ng-container>
 
-      <!-- Batch Column -->
-      <ng-container matColumnDef="batchId">
-        <th mat-header-cell *matHeaderCellDef>Batch</th>
-        <td mat-cell *matCellDef="let element">{{ element.batchId }}</td>
-      </ng-container>
+        <!-- Batch Column -->
+        <ng-container matColumnDef="batchId">
+          <th mat-header-cell *matHeaderCellDef>Batch</th>
+          <td mat-cell *matCellDef="let element">{{ element.batchId }}</td>
+        </ng-container>
 
-      <!-- Mobile Column -->
-      <ng-container matColumnDef="mobile">
-        <th mat-header-cell *matHeaderCellDef>Mobile</th>
-        <td mat-cell *matCellDef="let element">{{ element.mobile }}</td>
-      </ng-container>
+        <!-- Mobile Column -->
+        <ng-container matColumnDef="mobile">
+          <th mat-header-cell *matHeaderCellDef>Mobile</th>
+          <td mat-cell *matCellDef="let element">{{ element.mobile }}</td>
+        </ng-container>
 
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-mini-button color="primary" (click)="handleOperation(element)">Mark</button>
-        </td>
-      </ng-container>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Attendance -->
+            <ng-container
+              *ngIf="attendanceForm.get('operationType')?.value === 'attendance'"
+            >
+              <button
+                mat-raised-button
+                color="primary"
+                class="present-btn"
+                (click)="markAttendance(element, true)"
+              >
+                Present
+              </button>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+            <!-- Item Distribution -->
+            <ng-container
+              *ngIf="attendanceForm.get('operationType')?.value === 'item'"
+            >
+              <div class="item-actions">
+                <button
+                  mat-mini-fab
+                  color="accent"
+                  class="item-btn given"
+                  (click)="markItemGiven(element)"
+                >
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button
+                  mat-mini-fab
+                  color="warn"
+                  class="item-btn not-given"
+                  (click)="markItemNotGiven(element)"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
   </div>
 </div>

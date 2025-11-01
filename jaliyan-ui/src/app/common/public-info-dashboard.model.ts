@@ -5,15 +5,13 @@ export interface Location {
 }
 
 export interface Meal {
-  menu?: string[];
+  id: number;
+  type: string;      // meal name in Gujarati
+  menu: string[];
   location?: Location;
 }
 
-export interface Meals {
-  [key: string]: Meal;
-}
-
 export interface DayItinerary {
-  date: string;  // ISO date string
-  meals: Meals;
+  date: string;      
+  meals: Meal[];     // now meals is an array
 }

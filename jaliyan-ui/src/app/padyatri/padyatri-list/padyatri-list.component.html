@@ -77,6 +77,16 @@
                 <button mat-icon-button color="warn" (click)="deletePadyatri(padyatri.padyatriId)" matTooltip="Delete">
                   <mat-icon>delete</mat-icon>
                 </button>
+                <button mat-icon-button color="primary" (click)="returnPadyatri(padyatri.padyatriId,true)"
+                  *ngIf="!padyatri.isReturn" matTooltip="Mark as Returned">
+                  <mat-icon>repartition</mat-icon>
+                </button>
+
+                <button mat-icon-button color="primary" (click)="returnPadyatri(padyatri.padyatriId,false)"
+                  *ngIf="padyatri.isReturn" matTooltip="Mark as Active">
+                  <mat-icon>how_to_reg</mat-icon>
+                </button>
+
                 <button mat-icon-button (click)="viewIDCard(padyatri)" matTooltip="View ID Card">
                   <mat-icon>assignment_ind</mat-icon>
                 </button>

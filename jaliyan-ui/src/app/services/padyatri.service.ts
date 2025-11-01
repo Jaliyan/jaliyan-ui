@@ -61,6 +61,13 @@ export class PadyatriService {
   return this.http.delete(`${this.baseUrl}/padyatri/deletePadyatri`, options);
   }
 
+    /**
+   * Return a Padyatri (padyatri) by ID.
+   * @param PadyatriId - The ID of the Padyatri to return.
+   */
+  returnPadyatri(payload: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Padyatri/returnPadyatri`, payload);
+  }
 
   getPadyatriImageAsBlob(fileName: string) {
     return this.http.get(`${this.baseUrl}/padyatri/getPadyatriImage/${fileName}`, {

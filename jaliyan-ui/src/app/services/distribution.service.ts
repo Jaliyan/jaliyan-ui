@@ -18,9 +18,10 @@ export class DistributionService {
    /**
    * Revoke an already given item (undo)
    */
-  revokeItem(payload: ItemDistributionPayload): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/revoke`, payload);
-  }
+revokeItemDistribution(payload: { itemId: number; padyatriId: number; revokedBy: string }) {
+  return this.http.post(`${environment.apiUrl}/itemdistribution/revoke`, payload);
+}
+
 
   /**
    * Mark item distribution (used by attendance/item combined screen)

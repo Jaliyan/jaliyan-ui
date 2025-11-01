@@ -192,10 +192,7 @@ export class QrScanComponent implements OnInit {
 
     this.distributionService.markItemDistribution(payload).subscribe({
       next: () => {
-        this.toast.show(
-          `${selectedItem} given to ${padyatri.firstName}`,
-          'success'
-        );
+        this.toast.show(`${selectedItem} given to ${padyatri.firstName}`, 'success');
         this.showCooldownEffect('success', `${selectedItem} marked`);
       },
       error: () => {
@@ -203,6 +200,37 @@ export class QrScanComponent implements OnInit {
       },
     });
   }
+
+  markItemNotGiven(padyatri: Padyatri) {
+    const { selectedStop, selectedItem } = this.attendanceForm.value;
+
+    if (!selectedStop || !selectedItem) {
+      this.toast.show('Please select Stop and Item', 'warning');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to revoke this item for ${padyatri.firstName}?`)) {
+      return;
+    }
+
+    const payload = {
+      itemId: selectedItem,
+      padyatriId: padyatri.padyatriId,
+      revokedBy: this.userName,
+    };
+
+    this.distributionService.revokeItemDistribution(payload).subscribe({
+      next: () => {
+        this.toast.show(`Item revoked for ${padyatri.firstName}`, 'success');
+        this.showCooldownEffect('error', 'Item Revoked');
+      },
+      error: () => {
+        this.toast.show('Failed to revoke item', 'error');
+        this.showCooldownEffect('error', 'Revoke Failed');
+      },
+    });
+  }
+
 
   extractId(qrData: string): number | null {
     try {

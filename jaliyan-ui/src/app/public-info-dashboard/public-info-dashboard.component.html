@@ -1,56 +1,53 @@
 <div class="dashboard-wrapper">
-  <h1 class="dashboard-header">Meal Itinerary</h1>
+  <h1 class="dashboard-header">ભોજન કાર્યક્રમ</h1>
 
-  <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let day of itinerary">
-      <mat-expansion-panel-header>
-        <mat-panel-title class="date-header">
-          {{ day.date | date: 'dd-MM.yyyy' }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-<table
-  class="dashboard-table"
-  role="table"
-  [attr.aria-label]="'Meal Itinerary for ' + (day.date | date: 'fullDate')"
->
-  <colgroup>
-    <col style="width: 20%;" />  <!-- Meal -->
-    <col style="width: 55%;" />  <!-- Menu -->
-    <col style="width: 25%;" />  <!-- Location -->
-  </colgroup>
+  <ng-container *ngIf="loading">
+    <p class="loading">લોડ થઇ રહ્યું છે...</p>
+  </ng-container>
 
-  <thead>
-    <tr>
-      <th>Meal</th>
-      <th>Menu</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let meal of day.meals | keyvalue">
-      <td>{{ mealTypeLabel(meal.key) }}</td>
-      <td>
-        <ng-container *ngIf="meal.value.menu?.length; else noMenu">
-          {{ meal.value.menu?.join(', ') }}
-        </ng-container>
-        <ng-template #noMenu>No menu available</ng-template>
-      </td>
-      <td>
-        <ng-container *ngIf="meal.value.location; else noLocation">
-          <a
-            href="https://www.google.com/maps/search/?api=1&query={{ meal.value.location.lat }},{{ meal.value.location.lng }}"
-            target="_blank"
-            rel="noopener"
-          >
-            {{ meal.value.location.name }}
-          </a>
-        </ng-container>
-        <ng-template #noLocation>No location available</ng-template>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <ng-container *ngIf="!loading && error">
+    <p class="error">{{ error }}</p>
+  </ng-container>
 
-    </mat-expansion-panel>
-  </mat-accordion>
+  <ng-container *ngIf="!loading && !error">
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let day of itinerary">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="date-header">
+            {{ day.date }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <table class="dashboard-table" role="table" [attr.aria-label]="'ભોજન કાર્યક્રમ માટે ' + day.date">
+          <thead>
+            <tr>
+              <th>ભોજન પ્રકાર</th>
+              <th>મેનુ</th>
+              <th>સ્થળ</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let meal of day.meals">
+              <td data-label="ભોજન પ્રકાર">{{ meal.type }}</td>
+              <td data-label="મેનુ">
+                <ng-container *ngIf="meal.menu?.length; else noMenu">
+                  {{ meal.menu.join(', ') }}
+                </ng-container>
+                <ng-template #noMenu>મેનુ ઉપલબ્ધ નથી</ng-template>
+              </td>
+              <td data-label="સ્થળ">
+                <ng-container *ngIf="meal.location; else noLocation">
+                  <a href="https://www.google.com/maps/search/?api=1&query={{ meal.location.lat }},{{ meal.location.lng }}" target="_blank" rel="noopener">
+                    {{ meal.location.name }}
+                  </a>
+                </ng-container>
+                <ng-template #noLocation>સ્થળ ઉપલબ્ધ નથી</ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
 </div>

@@ -87,18 +87,42 @@
   font-weight: bold;
 }
 
+/* Table */
 .manual-mode table {
   width: 100%;
 }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
+.table-wrapper {
+  overflow-x: auto;
 }
 
+/* Attendance Button */
+.present-btn {
+  background-color: #4caf50 !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+/* Item Buttons */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-btn.given {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.item-btn.not-given {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+/* Responsive Layouts */
 @media (max-width: 600px) {
   .filters-row {
     flex-direction: column;
@@ -111,5 +135,33 @@
   .filter-item {
     min-width: auto;
     width: 100%;
+  }
+
+  table th,
+  table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .present-btn {
+    width: 100%;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
