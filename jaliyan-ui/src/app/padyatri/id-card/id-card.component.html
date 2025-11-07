@@ -1,32 +1,130 @@
-<div id="id-card" class="id-card-wrapper">
-  <div class="id-card">
-    <div class="header">
-      <h3>Shri Jalaram Padyatra Sangh - 2025</h3>
+<!-- ✅ ID CARD COMPONENT -->
+<div class="id-card-wrapper">
+  <div class="id-card-flip" (click)="flipCard()" [class.flipped]="isFlipped">
+
+    <!-- ================= FRONT SIDE ================= -->
+    <div #frontCard class="id-card front-card">
+      <svg class="card-svg" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="orangeGrad" x1="0" y1="0" x2="0" y2="1">
+            <!-- <stop offset="0%" stop-color="#FFB74D"/> -->
+            <stop offset="100%" stop-color="#E65100" />
+          </linearGradient>
+
+          <linearGradient id="centerGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="100%" stop-color="#fffaf3" />
+            <!-- <stop offset="100%" stop-color="#f2e3d0"/> -->
+          </linearGradient>
+
+          <linearGradient id="bottomGrad" x1="0" y1="0" x2="0" y2="1">
+            <!-- <stop offset="0%" stop-color="#FB8C00"/>
+            <stop offset="100%" stop-color="#F57C00"/> -->
+            <stop offset="100%" stop-color="#E65100" />
+          </linearGradient>
+        </defs>
+
+        <!-- Card background -->
+        <rect width="600" height="900" rx="40" ry="40" fill="#fdfcfb" />
+        <rect x="0" y="120" width="600" height="780" fill="url(#centerGrad)" />
+
+        <!-- Top orange gradient reaching photo -->
+        <path d="M0 0 L600 0 L600 200 Q300 340 0 200 Z" fill="url(#orangeGrad)" />
+
+        <!-- Bottom wave -->
+        <path d="M0 720 Q150 840 300 800 Q450 760 600 840 L600 900 L0 900 Z" fill="url(#bottomGrad)" />
+      </svg>
+
+      <div class="header">
+        <img src="assets/images/Logo.jpg" alt="Logo" class="logo" />
+        <h3 class="title">
+          શ્રી જલારામ પદયાત્રા સંઘ<br />
+          પોરબંદર - {{ currentYear | gujaratiConversion }}
+        </h3>
+      </div>
+
+      <div class="photo-container">
+        <img [src]="photoUrl || 'assets/images/Logo.jpg'" alt="Padyatri Photo" class="photo" />
+      </div>
+
+      <div class="info-section">
+        <p><strong>બેચ આઈડી:</strong> {{ padyatri.batchId | gujaratiConversion }}</p>
+        <p><strong>નામ:</strong> {{ padyatri.firstName }} {{ padyatri.lastName }}</p>
+        <p><strong>મોબાઇલ:</strong> {{ padyatri.mobile }}</p>
+        <p><strong>ઇમર્જનસી નં:</strong> {{ padyatri.emergencyContactNumber }}</p>
+      </div>
+
+      <div class="footer">
+        <div class="qr-section" #qrContainer>
+          <img [src]="qrImage" style="width: 70px;">
+          <!-- <qrcode [qrdata]="qrData" [width]="70" errorCorrectionLevel="H" [elementType]="'img'"></qrcode> -->
+        </div>
+        <!-- <p>www.shreejalarampadyatra.com</p> -->
+      </div>
     </div>
 
-    <div class="photo-section photo-wrapper">
-      <img [src]="photoUrl || '../../assets/images/Logo1.jpg'" alt="Padyatri Photo" class="photo">
+    <!-- ================= BACK SIDE ================= -->
+    <div #backCard class="id-card back-card">
+      <svg class="card-svg" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="orangeGradBack" x1="0" y1="0" x2="0" y2="1">
+            <!-- <stop offset="0%" stop-color="#FFB74D"/>  -->
+            <stop offset="100%" stop-color="#E65100" />
 
+          </linearGradient>
+
+          <linearGradient id="centerGradBack" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="100%" stop-color="#fffaf3" />
+            <!-- <stop offset="100%" stop-color="#f2e3d0"/> -->
+          </linearGradient>
+
+          <linearGradient id="bottomGradBack" x1="0" y1="0" x2="0" y2="1">
+            <!-- <stop offset="0%" stop-color="#FB8C00"/>
+            <stop offset="100%" stop-color="#F57C00"/> -->
+            <stop offset="100%" stop-color="#E65100" />
+          </linearGradient>
+        </defs>
+
+        <rect width="600" height="900" rx="40" ry="40" fill="#fdfcfb" />
+        <rect x="0" y="120" width="600" height="780" fill="url(#centerGradBack)" />
+
+        <!-- Top orange band -->
+        <path d="M0 0 L600 0 L600 140 Q300 260 0 140 Z" fill="url(#orangeGradBack)" />
+
+        <!-- Bottom decorative wave -->
+        <path d="M0 760 Q150 840 300 810 Q450 780 600 840 L600 900 L0 900 Z" fill="url(#bottomGradBack)" />
+      </svg>
+
+      <!-- Organizer title inside orange -->
+      <!-- <h3 class="organizer-title">||જલારામ સદા સહયાતે||<br/>સ્વયંસેવક સંપર્ક માહિતિ</h3> -->
+      <h3 class="organizer-title">સ્વયંસેવક સંપર્ક માહિતિ</h3>
+
+      <!-- Organizer list -->
+      <div class="info-section back-info">
+        <div class="organizer-grid">
+          <p><strong>૧.</strong> સંદીપભાઈ કાનાણી - <strong>૮૭૫૮૫૦૫૮૩૭</strong></p>
+          <p><strong>૨.</strong> સંજયભાઈ કારીયા - <strong>૯૭૨૭૭૦૭૮૨૮</strong></p>
+          <p><strong>૩.</strong> વિમલભાઈ ગઢીયા - <strong>૯૮૨૫૭૫૩૯૯૯</strong></p>
+          <p><strong>૪.</strong> હિતેષભાઇ પાઉં  - <strong>૯૮૨૫૦૪૧૬૭૫</strong></p>
+        </div>
+        <!-- ================= MEDICAL EMERGENCY SECTION ================= -->
+        <div class="medical-emergency">
+          <h4 class="medical-title">મેડિકલ ઇમર્જન્સી સંપર્ક</h4>
+          <div class="medical-info">
+            <p>જયેશભાઈ પટેલ</p>
+            <p><strong>મોબાઇલ:</strong> ૯૮૭૬૫૪૩૨૧૦</p>
+          </div>
+        </div>
+
+      </div>
     </div>
-
-    <div class="info-section">
-      <p><strong>Name:</strong> {{ padyatri.firstName }} {{ padyatri.lastName }}</p>
-      <p><strong>Mobile:</strong> {{ padyatri.mobile }}</p>
-      <p><strong>Age:</strong> {{ padyatri.age | gujaratiConversion }}</p>
-      <p><strong>Batch ID:</strong> {{ padyatri.batchId | gujaratiConversion }}</p>
-    </div>
-
-<div class="qr-section" #qrContainer>
-  <qrcode [qrdata]="qrData" [width]="80" errorCorrectionLevel="M" [elementType]="'canvas'"></qrcode>
-</div>
-
-
 
   </div>
 
+  <!-- Buttons -->
   <div class="id-card-actions" *ngIf="showActions">
-  <button mat-raised-button color="primary" (click)="printCard()">Print</button>
-  <button mat-raised-button color="accent" (click)="downloadCard()">Download</button>
-</div>
-
+    <button mat-raised-button color="primary" (click)="printCard()">Print</button>
+    <button mat-raised-button color="accent" (click)="downloadCard()">Download</button>
+  </div>
 </div>

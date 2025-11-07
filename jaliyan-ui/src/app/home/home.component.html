@@ -1,16 +1,21 @@
 <div class="home-wrapper">
   <!-- Hero Section -->
   <section class="hero">
-    <img src="../../assets/images/jalarambapa.jpg" alt="Padyatra Pilgrimage" class="hero-image" />
+    <div class="hero-image-container">
+      <img
+        src="../../assets/images/jalarambapa.jpg"
+        alt="Padyatra Pilgrimage"
+        class="hero-image"
+      />
+    </div>
+
     <div class="hero-text">
-      <h2>Shree Jalaram Padyatra - {{currentYear}}</h2>
+      <h2>Shree Jalaram Padyatra - {{ currentYear }}</h2>
       <p>
         Join the sacred 126km journey from Porbandar to Virpur.<br />
         A spiritual walk of devotion spanning 4 days.<br />
         Organize menus, track attendance, and make this pilgrimage memorable.
       </p>
-      <!-- <a routerLink="/attendance" class="btn btn-primary">Mark Attendance</a>
-      <a routerLink="/menu" class="btn btn-secondary">Manage Menu</a> -->
     </div>
   </section>
 
@@ -19,47 +24,40 @@
     <h2>Event Overview</h2>
     <div class="overview-cards">
       <div class="card">
-        <h3>4 Days Journey</h3>
-        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
+        <mat-icon color="primary">directions_walk</mat-icon>
+        <h3>4-Day Journey</h3>
+        <p>From Porbandar to Virpur — a 126km spiritual walk.</p>
       </div>
 
       <div class="card">
-        <h3>4 Days Journey</h3>
-        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
+        <mat-icon color="primary">group</mat-icon>
+        <h3>Devotee Community</h3>
+        <p>Hundreds join every year in devotion and unity.</p>
       </div>
 
       <div class="card">
-        <h3>4 Days Journey</h3>
-        <p>From Porbandar to Virpur — 126 kilometers by foot.</p>
+        <mat-icon color="primary">restaurant_menu</mat-icon>
+        <h3>Organized Facilities</h3>
+        <p>Meals, rest, and event management simplified.</p>
       </div>
-
     </div>
   </section>
 
-  <!-- Daily Stops Timeline -->
-  <section class="timeline">
+  <!-- Timeline Section -->
+  <!-- <section class="timeline">
     <h2>Journey Timeline</h2>
     <ul>
-      <li>
-        <strong>Day 1:</strong> Porbandar → Stop 1
-      </li>
-      <li>
-        <strong>Day 2:</strong> Stop 1 → Stop 2
-      </li>
-      <li>
-        <strong>Day 3:</strong> Stop 2 → Stop 3
-      </li>
-      <li>
-        <strong>Day 4:</strong> Stop 3 → Virpur (Destination)
-      </li>
+      <li><strong>Day 1:</strong> Porbandar → Stop 1</li>
+      <li><strong>Day 2:</strong> Stop 1 → Stop 2</li>
+      <li><strong>Day 3:</strong> Stop 2 → Stop 3</li>
+      <li><strong>Day 4:</strong> Stop 3 → Virpur (Destination)</li>
     </ul>
-  </section>
+  </section> -->
 
-  <!-- 🎥 YouTube Video Section -->
+  <!-- 🎥 YouTube Section -->
   <section class="video-section">
-    <h2>Watch Our Journey Video</h2>
+    <h2>Watch Our Journey</h2>
 
-    <!-- Lazy load video: show thumbnail until user clicks -->
     <div class="video-container" *ngIf="!videoLoaded" (click)="loadVideo()">
       <img [src]="thumbnailUrl" alt="Video thumbnail" class="thumbnail" />
       <div class="play-button">▶</div>

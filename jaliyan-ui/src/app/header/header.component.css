@@ -8,6 +8,7 @@
 .mat-sidenav {
   width: 250px;
   background-color: #fffaf0;
+  color: black;
 }
 
 .mat-sidenav-content {
@@ -354,7 +355,7 @@ body {
 /* Highlight active links */
 a.active {
   color: #f57c00 !important;
-  font-weight: bold;
+  /* font-weight: bold; */
   background-color: rgba(245, 124, 0, 0.1);
   border-radius: 4px;
 }
@@ -363,7 +364,7 @@ a.active {
 .desktop-menu a.active {
   background-color: #ffffff;         /* Light background */
   color: #f57c00 !important;         /* Match theme orange for text */
-  font-weight: bold;
+  /* font-weight: bold; */
   border-radius: 4px;
 }
 
@@ -438,4 +439,35 @@ a.active mat-icon {
     min-width: 80px;
     font-size: 13px;
   }
+}
+
+/* ===== Fixed Header ===== */
+.main-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #f57c00;
+  color: white;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Main layout container */
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let content scroll below header */
+.mat-sidenav-content {
+  flex: 1;
+  overflow-y: auto; /* ✅ allow vertical scrolling */
+  padding-top: 64px; /* space for fixed toolbar */
+  box-sizing: border-box;
 }

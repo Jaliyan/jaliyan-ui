@@ -25,7 +25,7 @@ import { englishToGujaratiDigits, gujaratiToEnglishDigits } from '../../common/n
   standalone: false
 })
 export class PadyatriListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['select', 'batchId', 'firstName', 'mobile', 'actions'];
+  displayedColumns: string[] = ['batchId', 'firstName', 'mobile', 'actions'];
   selectedPadyatris: any[] = [];
 
   dataSource = new MatTableDataSource<any>([]);

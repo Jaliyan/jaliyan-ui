@@ -1,10 +1,9 @@
+<!-- AppComponent template -->
 <app-header>
-<div>
-  <main class="main-container">
-    <app-spinner [isLoading]="isLoading | async"></app-spinner>
-  <router-outlet></router-outlet>
-</main>
-</div>
-<app-footer></app-footer>
-</app-header>
+  <!-- Main Content -->
+  <main class="page-content">
+    <router-outlet></router-outlet>
+  </main>
 
+  <app-footer></app-footer>
+</app-header>

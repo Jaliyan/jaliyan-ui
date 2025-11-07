@@ -1,92 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600&display=swap');
+
+/* Base Wrapper */
 .id-card-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 16px;
-  padding: 16px;
+  perspective: 1200px;
+  width: 100%;
+  max-width: 280px;
+  margin: 20px auto;
+  font-family: 'Noto Sans Gujarati', 'Segoe UI', 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+.id-card-flip {
+  width: 100%;
+  aspect-ratio: 5 / 8;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease-in-out;
+  cursor: pointer;
+}
+.id-card-flip.flipped { transform: rotateY(180deg); }
+
+/* ============================= CARD BASE ============================= */
 .id-card {
-  width: 300px;
-  border: 2px solid #f57c00;
-  border-radius: 10px;
-  padding: 16px;
-  background-color: #fffaf0;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 10px 16px;
   text-align: center;
-}
-
-.header h3 {
-  color: #f57c00;
-  margin-bottom: 10px;
-  font-size: 16px;
-  white-space: nowrap; /* Prevent line break */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.photo-wrapper {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #f57c00;
-  margin: 0 auto 12px auto;
-  background-color: #fff;
+  backface-visibility: hidden;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+.card-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================= FRONT SIDE ============================= */
+.front-card .header {
+  position: relative;
+  z-index: 2;
+  margin-top: -5px;
+}
+.front-card .logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  /* margin-bottom: 4px; */
+}
+.front-card .title {
+  font-size: 18px;
+  color: whitesmoke;
+  /* font-weight: 600; */
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.front-card .photo-container {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  /* margin-top: -18px; */
+  margin-bottom: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+.front-card .photo { width: 100%; height: 100%; }
+
+.front-card .info-section {
+  z-index: 2;
+  margin-top: -5px;
+}
+.front-card .info-section p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #4e342e;
+  font-weight: 500;
+}
+
+/* Footer QR placement */
+.front-card .footer {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin-top: auto; pins QR at bottom */
+  gap: 10px;
+}
+
+/* ============================= BACK SIDE ============================= */
+.back-card {
+  color: #333;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Organizer title in orange band */
+.back-card .organizer-title {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 18px;
+  /* font-weight: 700; */
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* Organizer info centered */
+.back-card .back-info {
+  z-index: 2;
+  text-align: center;
+  font-size: 15px;
+  color: #4e342e;
+  font-weight: 500;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 30px;
+  margin-top: 100px; /* below orange area */
+}
+
+.organizer-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.organizer-grid p {
+  margin: 2px 0;
+  font-size: 15px;
+  color: #4e342e;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ============================= ACTION BUTTONS ============================= */
+.id-card-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
   justify-content: center;
 }
 
-.photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+/* ============================= RESPONSIVE ============================= */
+@media (max-width: 600px) {
+  .id-card-wrapper { max-width: 220px; }
+  .header .title { font-size: 16px; }
+  .photo-container { width: 70px; height: 70px; }
+  .info-section p { font-size: 13px; }
 }
 
-.info-section p {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #3E2723;
+.qr-section img {
+  image-rendering: pixelated;
 }
-
 .qr-section {
-  margin-top: 12px;
+  background: #fff;
+  display: inline-block;
+  padding: 4px;
 }
 
-.id-card-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 12px;
+
+/* ============================= MEDICAL EMERGENCY SECTION ============================= */
+.medical-emergency {
+  margin-top: 20px;
+  background: #fff3e0;
+  border: 2px solid #e65100;
+  border-radius: 10px;
+  padding: 10px 14px;
+  /* width: 90%; */
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-/* Print-specific styles only for the card inside app-id-card */
-@media print {
-  .id-card-wrapper {
-    display: block !important;
-    width: 100% !important;
-    padding: 20px !important;
-    margin: 0 auto !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
+.medical-title {
+  font-size: 16px;
+  color: #e65100;
+  margin-bottom: 6px;
+  /* font-weight: 600; */
+}
 
-  .id-card {
-    box-shadow: none !important;
-    margin: 0 auto !important;
-  }
-
-  .id-card-actions {
-    display: none !important;
-  }
-
-  body, html {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
+.medical-info p {
+  margin: 3px 0;
+  font-size: 15px;
+  color: #4e342e;
+  /* font-weight: 500; */
 }
