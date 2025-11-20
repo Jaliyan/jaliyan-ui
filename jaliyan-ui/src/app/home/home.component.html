@@ -1,75 +1,98 @@
-<div class="home-wrapper">
-  <!-- Hero Section -->
-  <section class="hero">
+<div class="home-wrapper devotional-background">
+
+  <!-- HERO SECTION -->
+ <section class="hero devotional-hero">
     <div class="hero-image-container">
-      <img
-        src="../../assets/images/jalarambapa.jpg"
-        alt="Padyatra Pilgrimage"
-        class="hero-image"
-      />
+      <img src="../../assets/images/jalarambapaimg.png" class="hero-image" />
     </div>
 
     <div class="hero-text">
-      <h2>Shree Jalaram Padyatra - {{ currentYear }}</h2>
-      <p>
-        Join the sacred 126km journey from Porbandar to Virpur.<br />
-        A spiritual walk of devotion spanning 4 days.<br />
-        Organize menus, track attendance, and make this pilgrimage memorable.
+      <h2 class="headline-medium text-primary hero-title">
+        શ્રી જલારામ પદયાત્રા
+        <!-- શ્રી જલારામ પદયાત્રા – {{ currentYear | gujaratiConversion }} -->
+      </h2>
+
+      <p class="body-medium hero-description">
+        <b>આસ્થાનો મહાપર્વ — શ્રદ્ધાનો મહાકુંભ </b>અનેક વર્ષો થી આયોજીત આ અલૌકિક અને ભવ્ય પદયાત્રા, ૪ દિવસની કઠોર તપસ્યા
+        સમાન છે. આ માત્ર શ્રદ્ધાળુઓનો અવિરત પ્રવાહ નહીં, પણ ભક્તિનો હિલોળા લેતો મહાસાગર છે 
+        <b>આ જલારામ બાપા ના સાક્ષાત આશીર્વાદનો મહાયજ્ઞ છે!</b>
       </p>
     </div>
   </section>
 
-  <!-- Event Overview Section -->
+  <!-- DIVIDER -->
+  <!-- <div class="devotional-divider"></div> -->
+
+  <!-- OVERVIEW SECTION -->
   <section class="overview">
-    <h2>Event Overview</h2>
+    <h2 style="color: var(--color-primary) !important;">Event Overview</h2>
+
     <div class="overview-cards">
-      <div class="card">
-        <mat-icon color="primary">directions_walk</mat-icon>
-        <h3>4-Day Journey</h3>
-        <p>From Porbandar to Virpur — a 126km spiritual walk.</p>
+      <div class="card devotional-card">
+        <div class="icon-circle">
+          <mat-icon>directions_walk</mat-icon>
+        </div>
+        <h3>૪ દિવસ — ૧૨૬ કિમી</h3>
+        <p>સુદામાપુરી થી વિરપુરધામ, માત્ર યાત્રા નહી, જલારામબાપા ના આશીર્વાદનો મહાયજ્ઞ!!</p>
       </div>
 
-      <div class="card">
-        <mat-icon color="primary">group</mat-icon>
-        <h3>Devotee Community</h3>
-        <p>Hundreds join every year in devotion and unity.</p>
+      <div class="card devotional-card">
+        <div class="icon-circle">
+          <mat-icon>temple_hindu</mat-icon>
+        </div>
+        <h3>લક્ષ્ય, શક્તિ અને ભક્તિ</h3>
+        <p>લક્ષ્ય એક — વિરપુરધામ, શક્તિ એક — જલારામબાપા નુ નામ, અનેક ભક્તો, એક જ પરિણામ, જલારામબાપા ના આશીર્વાદ!!</p>
       </div>
 
-      <div class="card">
-        <mat-icon color="primary">restaurant_menu</mat-icon>
-        <h3>Organized Facilities</h3>
-        <p>Meals, rest, and event management simplified.</p>
+      <div class="card devotional-card">
+        <div class="icon-circle">
+          <mat-icon>group</mat-icon>
+        </div>
+        <h3>આસ્થાની અવિરત ધારા</h3>
+        <p>જ્યા શક્તિ અને જીવંત પ્રેમ મળે છે, ત્યાં અખંડ ભક્તિની આ પદયાત્રા વર્ષનો સુવર્ણ ઇતિહાસ સર્જે છે!!</p>
       </div>
     </div>
   </section>
 
-  <!-- Timeline Section -->
-  <!-- <section class="timeline">
-    <h2>Journey Timeline</h2>
-    <ul>
-      <li><strong>Day 1:</strong> Porbandar → Stop 1</li>
-      <li><strong>Day 2:</strong> Stop 1 → Stop 2</li>
-      <li><strong>Day 3:</strong> Stop 2 → Stop 3</li>
-      <li><strong>Day 4:</strong> Stop 3 → Virpur (Destination)</li>
-    </ul>
-  </section> -->
+  <!-- DEVOTIONAL DIVIDER -->
+  <!-- <div class="devotional-divider"></div> -->
 
-  <!-- 🎥 YouTube Section -->
-  <section class="video-section">
-    <h2>Watch Our Journey</h2>
+  <!-- VIDEO SECTION -->
+ <section class="video-section">
+  <h2>Watch Our Journey</h2>
 
-    <div class="video-container" *ngIf="!videoLoaded" (click)="loadVideo()">
-      <img [src]="thumbnailUrl" alt="Video thumbnail" class="thumbnail" />
-      <div class="play-button">▶</div>
+  <div class="video-container" *ngIf="!videoLoaded" (click)="loadVideo()">
+    <img [src]="thumbnailUrl" class="thumbnail" alt="Video Thumbnail" />
+    <div class="play-button">
+      <!-- Play icon (SVG or text) goes here -->
+      <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="15,10 35,25 15,40" fill="white" />
+      </svg>
     </div>
+  </div>
 
-    <div class="video-container" *ngIf="videoLoaded">
-      <iframe
-        [src]="safeUrl"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>
-  </section>
+  <div class="video-container" *ngIf="videoLoaded">
+    <iframe [src]="safeUrl" allowfullscreen></iframe>
+  </div>
+</section>
+
+<div class="social-sidebar">
+    <a href="https://www.instagram.com/shreejalarampadyatra" target="_blank">
+      <img src="../../assets/images/instagram.svg" alt="Instagram Icon" class="social-icon-img">
+    </a>
+    <a href="https://www.youtube.com/@ShreeJalaramPadyatra" target="_blank">
+      <img src="../../assets/images/youtube.svg" alt="YouTube Icon" class="social-icon-img">
+    </a>
+  </div>
+
+  <!-- Floating Social Media Icons for Mobile -->
+  <div class="social-floating">
+    <a href="https://www.instagram.com/shreejalarampadyatra" target="_blank">
+      <img src="../../assets/images/instagram.svg" alt="Instagram Icon" class="social-icon-img">
+    </a>
+    <a href="https://www.youtube.com/@ShreeJalaramPadyatra" target="_blank">
+      <img src="../../assets/images/youtube.svg" alt="YouTube Icon" class="social-icon-img">
+    </a>
+  </div>
+
 </div>

@@ -8,13 +8,16 @@
       </div>
       <div class="sidebar-user-text">
         <span class="welcome-label">Welcome,</span>
-        <span class="username">User</span>
+        <span class="username">Jalaram</span>
       </div>
     </div>
 
     <mat-nav-list>
       <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
+      </a>
+      <a mat-list-item routerLink="/infodashboard" routerLinkActive="active">
+        <mat-icon>dining</mat-icon> Menu Info
       </a>
       <!-- <a mat-list-item routerLink="/about" routerLinkActive="active">
         <mat-icon>info</mat-icon> About
@@ -37,8 +40,8 @@
           <mat-icon>how_to_reg</mat-icon> Attendance
         </a>
         <a mat-list-item routerLink="/report" routerLinkActive="active">
-          <mat-icon>dashboard-cards</mat-icon> Reports
-        </a>        
+          <mat-icon>analytics</mat-icon> Reports
+        </a>
         <!-- <a mat-list-item routerLink="/foodmenu" routerLinkActive="active">
           <mat-icon>restaurant_menu</mat-icon> Food Item
         </a>
@@ -60,7 +63,7 @@
         <mat-icon class="hamburger-icon">menu</mat-icon>
       </button>
 
-      <a routerLink="/" class="logo-text">Jalaram Padyatra</a>
+      <a routerLink="/" class="logo-text">Shree Jalaram Padyatra</a>
       <span class="spacer"></span>
 
       <!-- <mat-select [(value)]="selectedLang" (selectionChange)="changeLanguage($event.value)" class="lang-select">
@@ -73,6 +76,9 @@
         <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
         </a>
+        <a mat-button routerLink="/infodashboard" routerLinkActive="active">
+        <mat-icon>dining</mat-icon> Menu Info
+      </a>
         <!-- <a mat-button routerLink="/about" routerLinkActive="active">
           <mat-icon>info</mat-icon> About
         </a>
@@ -94,8 +100,8 @@
             <mat-icon>how_to_reg</mat-icon> Attendance
           </a>
           <a mat-button routerLink="/report" routerLinkActive="active">
-            <mat-icon>dashboard-cards</mat-icon> Reports
-          </a>          
+            <mat-icon>analytics</mat-icon> Reports
+          </a>
           <!-- <a mat-button routerLink="/foodmenu" routerLinkActive="active">
             <mat-icon>restaurant_menu</mat-icon> Food Item
           </a>

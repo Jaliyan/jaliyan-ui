@@ -1,27 +1,107 @@
-/* spinner.component.css */
+/* Background overlay */
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 244, 224, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+/* Container */
+.hybrid-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 🔶 Cap + Ring */
+.cap-ring {
+  position: relative;
+  margin-top: 5px;
+  width: 80px;
+  height: 80px;
+}
+
+.ring {
+  width: 80px;
+  height: 80px;
+  border: 5px solid rgba(255, 168, 70, 0.4);
+  border-top-color: #fb8c00;
+  border-left-color: #ffb84d;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+.cap {
+  position: absolute;
+  width: 40px;
+  top: 20px;
+  left: 20px;
+  animation: spinReverse 1.8s linear infinite;
+}
+
+/* 🔶 Footsteps animation */
+.footsteps {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.foot {
+  width: 14px;
+  height: 22px;
+  background: #fb8c00;
+  opacity: 0.3;
+  border-radius: 40% 40% 25% 25%;
+  animation: walk 0.6s infinite alternate;
+}
+
+.foot.left {
+  transform: rotate(-18deg);
+}
+
+.foot.right {
+  transform: rotate(18deg);
+  animation-delay: 0.3s;
+}
+
+/* 🔶 Gujarati text */
+.loader-text {
+  margin-top: 12px;
+  color: #d97000;
+  font-size: 17px;
+  font-weight: 600;
+  font-family: "Noto Sans Gujarati", sans-serif;
+}
+
+/* Animations */
+@keyframes walk {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
   }
-  
-  .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #ffb84d;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+  100% {
+    transform: translateY(-10px) scale(1.25);
+    opacity: 1;
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

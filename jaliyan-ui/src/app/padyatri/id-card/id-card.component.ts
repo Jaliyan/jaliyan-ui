@@ -48,23 +48,66 @@ export class IdCardComponent implements OnInit, AfterViewInit {
     return `${appBaseUrl}/home?data=${encoded}`;
   }
 
+  async generateQR() {
+  try {
+    // 1️⃣ Generate base QR
+    const qrCanvas = await QRCode.toCanvas(this.qrData, {
+      errorCorrectionLevel: 'H',
+      margin: 2,
+      scale: 12,
+      color: { dark: '#000000', light: '#FFFFFF' }
+    });
 
-   async generateQR() {
-    try {
-      this.qrImage = await QRCode.toDataURL(this.qrData, {
-        errorCorrectionLevel: 'H', // High error correction
-        type: 'image/png',
-        scale: 12,                   // Higher scale = bigger and sharper
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
-      });
-    } catch (err) {
-      console.error('QR generation failed', err);
-    }
+    /** 2️⃣ Load Logo Image */
+    const logo = new Image();
+    logo.src = 'assets/images/Logo_old.jpg';     // your logo
+    await new Promise(res => (logo.onload = res));
+
+    /** 3️⃣ Draw QR + Logo together */
+    const size = qrCanvas.width;
+    const logoSize = size * 0.25; // 25% of QR size
+    const position = (size - logoSize) / 2;
+
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = size;
+    finalCanvas.height = size;
+
+    const ctx = finalCanvas.getContext('2d')!;
+    ctx.drawImage(qrCanvas, 0, 0, size, size);
+
+    // Draw logo on top
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.roundRect(position - 8, position - 8, logoSize + 16, logoSize + 16, 10);
+    ctx.fill();
+
+    ctx.drawImage(logo, position, position, logoSize, logoSize);
+
+    /** 4️⃣ Save final image */
+    this.qrImage = finalCanvas.toDataURL('image/png');
+
+  } catch (err) {
+    console.error("QR generation with logo failed", err);
   }
+}
+
+
+  //  async generateQR() {
+  //   try {
+  //     this.qrImage = await QRCode.toDataURL(this.qrData, {
+  //       errorCorrectionLevel: 'H', // High error correction
+  //       type: 'image/png',
+  //       scale: 12,                   // Higher scale = bigger and sharper
+  //       margin: 2,
+  //       color: {
+  //         dark: '#000000',
+  //         light: '#FFFFFF'
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.error('QR generation failed', err);
+  //   }
+  // }
 
   ngOnInit(): void {
     if (!this.padyatri && this.injectedData) {

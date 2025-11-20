@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AttendanceService } from '../../services/attendance.service';
 import { PadyatriService } from '../../services/padyatri.service';
@@ -8,22 +10,23 @@ import { ToastService } from '../../services/toast.service';
 import { Padyatri } from '../../common/padyatri.model';
 import { DistributionService } from '../../services/distribution.service';
 import { AuthService } from '../../services/auth.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { gujaratiToEnglishDigits } from '../../common/number-utils';
 
 @Component({
   selector: 'app-qr-scan',
   templateUrl: './qr-scan.component.html',
   styleUrls: ['./qr-scan.component.css'],
-  standalone: false,
+  standalone: false
 })
-export class QrScanComponent implements OnInit {
+export class QrScanComponent implements OnInit, AfterViewInit {
   attendanceForm!: FormGroup;
   padyatri: Padyatri[] = [];
-  filteredPadyatri: Padyatri[] = [];
   stops: any[] = [];
   itemList: any[] = [];
 
   dataSource = new MatTableDataSource<Padyatri>();
-  displayedColumns: string[] = ['name', 'batchId', 'mobile', 'actions'];
+  displayedColumns: string[] = ['batchId','name', 'mobile', 'actions'];
 
   isMobile = false;
   lastScanTime = 0;
@@ -34,6 +37,10 @@ export class QrScanComponent implements OnInit {
   cooldownBorderColor = '#f57c00';
 
   userName: any;
+
+@ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+@ViewChild(MatSort, { static: false }) sort!: MatSort;
+
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +67,37 @@ export class QrScanComponent implements OnInit {
       next: (items) => (this.itemList = items),
       error: (err: any) => console.error(err),
     });
+
+    // Live search
+    this.attendanceForm.get('batchSearch')?.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => this.applyFilters());
   }
+
+ngAfterViewInit() {
+  this.dataSource.paginator = this.paginator;
+  this.dataSource.sort = this.sort;
+
+  // Fix sorting on new data load
+  this.dataSource.sortingDataAccessor = (item, property) => {
+    switch (property) {
+      case 'name':
+        return `${item.firstName} ${item.lastName}`.toLowerCase();
+      default:
+        return (item as any)[property];
+    }
+  };
+}
+
+ngAfterViewChecked() {
+  if (this.dataSource && this.paginator && this.dataSource.paginator !== this.paginator) {
+    this.dataSource.paginator = this.paginator;
+  }
+  if (this.dataSource && this.sort && this.dataSource.sort !== this.sort) {
+    this.dataSource.sort = this.sort;
+  }
+}
+
 
   buildForm() {
     this.attendanceForm = this.fb.group({
@@ -83,35 +120,48 @@ export class QrScanComponent implements OnInit {
     this.padyatriService.getPadyatris().subscribe({
       next: (data) => {
         this.padyatri = data;
-        this.filteredPadyatri = data;
-        this.dataSource.data = data;
+        this.dataSource = new MatTableDataSource(data);
+
+        if (this.paginator) this.dataSource.paginator = this.paginator;
+        if (this.sort) this.dataSource.sort = this.sort;
       },
       error: () => this.toast.show('Failed to load padyatris', 'error'),
     });
   }
 
   canScan(): boolean {
-    const { selectedStop } = this.attendanceForm.value;
-    return !!selectedStop;
+    return !!this.attendanceForm.value.selectedStop;
   }
 
-  applyFilters() {
-    const batch = this.attendanceForm.get('batchSearch')?.value;
-    this.filteredPadyatri = this.padyatri.filter((p) =>
-      batch ? p.batchId === +batch : true
+applyFilters() {
+  let searchValue = this.attendanceForm.get('batchSearch')?.value;
+  searchValue = searchValue ? String(searchValue).trim().toLowerCase() : '';
+
+  this.dataSource.filterPredicate = (data: Padyatri, filter: string) => {
+    const batchId = String(data.batchId).toLowerCase();
+    return (
+      batchId.includes(filter)
     );
-    this.dataSource.data = this.filteredPadyatri;
+  };
+
+  this.dataSource.filter = gujaratiToEnglishDigits(searchValue);
+  
+  if (this.dataSource.paginator) {
+    this.dataSource.paginator.firstPage();
   }
+}
+
+
 
   clearBatchSearch() {
     this.attendanceForm.get('batchSearch')?.setValue('');
-    this.applyFilters();
   }
 
   setMode(mode: 'manual' | 'qr') {
     if (!this.canScan()) return;
     this.attendanceForm.get('attendanceMode')?.setValue(mode);
   }
+
 
   onQrScanned(data: string) {
     const now = Date.now();
@@ -192,7 +242,7 @@ export class QrScanComponent implements OnInit {
 
     this.distributionService.markItemDistribution(payload).subscribe({
       next: () => {
-        this.toast.show(`${selectedItem} given to ${padyatri.firstName}`, 'success');
+        this.toast.show(`Given to ${padyatri.firstName}`, 'success');
         this.showCooldownEffect('success', `${selectedItem} marked`);
       },
       error: () => {

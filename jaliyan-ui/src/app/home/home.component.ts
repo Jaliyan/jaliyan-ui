@@ -1,22 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 interface JourneyStep {
   day: number;
   from: string;
   to: string;
 }
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  standalone: false,
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css'],
+  standalone: false
 })
 export class HomeComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private router: Router,
-    private auth: AuthService, private sanitizer: DomSanitizer) { }
-
   currentYear = new Date().getFullYear();
   videoId = 'eLOuHnONEao'; // 🔹 Replace with your YouTube video ID
   safeUrl!: SafeResourceUrl;
@@ -29,18 +26,22 @@ export class HomeComponent implements OnInit {
     { day: 4, from: 'Stop 3', to: 'Virpur' }
   ];
 
-  ngOnInit() {
+  constructor(private sanitizer: DomSanitizer) {}
 
+  ngOnInit() {
+    // Initialize the safe URL in case the video has already been loaded
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${this.videoId}?rel=0`);
   }
 
+  // Get the YouTube thumbnail URL dynamically based on videoId
   get thumbnailUrl() {
     return `https://img.youtube.com/vi/${this.videoId}/hqdefault.jpg`;
   }
 
+  // Function to load the video when the play button is clicked
   loadVideo() {
     const url = `https://www.youtube.com/embed/${this.videoId}?autoplay=1&rel=0`;
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.videoLoaded = true;
   }
-
 }

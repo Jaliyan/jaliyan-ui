@@ -1,115 +1,136 @@
 <mat-sidenav-container class="drawer-container">
   <mat-sidenav-content>
+
     <div class="page-wrapper">
-      <h2 class="title">Padyatri List</h2>
 
-      <!-- Action Bar -->
-      <div class="action-bar">
-        <div class="button-group">
-          <button mat-raised-button color="primary" routerLink="/padyatri/add" style="color: #f57c00">
-            <mat-icon>person_add</mat-icon> Add New Padyatri
-          </button>
+      <!-- Title -->
+      <div class="page-header">
+        <h2 class="title">Padyatri List</h2>
 
-          <!-- <button mat-raised-button color="primary" (click)="downloadBulkIDCards()"
-            [disabled]="selectedPadyatris.length === 0" style="margin-left: 8px; color: #f57c00">
-            <mat-icon>download</mat-icon>Download Selected ID Cards
-          </button> -->
-        </div>
-
-        <mat-form-field appearance="fill" class="filter-field">
-          <mat-label>Search</mat-label>
-          <input matInput placeholder="Search by Batch Id" (input)="applyFilter($event)" />
-        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="addNewPadyatri()">
+          <mat-icon>person_add</mat-icon>
+          Add Padyatri
+        </button>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrapper">
-        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="background: #f4f6f8">
-          <!-- Checkbox -->
-          <!-- <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="toggleAllRows($event)" [checked]="isAllSelected()"
-                [indeterminate]="isSomeSelected()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(row)"
-                [checked]="selectedPadyatris.includes(row)">
-              </mat-checkbox>
-            </td>
-          </ng-container> -->
+      <!-- Search Bar -->
+      <mat-form-field appearance="outline" class="search-bar">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search by Batch ID" (input)="applyFilter($event)" />
+      </mat-form-field>
+
+      <!-- DESKTOP TABLE VIEW -->
+      <div *ngIf="!isMobile" class="table-wrapper mat-elevation-z2">
+        <table mat-table [dataSource]="dataSource" matSort>
 
           <!-- Batch ID -->
           <ng-container matColumnDef="batchId">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
-            <td mat-cell *matCellDef="let padyatri">
-              {{ toGujaratiDigits(padyatri.batchId) }}
-            </td>
+            <td mat-cell *matCellDef="let p">{{ toGujaratiDigits(p.batchId) }}</td>
           </ng-container>
 
-          <!-- First Name -->
+          <!-- Name -->
           <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              First Name
-            </th>
-            <td mat-cell *matCellDef="let padyatri">{{ padyatri.firstName }} {{ padyatri.lastName }}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let p">{{ p.firstName }} {{ p.lastName }}</td>
           </ng-container>
 
           <!-- Mobile -->
           <ng-container matColumnDef="mobile">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
-            <td mat-cell *matCellDef="let padyatri">{{ padyatri.mobile }}</td>
+            <td mat-cell *matCellDef="let p">{{ p.mobile }}</td>
           </ng-container>
 
           <!-- Actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let padyatri">
+            <td mat-cell *matCellDef="let p">
               <div class="actions">
-                <button mat-icon-button color="accent" (click)="viewPadyatri(padyatri)" matTooltip="View Details">
+
+                <!-- View Details -->
+                <button mat-icon-button matTooltip="View" (click)="viewPadyatri(p)">
                   <mat-icon>visibility</mat-icon>
                 </button>
 
-                <button mat-icon-button color="primary" [routerLink]="['/padyatri/edit', padyatri.padyatriId]"
-                  matTooltip="Edit">
+                <!-- View ID Card -->
+                <button mat-icon-button matTooltip="View ID Card" (click)="viewIDCard(p)">
+                  <mat-icon>assignment_ind</mat-icon>
+                </button>
+
+                <!-- Edit -->
+                <button mat-icon-button matTooltip="Edit" (click)="editPadyatri(p)">
                   <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" (click)="deletePadyatri(padyatri.padyatriId)" matTooltip="Delete">
+
+                <!-- Delete -->
+                <button mat-icon-button matTooltip="Delete" color="warn" (click)="deletePadyatri(p.padyatriId)">
                   <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-icon-button color="primary" (click)="returnPadyatri(padyatri.padyatriId,true)"
-                  *ngIf="!padyatri.isReturn" matTooltip="Mark as Returned">
+
+                <!-- Return Toggle -->
+                <button mat-icon-button *ngIf="!p.isReturn" matTooltip="Mark Returned"
+                  (click)="returnPadyatri(p.padyatriId, true)">
                   <mat-icon>repartition</mat-icon>
                 </button>
 
-                <button mat-icon-button color="primary" (click)="returnPadyatri(padyatri.padyatriId,false)"
-                  *ngIf="padyatri.isReturn" matTooltip="Mark as Active">
+                <button mat-icon-button *ngIf="p.isReturn" matTooltip="Activate"
+                  (click)="returnPadyatri(p.padyatriId, false)">
                   <mat-icon>how_to_reg</mat-icon>
                 </button>
 
-                <button mat-icon-button (click)="viewIDCard(padyatri)" matTooltip="View ID Card">
-                  <mat-icon>assignment_ind</mat-icon>
-                </button>
               </div>
             </td>
           </ng-container>
 
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-              No padyatris found.
-            </td>
-          </tr>
         </table>
       </div>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons style="background: #f4f6f8"></mat-paginator>
+      <!-- MOBILE CARD VIEW -->
+      <div *ngIf="isMobile" class="mobile-card-list">
+        <mat-card class="padyatri-card" *ngFor="let p of dataSource.filteredData" (click)="openMobileActions(p)">
+          <div class="card-header">
+            <div class="batch">{{ toGujaratiDigits(p.batchId) }}</div>
+            <mat-chip *ngIf="p.isReturn" color="warn" selected>RETURNED</mat-chip>
+          </div>
+
+          <div class="card-body">
+            <div class="name">{{ p.firstName }} {{ p.lastName }}</div>
+
+            <div class="mobile">
+              <mat-icon inline>call</mat-icon>
+              {{ p.mobile }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="card-actions">
+            <button mat-stroked-button color="primary" (click)="viewIDCard(p); $event.stopPropagation()">
+              <mat-icon>assignment_ind</mat-icon> ID Card
+            </button>
+            <button mat-stroked-button color="primary" (click)="editPadyatri(p); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+
+            <button mat-stroked-button color="warn" (click)="deletePadyatri(p.padyatriId); $event.stopPropagation()">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- Paginator -->
+      <mat-paginator
+  [length]="dataSource.filteredData.length"
+  [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 25]"
+  showFirstLastButtons>
+</mat-paginator>
+
+
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-<!-- Hidden Render Container for PDF -->
-<div #bulkCardContainer style="position: absolute; top: 0; left: 0; opacity: 0; z-index: -1;">
-  <app-id-card *ngFor="let padyatri of selectedPadyatris" [padyatri]="padyatri"></app-id-card>
-</div>

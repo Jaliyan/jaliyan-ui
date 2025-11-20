@@ -1,11 +1,12 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AttendanceService } from '../services/attendance.service';
-import { PadyatriAttendance, PadyatriItem } from '../common/padyatri.model';
 import { DistributionService } from '../services/distribution.service';
-
+import { PadyatriAttendance, PadyatriItem } from '../common/padyatri.model';
+import { gujaratiToEnglishDigits } from '../common/number-utils';
 
 @Component({
   selector: 'app-report',
@@ -15,138 +16,159 @@ import { DistributionService } from '../services/distribution.service';
 })
 export class ReportComponent implements OnInit, AfterViewInit {
 
-  // Tabs
-  activeTab: 'attendance' | 'item' = 'attendance';
+  isMobile = false;
 
-  // Attendance
+  activeTab: 'attendance' | 'item' = 'attendance';
+  selectedIndex = 0;
+
   locations: any[] = [];
   selectedStopId: number | null = null;
+
   attendanceColumns: string[] = ['batchId', 'fullName', 'attendanceTime', 'isPresent'];
   attendanceData = new MatTableDataSource<PadyatriAttendance>();
-  totalCount = 0;
-  presentCount = 0;
-  absentCount = 0;
 
-  // Item Distribution
   itemColumns: string[] = ['batchId', 'fullName'];
-  itemList: any[] = [];
+  itemList: string[] = [];
   itemData = new MatTableDataSource<PadyatriItem>();
 
   loading = false;
 
-  selectedIndex = 0;
+  totalCount = 0;
+  presentCount = 0;
+  absentCount = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private attendanceService: AttendanceService, private cdr: ChangeDetectorRef, 
-    private distributionService : DistributionService) { }
+  constructor(
+    private attendanceService: AttendanceService,
+    private distributionService: DistributionService,
+    private cdr: ChangeDetectorRef,
+    private breakpointObserver: BreakpointObserver
+  ) { }
 
   ngOnInit() {
-    // Load stops
-    this.attendanceService.getStops().subscribe({
-      next: (stops) => this.locations = stops,
-      error: (err) => console.error(err)
-    });
+    // Detect only MOBILE for card layout
+    this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
+      .subscribe(result => this.isMobile = result.matches);
 
-    // Load item list
-    this.distributionService.getItems().subscribe({
-      next: (items) => {
-        // this.itemList = items;
-        this.itemList = items.map((x: any) => x.itemName);
-        this.itemColumns = ['batchId', 'fullName', ...this.itemList];
-      },
-      error: (err: any) => console.error(err)
+    // Load stops list
+    this.attendanceService.getStops().subscribe(res => this.locations = res);
+
+    // Load item headers
+    this.distributionService.getItems().subscribe(items => {
+      this.itemList = items.map(x => x.itemName);
+      this.itemColumns = ['batchId', 'fullName', ...this.itemList];
     });
   }
 
   ngAfterViewInit() {
-    this.attendanceData.paginator = this.paginator;
-    this.attendanceData.sort = this.sort;
-
-    this.itemData.paginator = this.paginator;
-    this.itemData.sort = this.sort;
-
-    // Filter for multiple fields
-    this.attendanceData.filterPredicate = (data: PadyatriAttendance, filter: string) => {
-      const f = filter.trim().toLowerCase();
-      return data.fullName.toLowerCase().includes(f) || data.batchId.toString().includes(f);
-    };
-
-    this.itemData.filterPredicate = (data: PadyatriItem, filter: string) => {
-      const f = filter.trim().toLowerCase();
-      return data.fullName.toLowerCase().includes(f) || data.batchId.toString().includes(f);
-    };
+    // Attach paginator/sort initially
+    this.attachTableControls();
   }
 
-  // Switch Tabs
-  // switchTab(tab: 'attendance' | 'items') {
-  //   this.activeTab = tab;
-  //   this.resetSummary();
-  // }
+  // Re-attaches paginator & sort based on active tab
+  private attachTableControls() {
+    const ds = this.currentDataSource;
+    if (!ds) return;
 
+    ds.paginator = this.paginator;
+    ds.sort = this.sort;
 
- get currentDataSource(): any {
-  return this.activeTab === 'attendance' ? this.attendanceData : this.itemData;
-}
-trackByIndex(index: number, _: any) {
-  return index;
-}
+    this.cdr.detectChanges();
+  }
+
+  // Unified data source for HTML
+  get currentDataSource(): MatTableDataSource<any> {
+    return this.activeTab === 'attendance'
+      ? this.attendanceData
+      : this.itemData;
+  }
+
   onTabChange(index: number) {
-  this.activeTab = index === 0 ? 'attendance' : 'item';
+    this.activeTab = index === 0 ? 'attendance' : 'item';
+
+    setTimeout(() => this.attachTableControls(), 10);
+  }
+
+  switchTab(tab: 'attendance' | 'item') {
+  this.activeTab = tab;
+
+  // Reset search & table when switching
+  if (this.currentDataSource?.paginator) {
+    this.currentDataSource.paginator.firstPage();
+  }
 }
 
-  // Attendance Report
+
   loadAttendanceReport() {
     if (!this.selectedStopId) return;
     this.loading = true;
-    this.resetSummary();
 
     this.attendanceService.getAttendanceDetailsByStop(this.selectedStopId).subscribe({
-      next: (data: PadyatriAttendance[]) => {
-        this.attendanceData.data = data;
+      next: data => {
+        this.attendanceData = new MatTableDataSource(data);
+
         this.totalCount = data.length;
-        this.presentCount = data.filter(x => x.isPresent).length;
+        this.presentCount = data.filter((x: { isPresent: any; }) => x.isPresent).length;
         this.absentCount = this.totalCount - this.presentCount;
+
         this.loading = false;
+
+        setTimeout(() => this.attachTableControls(), 10);
       },
-      error: (err) => { console.error(err); this.loading = false; }
+      error: () => this.loading = false
     });
   }
 
-  // Item Report
   loadItemReport() {
     this.loading = true;
+
     this.distributionService.getItemDistribution().subscribe({
-      next: (rawData: any[]) => {
+      next: raw => {
+
         const map = new Map<number, PadyatriItem>();
-        rawData.forEach(r => {
-          if (!map.has(r.padyatriId)) {
-            map.set(r.padyatriId, {
-              padyatriId: r.padyatriId,
-              fullName: r.fullName,
-              batchId: r.batchId,
+
+        raw.forEach((row: { padyatriId: number; fullName: any; batchId: any; itemName: string | number; isGiven: boolean; }) => {
+          if (!map.has(row.padyatriId)) {
+            map.set(row.padyatriId, {
+              padyatriId: row.padyatriId,
+              fullName: row.fullName,
+              batchId: row.batchId,
               items: {}
             });
           }
-          map.get(r.padyatriId)!.items[r.itemName] = r.isGiven;
+          map.get(row.padyatriId)!.items[row.itemName] = row.isGiven;
         });
-        this.itemData.data = Array.from(map.values());
+
+        this.itemData = new MatTableDataSource([...map.values()]);
+
         this.loading = false;
+
+        setTimeout(() => this.attachTableControls(), 10);
       },
-      error: (err: any) => { console.error(err); this.loading = false; }
+      error: () => this.loading = false
     });
+  }
+
+  trackByIndex(index: number) {
+    return index;
   }
 
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    if (this.activeTab === 'attendance') this.attendanceData.filter = value;
-    else this.itemData.filter = value;
-  }
 
-  private resetSummary() {
-    this.totalCount = 0;
-    this.presentCount = 0;
-    this.absentCount = 0;
+    const ds = this.currentDataSource;
+
+    ds.filterPredicate = (data: any, filter: string) => {
+        const batchId = String(data.batchId).toLowerCase();
+        return (
+          batchId.includes(filter)
+        );
+      };
+
+    ds.filter = gujaratiToEnglishDigits(value);
+
+    if (ds.paginator) ds.paginator.firstPage();
   }
 }

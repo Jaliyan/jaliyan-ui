@@ -27,9 +27,10 @@ import { englishToGujaratiDigits, gujaratiToEnglishDigits } from '../../common/n
 export class PadyatriListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['batchId', 'firstName', 'mobile', 'actions'];
   selectedPadyatris: any[] = [];
+  isMobile = false;
 
   dataSource = new MatTableDataSource<any>([]);
-    userName: any;
+  userName: any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,6 +46,10 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private authService: AuthService
   ) {
     this.userName = this.authService.getUsername();
+    this.breakpointObserver.observe([Breakpoints.Handset])
+      .subscribe(result => {
+        this.isMobile = result.matches;
+      });
   }
 
   ngOnInit(): void {
@@ -66,25 +71,50 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    this.dataSource.filterPredicate = (data, filter) => {
+      const normalizedFilter = gujaratiToEnglishDigits(filter.toLowerCase());
+      const batchId = gujaratiToEnglishDigits(data.batchId.toString());
+      return batchId.includes(normalizedFilter);
+    };
+
+    this.dataSource.filter = ''; // initialize filter
   }
 
- viewPadyatri(padyatri: any) {
+  viewPadyatri(padyatri: any) {
     const isMobile = this.breakpointObserver.isMatched([Breakpoints.Handset, Breakpoints.Small]);
     this.dialog.open(PadyatriViewDialogComponent, {
-      width: isMobile ? '100vw' : '500px',
-      height: isMobile ? '100vh' : 'auto',
-      maxHeight: '95vh',
+      width: isMobile ? '100%' : '500px',  // Use % instead of vw for better theme alignment
+      maxWidth: '95vw',
+      height: 'auto',
+      maxHeight: '90vh',  // restrict height to prevent overflow
       data: padyatri,
       panelClass: 'padyatri-dialog'
     });
+
   }
+
+  openMobileActions(padyatri: any) {
+    this.dialog.open(PadyatriViewDialogComponent, {
+      width: '100vw',
+      height: 'auto',
+      maxHeight: '95vh',
+      data: padyatri,
+      panelClass: 'mobile-card-dialog'
+    });
+  }
+
 
   loadPadyatris(): void {
     this.padyatriService.getPadyatris().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        // this.dataSource.paginator = this.paginator;
+        // this.dataSource.sort = this.sort;
+
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
       },
       error: () => this.toastService.show('Failed to load data', 'error')
     });
@@ -98,34 +128,38 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     //this.dataSource.filter = filterValue;
     this.dataSource.filter = gujaratiToEnglishDigits(filterValue);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   addNewPadyatri(): void {
-  this.router.navigate(['/padyatri/add']);
-}
+    this.router.navigate(['/padyatri/add']);
+  }
 
-editPadyatri(padyatri: any): void {
-  this.router.navigate(['/padyatri/edit', padyatri.padyatriId]);
-}
+  editPadyatri(padyatri: any): void {
+    this.router.navigate(['/padyatri/edit', padyatri.padyatriId]);
+  }
 
   deletePadyatri(padyatriId: number): void {
-  if (confirm('Are you sure you want to delete this Padyatri?')) {
-    this.padyatriService.deletePadyatri(padyatriId, "admin").subscribe({
-      next: () => {
-        this.toastService.show('Deleted successfully', 'success');
-        this.loadPadyatris();
-      },
-      error: () => this.toastService.show('Delete failed', 'error')
-    });
+    if (confirm('Are you sure you want to delete this Padyatri?')) {
+      this.padyatriService.deletePadyatri(padyatriId, "admin").subscribe({
+        next: () => {
+          this.toastService.show('Deleted successfully', 'success');
+          this.loadPadyatris();
+        },
+        error: () => this.toastService.show('Delete failed', 'error')
+      });
+    }
   }
-}
 
   viewIDCard(padyatri: any): void {
     this.dialog.open(IdCardComponent, {
-    width: '350px',
-    data: padyatri,
-    panelClass: 'id-card-dialog'
-  });
+      width: '350px',
+      data: padyatri,
+      panelClass: 'id-card-dialog'
+    });
   }
 
   generateQRCode(padyatri: any): void {
@@ -133,38 +167,38 @@ editPadyatri(padyatri: any): void {
   }
 
   toggleRow(row: any): void {
-  const index = this.selectedPadyatris.indexOf(row);
-  if (index === -1) {
-    this.selectedPadyatris.push(row);
-  } else {
-    this.selectedPadyatris.splice(index, 1);
+    const index = this.selectedPadyatris.indexOf(row);
+    if (index === -1) {
+      this.selectedPadyatris.push(row);
+    } else {
+      this.selectedPadyatris.splice(index, 1);
+    }
   }
-}
 
-toggleAllRows(event: any): void {
-  if (event.checked) {
-    this.selectedPadyatris = [...this.dataSource.filteredData];
-  } else {
-    this.selectedPadyatris = [];
+  toggleAllRows(event: any): void {
+    if (event.checked) {
+      this.selectedPadyatris = [...this.dataSource.filteredData];
+    } else {
+      this.selectedPadyatris = [];
+    }
   }
-}
 
-isAllSelected(): boolean {
-  return this.selectedPadyatris.length === this.dataSource.filteredData.length;
-}
+  isAllSelected(): boolean {
+    return this.selectedPadyatris.length === this.dataSource.filteredData.length;
+  }
 
-isSomeSelected(): boolean {
-  return this.selectedPadyatris.length > 0 && !this.isAllSelected();
-}
+  isSomeSelected(): boolean {
+    return this.selectedPadyatris.length > 0 && !this.isAllSelected();
+  }
 
-printSelectedIDCards(): void {
-  this.router.navigate(['/padyatri/print-id-cards'], {
-    state: { data: this.selectedPadyatris }
-  });
-}
+  printSelectedIDCards(): void {
+    this.router.navigate(['/padyatri/print-id-cards'], {
+      state: { data: this.selectedPadyatris }
+    });
+  }
 
 
-async downloadBulkIDCards(): Promise<void> {
+  async downloadBulkIDCards(): Promise<void> {
     if (!this.selectedPadyatris.length) {
       alert('Please select at least one Padyatri');
       return;
@@ -232,45 +266,45 @@ async downloadBulkIDCards(): Promise<void> {
 
 
 
-async getPhotoDataURL(photoPath: string): Promise<string> {
-  return new Promise((resolve) => {
-    this.padyatriService.getPadyatriImageAsBlob(photoPath).subscribe(blob => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.readAsDataURL(blob);
-    }, () => resolve('../../assets/images/Logo1.jpg'));
-  });
-}
-
-
-
-async renderQRCode(data: string, elementId: string): Promise<void> {
-  const container = document.getElementById(elementId);
-  if (container) {
-    container.innerHTML = ''; // Clear old
-    const canvas = document.createElement('canvas');
-    await QRCode.toCanvas(canvas, data, { width: 80 });
-    container.appendChild(canvas);
-  }
-}
-
-returnPadyatri(padyatriId: number, isreturn : boolean): void {
-
-  var returnMsg = isreturn ? "mark return for" : "active"
-  if (confirm('Are you sure you want to '+ returnMsg + ' this Padyatri?')) {
-     const payload = {
-      padyatriId: padyatriId,
-      updatedBy: "admin",
-      isreturn: isreturn,
-    };
-    this.padyatriService.returnPadyatri(payload).subscribe({
-      next: () => {
-        this.toastService.show('Marked successfully', 'success');
-        this.loadPadyatris();
-      },
-      error: () => this.toastService.show('Return failed', 'error')
+  async getPhotoDataURL(photoPath: string): Promise<string> {
+    return new Promise((resolve) => {
+      this.padyatriService.getPadyatriImageAsBlob(photoPath).subscribe(blob => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      }, () => resolve('../../assets/images/Logo1.jpg'));
     });
   }
-}
+
+
+
+  async renderQRCode(data: string, elementId: string): Promise<void> {
+    const container = document.getElementById(elementId);
+    if (container) {
+      container.innerHTML = ''; // Clear old
+      const canvas = document.createElement('canvas');
+      await QRCode.toCanvas(canvas, data, { width: 80 });
+      container.appendChild(canvas);
+    }
+  }
+
+  returnPadyatri(padyatriId: number, isreturn: boolean): void {
+
+    var returnMsg = isreturn ? "mark return for" : "active"
+    if (confirm('Are you sure you want to ' + returnMsg + ' this Padyatri?')) {
+      const payload = {
+        padyatriId: padyatriId,
+        updatedBy: "admin",
+        isreturn: isreturn,
+      };
+      this.padyatriService.returnPadyatri(payload).subscribe({
+        next: () => {
+          this.toastService.show('Marked successfully', 'success');
+          this.loadPadyatris();
+        },
+        error: () => this.toastService.show('Return failed', 'error')
+      });
+    }
+  }
 
 }

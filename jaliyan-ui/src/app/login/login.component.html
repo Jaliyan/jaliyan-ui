@@ -18,6 +18,7 @@
               [(ngModel)]="username"
               required
               #usernameModel="ngModel"
+              style="margin-left: 10px;"
             />
             <mat-error *ngIf="usernameModel.invalid && usernameModel.touched">
               Username is required
@@ -33,6 +34,7 @@
               [(ngModel)]="password"
               required
               #passwordModel="ngModel"
+              style="margin-left: 10px;"
             />
             <mat-error *ngIf="passwordModel.invalid && passwordModel.touched">
               Password is required
@@ -72,8 +74,8 @@
       </mat-card>
     </div>
 
-    <div class="login-illustration">
-      <img src="../../assets/images/login-illustration.svg" alt="Illustration" />
-    </div>
+    <!-- <div class="login-illustration">
+      <img src="../../assets/images/PorbandarToVirpur.png" alt="Illustration" />
+    </div> -->
   </div>
 </div>

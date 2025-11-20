@@ -1,3 +1,4 @@
+/* Container */
 .registration-container {
   display: flex;
   justify-content: center;
@@ -5,39 +6,43 @@
   background: #f5f5f5;
   box-sizing: border-box;
   overflow-x: hidden;
-  /* Prevent horizontal scroll */
 }
 
+/* Card */
 .registration-card {
   width: 100%;
   max-width: 900px;
-  padding: 24px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.6);
+  padding: 32px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* Form Title */
 .form-title {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .form-title img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .form-title h2 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 26px;
+  /* font-weight: 600; */
+  color: var(--color-primary);
 }
 
+/* Form Grid & Rows */
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form-row {
@@ -48,78 +53,27 @@
 
 .form-field {
   flex: 1 1 calc(50% - 8px);
-  min-width: 250px;
+  min-width: 220px;
 }
 
 @media (max-width: 768px) {
-  .form-row {
-    flex-direction: row;
-  }
-
   .form-field {
     flex: 1 1 100%;
-    min-width: 100%;
   }
 }
 
+/* Actions */
 .form-actions {
-  text-align: center;
-  margin-top: 24px;
-}
-
-.file-label {
-  font-weight: 500;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 4px;
-  user-select: none;
-}
-
-.photo-upload-container {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  max-width: 150px;
-}
-
-.photo-upload-box {
-  width: 150px;
-  height: 150px;
-  border: 2px dashed #bbb;
-  border-radius: 8px;
-  cursor: pointer;
   display: flex;
   justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
+  margin-top: 28px;
 }
 
-.photo-upload-box:hover,
-.photo-upload-box:focus {
-  border-color: #3f51b5;
-  outline: none;
+.button-group button {
+  margin: 0 8px;
 }
 
-.photo-placeholder {
-  color: #999;
-  font-size: 14px;
-  text-align: center;
-  padding: 10px;
-  user-select: none;
-}
-
-.photo-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  /* optional */
-}
-
-
+/* Photo Upload */
 .photo-upload-wrapper {
   display: flex;
   align-items: center;
@@ -130,18 +84,13 @@
   background-color: #005cbb;
   color: white;
   border: none;
-  padding: 4px 10px;
-  /* 🔽 Reduced padding for smaller height */
-  border-radius: 4px;
-  font-size: 12px;
-  /* 🔽 Smaller text */
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  height: 30px;
-  /* Optional: Fixed height if you want precise control */
-  line-height: 1;
+  height: 36px;
 }
-
 
 .upload-button:hover {
   background-color: #303f9f;
@@ -154,4 +103,32 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+}
+
+.photo-upload-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  max-width: 160px;
+}
+
+.photo-preview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+/* Change the background and text color of the dropdown panel */
+::ng-deep .mat-select-panel {
+  background-color: white; /* or any color you prefer */
+  color: #333; /* text color */
+  border-radius: 8px; /* optional, for rounded corners */
+}
+
+/* Optional: Hover effect for options */
+::ng-deep .mat-option:hover {
+  background-color: #e0e0e0;
 }

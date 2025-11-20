@@ -227,3 +227,15 @@ button.mat-stroked-button:disabled {
   background-color: rgba(0, 0, 0, 0.12); /* default disabled style */
   color: rgba(0, 0, 0, 0.26);
 }
+
+/* Change dropdown background and text color for MDC mat-select */
+.mat-mdc-select-panel {
+  background-color: #ffffff !important; /* white background */
+  color: #333333 !important;           /* dark text */
+  border-radius: 8px;
+}
+
+/* Hover effect for options */
+.mat-mdc-option:hover {
+  background-color: #e0e0e0 !important;
+}

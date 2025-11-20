@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PrintAllIdCardsDialogComponent } from './print-all-id-cards-dialog/print-all-id-cards-dialog.component';
 import { MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-view-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 // Translation
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -61,6 +62,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatCheckboxModule,
     MatSidenavContent,
     MatSidenavContainer,
+    MatChipsModule,
     SharedModule,
     TranslateModule.forRoot({
       loader: {
