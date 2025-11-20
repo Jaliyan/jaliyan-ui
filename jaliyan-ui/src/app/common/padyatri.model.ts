@@ -38,6 +38,7 @@ export interface PadyatriAttendance {
   batchId: number;
   isPresent: boolean;
   attendanceTime: string;
+  isReturn: boolean;
 }
 
 export interface PadyatriItem {

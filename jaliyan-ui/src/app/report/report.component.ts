@@ -36,6 +36,7 @@ export class ReportComponent implements OnInit, AfterViewInit {
   totalCount = 0;
   presentCount = 0;
   absentCount = 0;
+  returnCount = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,7 +112,9 @@ export class ReportComponent implements OnInit, AfterViewInit {
 
         this.totalCount = data.length;
         this.presentCount = data.filter((x: { isPresent: any; }) => x.isPresent).length;
-        this.absentCount = this.totalCount - this.presentCount;
+        this.returnCount = data.filter((x: { isReturn: any; }) => x.isReturn).length;
+        this.absentCount = this.totalCount - this.presentCount - this.returnCount;
+        
 
         this.loading = false;
 

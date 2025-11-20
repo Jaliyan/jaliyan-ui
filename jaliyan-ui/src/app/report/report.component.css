@@ -45,6 +45,9 @@
 .status.absent {
   background-color: #f44336;
 }
+.status.return {
+  background-color: #607d8b;
+}
 
 /* SUMMARY BAR */
 .summary-bar {
@@ -72,6 +75,9 @@
 
 .summary-item.absent {
   background-color: #f44336;
+}
+.summary-item.return {
+  background-color: #607d8b;
 }
 
 /* MOBILE CARD VIEW */
