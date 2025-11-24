@@ -31,7 +31,7 @@
 
 
     <!-- Row 2: Stop Selection -->
-    <div class="row">
+    <div class="row" *ngIf="attendanceForm.get('operationType')?.value === 'attendance'">
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Select Stop</mat-label>
         <mat-select formControlName="selectedStop">
@@ -45,13 +45,14 @@
     <!-- Row 3: Item Selection (Only for Item Distribution) -->
     <div class="row" *ngIf="attendanceForm.get('operationType')?.value === 'item'">
       <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Select Item</mat-label>
-        <mat-select formControlName="selectedItem">
+        <mat-label>Select Items</mat-label>
+        <mat-select formControlName="selectedItem" multiple>
           <mat-option *ngFor="let item of itemList" [value]="item.itemId">
             {{ item.itemName }}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
     </div>
 
     <!-- Mode Selection -->
@@ -69,7 +70,10 @@
       </div>
     </div>
 
-    <p *ngIf="!canScan()" class="error-text">Please select a stop first.</p>
+    <p *ngIf="!canScan() && attendanceForm.get('operationType')?.value === 'attendance'" class="error-text">Please
+      select a stop first.</p>
+    <p *ngIf="!canScan() && attendanceForm.get('operationType')?.value === 'item'" class="error-text">Please select a
+      item first.</p>
 
     <!-- MANUAL SEARCH -->
     <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'" class="row">
@@ -141,11 +145,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator 
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      showFirstLastButtons>
-  </mat-paginator>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons>
+      </mat-paginator>
     </div>
 
     <!-- CARD LIST FOR MOBILE -->

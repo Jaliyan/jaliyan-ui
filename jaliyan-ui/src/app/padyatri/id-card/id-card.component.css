@@ -215,6 +215,15 @@
   z-index: 2;
 }
 
+.footer-title-back {
+  font-size: 16px;
+  color: whitesmoke;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 6px;
+  z-index: 2;
+}
+
 .qr-img {
   width: 80px;
   height: 80px;

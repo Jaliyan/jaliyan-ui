@@ -12,6 +12,7 @@ import { DistributionService } from '../../services/distribution.service';
 import { AuthService } from '../../services/auth.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { gujaratiToEnglishDigits } from '../../common/number-utils';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-qr-scan',
@@ -26,7 +27,7 @@ export class QrScanComponent implements OnInit, AfterViewInit {
   itemList: any[] = [];
 
   dataSource = new MatTableDataSource<Padyatri>();
-  displayedColumns: string[] = ['batchId','name', 'mobile', 'actions'];
+  displayedColumns: string[] = ['batchId', 'name', 'mobile', 'actions'];
 
   isMobile = false;
   lastScanTime = 0;
@@ -38,8 +39,8 @@ export class QrScanComponent implements OnInit, AfterViewInit {
 
   userName: any;
 
-@ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
-@ViewChild(MatSort, { static: false }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
 
   constructor(
@@ -74,36 +75,37 @@ export class QrScanComponent implements OnInit, AfterViewInit {
       .subscribe(() => this.applyFilters());
   }
 
-ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator;
-  this.dataSource.sort = this.sort;
-
-  // Fix sorting on new data load
-  this.dataSource.sortingDataAccessor = (item, property) => {
-    switch (property) {
-      case 'name':
-        return `${item.firstName} ${item.lastName}`.toLowerCase();
-      default:
-        return (item as any)[property];
-    }
-  };
-}
-
-ngAfterViewChecked() {
-  if (this.dataSource && this.paginator && this.dataSource.paginator !== this.paginator) {
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-  }
-  if (this.dataSource && this.sort && this.dataSource.sort !== this.sort) {
     this.dataSource.sort = this.sort;
+
+    // Fix sorting on new data load
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'name':
+          return `${item.firstName} ${item.lastName}`.toLowerCase();
+        default:
+          return (item as any)[property];
+      }
+    };
   }
-}
+
+  ngAfterViewChecked() {
+    if (this.dataSource && this.paginator && this.dataSource.paginator !== this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.dataSource && this.sort && this.dataSource.sort !== this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
 
 
   buildForm() {
     this.attendanceForm = this.fb.group({
       operationType: ['attendance'],
       selectedStop: [''],
-      selectedItem: [''],
+      // selectedItem: [''],
+      selectedItem: [[]],
       attendanceMode: [''],
       batchSearch: [''],
     });
@@ -130,26 +132,35 @@ ngAfterViewChecked() {
   }
 
   canScan(): boolean {
-    return !!this.attendanceForm.value.selectedStop;
+    const { operationType } = this.attendanceForm.value;
+    console.log(!!this.attendanceForm.value.selectedStop && operationType === 'attendance');
+
+    if (operationType === 'item') {
+      return this.attendanceForm.value.selectedItem?.length > 0;
+
+    }
+    else {
+      return !!this.attendanceForm.value.selectedStop
+    }
   }
 
-applyFilters() {
-  let searchValue = this.attendanceForm.get('batchSearch')?.value;
-  searchValue = searchValue ? String(searchValue).trim().toLowerCase() : '';
+  applyFilters() {
+    let searchValue = this.attendanceForm.get('batchSearch')?.value;
+    searchValue = searchValue ? String(searchValue).trim().toLowerCase() : '';
 
-  this.dataSource.filterPredicate = (data: Padyatri, filter: string) => {
-    const batchId = String(data.batchId).toLowerCase();
-    return (
-      batchId.includes(filter)
-    );
-  };
+    this.dataSource.filterPredicate = (data: Padyatri, filter: string) => {
+      const batchId = String(data.batchId).toLowerCase();
+      return (
+        batchId.includes(filter)
+      );
+    };
 
-  this.dataSource.filter = gujaratiToEnglishDigits(searchValue);
-  
-  if (this.dataSource.paginator) {
-    this.dataSource.paginator.firstPage();
+    this.dataSource.filter = gujaratiToEnglishDigits(searchValue);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
-}
 
 
 
@@ -225,59 +236,125 @@ applyFilters() {
     });
   }
 
-  markItemGiven(padyatri: Padyatri) {
-    const { selectedStop, selectedItem } = this.attendanceForm.value;
+  // markItemGiven(padyatri: Padyatri) {
+  //   const { selectedItem } = this.attendanceForm.value;
 
-    if (!selectedStop || !selectedItem) {
-      this.toast.show('Please select Stop and Item', 'warning');
+  //   if (!selectedItem) {
+  //     this.toast.show('Please select Item', 'warning');
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     padyatriId: padyatri.padyatriId,
+  //     stopId: 0,
+  //     itemId: selectedItem,
+  //     distributedBy: this.userName,
+  //   };
+
+  //   this.distributionService.markItemDistribution(payload).subscribe({
+  //     next: () => {
+  //       this.toast.show(`Given to ${padyatri.firstName}`, 'success');
+  //       this.showCooldownEffect('success', `${selectedItem} marked`);
+  //     },
+  //     error: () => {
+  //       this.showCooldownEffect('error', 'Failed to mark item');
+  //     },
+  //   });
+  // }
+
+  // markItemNotGiven(padyatri: Padyatri) {
+  //   const { selectedItem } = this.attendanceForm.value;
+
+  //   if (!selectedItem) {
+  //     this.toast.show('Please select Item', 'warning');
+  //     return;
+  //   }
+
+  //   if (!confirm(`Are you sure you want to revoke this item for ${padyatri.firstName}?`)) {
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     itemId: selectedItem,
+  //     padyatriId: padyatri.padyatriId,
+  //     revokedBy: this.userName,
+  //   };
+
+  //   this.distributionService.revokeItemDistribution(payload).subscribe({
+  //     next: () => {
+  //       this.toast.show(`Item revoked for ${padyatri.firstName}`, 'success');
+  //       this.showCooldownEffect('error', 'Item Revoked');
+  //     },
+  //     error: () => {
+  //       this.toast.show('Failed to revoke item', 'error');
+  //       this.showCooldownEffect('error', 'Revoke Failed');
+  //     },
+  //   });
+  // }
+
+
+
+  markItemGiven(padyatri: Padyatri) {
+    const selectedItems: number[] = this.attendanceForm.value.selectedItem;
+
+    if (!selectedItems || selectedItems.length === 0) {
+      this.toast.show('Please select items', 'warning');
       return;
     }
 
-    const payload = {
-      padyatriId: padyatri.padyatriId,
-      stopId: selectedStop,
-      itemId: selectedItem,
-      distributedBy: this.userName,
-    };
+    const requests = selectedItems.map(itemId => {
+      const payload = {
+        padyatriId: padyatri.padyatriId,
+        stopId: 0,
+        itemId,
+        distributedBy: this.userName
+      };
+      return this.distributionService.markItemDistribution(payload);
+    });
 
-    this.distributionService.markItemDistribution(payload).subscribe({
+    forkJoin(requests).subscribe({
       next: () => {
-        this.toast.show(`Given to ${padyatri.firstName}`, 'success');
-        this.showCooldownEffect('success', `${selectedItem} marked`);
+        this.toast.show(`All selected items given to ${padyatri.firstName}`, 'success');
+        this.showCooldownEffect('success', 'All items distributed');
       },
       error: () => {
-        this.showCooldownEffect('error', 'Failed to mark item');
-      },
+        this.toast.show('One or more items failed to distribute', 'error');
+        this.showCooldownEffect('error', 'Distribution Failed');
+      }
     });
   }
 
+
   markItemNotGiven(padyatri: Padyatri) {
-    const { selectedStop, selectedItem } = this.attendanceForm.value;
+    const selectedItems: number[] = this.attendanceForm.value.selectedItem;
 
-    if (!selectedStop || !selectedItem) {
-      this.toast.show('Please select Stop and Item', 'warning');
+    if (!selectedItems || selectedItems.length === 0) {
+      this.toast.show('Please select items', 'warning');
       return;
     }
 
-    if (!confirm(`Are you sure you want to revoke this item for ${padyatri.firstName}?`)) {
+    if (!confirm(`Revoke ALL selected items for ${padyatri.firstName}?`)) {
       return;
     }
 
-    const payload = {
-      itemId: selectedItem,
-      padyatriId: padyatri.padyatriId,
-      revokedBy: this.userName,
-    };
+    const revokeRequests = selectedItems.map(itemId => {
+      const payload = {
+        itemId,
+        padyatriId: padyatri.padyatriId,
+        revokedBy: this.userName,
+      };
+      return this.distributionService.revokeItemDistribution(payload);
+    });
 
-    this.distributionService.revokeItemDistribution(payload).subscribe({
+    forkJoin(revokeRequests).subscribe({
       next: () => {
-        this.toast.show(`Item revoked for ${padyatri.firstName}`, 'success');
-        this.showCooldownEffect('error', 'Item Revoked');
+        this.toast.show(`Selected items revoked for ${padyatri.firstName}`, 'success');
+        this.showCooldownEffect('error', 'Items Revoked');
       },
       error: () => {
-        this.toast.show('Failed to revoke item', 'error');
+        this.toast.show('One or more revocations failed', 'error');
         this.showCooldownEffect('error', 'Revoke Failed');
-      },
+      }
     });
   }
 
