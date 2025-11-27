@@ -13,7 +13,7 @@ export class PublicInfoDashboardComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private menuplanner: MenuplannerService) {}
+  constructor(private menuplanner: MenuplannerService) { }
 
   ngOnInit(): void {
     this.menuplanner.getItinerary().subscribe({
@@ -22,8 +22,11 @@ export class PublicInfoDashboardComponent implements OnInit {
         this.itinerary = data.map(day => ({
           date: day.date,
           meals: Object.entries(day.meals)
-            .map(([type, meal]) => ({ ...meal, type })) // add type from key
-            .sort((a, b) => a.id - b.id)               // sort by id
+            .map(([key, meal]) => {
+              const type = key.split('_')[1];  // remove numeric ID
+              return { ...meal, type };
+            })
+            .sort((a, b) => a.id - b.id)
         }));
         this.loading = false;
       },

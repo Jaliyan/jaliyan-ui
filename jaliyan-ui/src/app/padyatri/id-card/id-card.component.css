@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600&display=swap'); */
 
 /* Base Wrapper */
 .id-card-wrapper {
@@ -52,7 +52,7 @@
 .front-card .header {
   position: relative;
   z-index: 2;
-  margin-top: -5px;
+  /* margin-top: -5px; */
 }
 .front-card .logo {
   width: 50px;
@@ -82,7 +82,7 @@
 
 .front-card .info-section {
   z-index: 2;
-  margin-top: -5px;
+  margin-top: -10px;
 }
 .front-card .info-section p {
   margin: 3px 0;
@@ -232,4 +232,6 @@
   padding: 4px;
   border-radius: 8px;
 }
-
+.front-card, .back-card {
+  backface-visibility: hidden !important;
+}

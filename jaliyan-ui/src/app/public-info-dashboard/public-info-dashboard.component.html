@@ -38,7 +38,10 @@
               </td>
               <td data-label="સ્થળ">
                 <ng-container *ngIf="meal.location; else noLocation">
-                  <a href="https://www.google.com/maps/search/?api=1&query={{ meal.location.lat }},{{ meal.location.lng }}" target="_blank" rel="noopener">
+                  <!-- <a href="https://www.google.com/maps/search/?api=1&query={{ meal.location.lat }},{{ meal.location.lng }}" target="_blank" rel="noopener">
+                    {{ meal.location.name }}
+                  </a> -->
+                  <a [href]="meal.location.mapUrl" target="_blank" rel="noopener">
                     {{ meal.location.name }}
                   </a>
                 </ng-container>
