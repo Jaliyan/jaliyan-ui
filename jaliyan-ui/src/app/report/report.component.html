@@ -62,7 +62,7 @@
 
         <!-- Attendance Cards -->
         <ng-container *ngIf="activeTab === 'attendance'">
-          <mat-card class="mobile-card" *ngFor="let row of attendanceData.data">
+          <mat-card class="mobile-card" *ngFor="let row of attendanceData.filteredData">
             <div class="mobile-row">
               <div class="left">
                 <div class="name">{{ row.fullName }}</div>
@@ -80,7 +80,7 @@
 
         <!-- Item Cards -->
         <ng-container *ngIf="activeTab === 'item'">
-          <mat-card class="mobile-card" *ngFor="let row of itemData.data">
+          <mat-card class="mobile-card" *ngFor="let row of itemData.filteredData">
             <div class="mobile-row">
               <div class="left">
                 <div class="name">{{ row.fullName }}</div>

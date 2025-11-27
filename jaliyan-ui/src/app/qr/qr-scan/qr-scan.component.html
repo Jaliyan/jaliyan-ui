@@ -151,7 +151,7 @@
 
     <!-- CARD LIST FOR MOBILE -->
     <div class="card-list" *ngIf="isMobile">
-      <div class="card" *ngFor="let e of dataSource.data">
+      <div class="card" *ngFor="let e of dataSource.filteredData">
         <div class="card-row"><strong>Name:</strong> {{ e.firstName }} {{ e.lastName }}</div>
         <div class="card-row"><strong>Batch ID:</strong> {{ e.batchId | gujaratiConversion }}</div>
         <div class="card-row"><strong>Mobile:</strong> {{ e.mobile }}</div>
