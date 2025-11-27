@@ -328,6 +328,7 @@ svg.card-svg {
   color: whitesmoke;
   /* font-weight: 600; */
   /* text-shadow: 0 0 2px rgba(0, 0, 0, 0.3); */
+  margin:0px !important; 
 }
 
 .front-card .photo-container {
@@ -373,7 +374,7 @@ svg.card-svg {
 /* Fix title inside orange band */
 .back-card .organizer-title {
   position: absolute !important;
-  top: 15px !important;
+  top: 10px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   font-size: 18px !important;
@@ -408,8 +409,8 @@ svg.card-svg {
 
 /* Medical emergency card */
 .medical-emergency {
-  margin-top: 15px !important;
-  padding: 10px 14px !important;
+  margin-top: 10px !important;
+  padding: 0px 0px !important;
   width: 100% !important;
   box-sizing: border-box !important;
   border: 2px solid red !important;
@@ -430,7 +431,7 @@ svg.card-svg {
 
 /* Footer alignment */
 .footer-title-back {
-  margin-top: 45px !important;
+  margin-top: 65px !important;
   font-size: 16px !important;
   text-align: center !important;
   color: whitesmoke !important;
@@ -438,7 +439,7 @@ svg.card-svg {
   
 .back-card {
   color: #333;
-  transform: rotateY(180deg);
+  transform: rotateY(0deg) !important;
   display: flex;
   flex-direction: column;
   align-items: center;

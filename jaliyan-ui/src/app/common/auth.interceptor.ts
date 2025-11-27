@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private toastService: ToastService,
     private queryParamsService: QueryParamsService,
     private loaderService: LoaderService
-  ) {}
+  ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getJwtToken();
@@ -39,6 +39,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
     this.loaderService.show();
     
+    if (request.method === 'GET') {
+      request = request.clone({
+        setParams: {
+          _: Date.now().toString()
+        },
+        setHeaders: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+    }
+
     return next.handle(request).pipe(
       finalize(() => this.loaderService.hide()),
       catchError(error => {
