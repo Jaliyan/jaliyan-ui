@@ -46,7 +46,7 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private authService: AuthService
   ) {
     this.userName = this.authService.getUsername();
-    this.breakpointObserver.observe([Breakpoints.Handset])
+    this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
       .subscribe(result => {
         this.isMobile = result.matches;
       });
