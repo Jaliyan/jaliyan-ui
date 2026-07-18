@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://www.shreejalarampadyatra.com/JalaramAPI/api',  // Production API URL
-    appUrl: 'https://www.shreejalarampadyatra.com'
+    apiUrl: 'https://localhost:7081/api',  // Local API URL
+    appUrl: 'https://localhost:7081'
   };
   

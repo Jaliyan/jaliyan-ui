@@ -1,6 +1,19 @@
 @use '_custom-theme' as *;
 
 /* ==========================
+   SELF-HOSTED FONTS
+   Guarantees identical Gujarati text rendering (all weights) on every
+   machine, instead of relying on a CDN / OS-substituted font.
+========================== */
+@font-face {
+  font-family: 'Noto Sans Gujarati';
+  src: url('assets/fonts/NotoSansGujarati.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================
    GLOBAL RESET & BASE STYLES
 ========================== */
 *, *::before, *::after {
