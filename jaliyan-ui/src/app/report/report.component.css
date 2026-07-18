@@ -1,0 +1,245 @@
+.report-container {
+  padding: 16px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+  /* margin: 12px 0; */
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.full-width-table {
+  width: 100%;
+  min-width: 600px;
+}
+
+/* STATUS BADGES */
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.status.present {
+  background-color: #4caf50;
+}
+
+.status.absent {
+  background-color: #f44336;
+}
+.status.return {
+  background-color: #607d8b;
+}
+
+/* SUMMARY BAR */
+.summary-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.summary-item {
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+}
+
+.summary-item.total {
+  background-color: #607d8b;
+}
+
+.summary-item.present {
+  background-color: #4caf50;
+}
+
+.summary-item.absent {
+  background-color: #f44336;
+}
+.summary-item.return {
+  background-color: #607d8b;
+}
+
+/* MOBILE CARD VIEW */
+.mobile-card {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.mobile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-row .name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mobile-row .sub {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.item-list {
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+/* MOBILE DESIGN FIXES */
+@media (max-width: 600px) {
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .search-field {
+    max-width: 100%;
+  }
+}
+
+.mat-mdc-card-title {
+  font-size: 26px;
+  color: var(--color-primary);
+}
+
+/* TAB-STYLE TOGGLE CONTAINER */
+.tab-toggle-container {
+  display: flex;
+  width: 100%;
+  background: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+/* INDIVIDUAL TAB */
+.tab-toggle {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #424242;
+  background: #f5f5f5;
+  transition: 0.25s ease-in-out;
+  border-bottom: 3px solid transparent;
+}
+
+/* ACTIVE TAB */
+.tab-toggle.active {
+  /* background: #3f51b5; */
+  color: black;
+  font-weight: 600;
+  border-bottom: 3px solid var(--color-primary);
+}
+
+
+/* Hover Effect */
+.tab-toggle:hover {
+  background: #e8e8e8;
+}
+
+/* MOBILE RESPONSIVE TAB */
+@media (max-width: 600px) {
+  .tab-toggle {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+}
+
+/* ERROR TEXT */
+.error-text {
+  text-align: center;
+  color: #e53935;
+  font-weight: bold;
+}
+
+.item-list div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Clean Item List Layout */
+.item-list {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each row looks neat */
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Prevent name squishing */
+.item-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Status Badge Styling */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Yes Badge */
+.status-badge.yes {
+  background-color: #4caf50;
+}
+
+/* No Badge */
+.status-badge.no {
+  background-color: #f44336;
+}
+
+/* Icon size fix */
+.status-icon {
+  font-size: 16px !important;
+  height: 16px !important;
+  width: 16px !important;
+}

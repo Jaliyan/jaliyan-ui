@@ -13,18 +13,36 @@ export class AttendanceService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
   // Mark the attendance of a user
-  markAttendance(padyatriId: number, isPresent: boolean, stopId: number): Observable<any> {
-    this.confirmedBy = this.authService.getUsername();
-    let confirmedBy = this.confirmedBy;
-    return this.http.post(`${this.baseUrl}/attendance/mark`, { padyatriId, stopId, isPresent, confirmedBy });
+  markAttendance(payload: {
+    padyatriId: number;
+    stopId: number;
+    isPresent: boolean;
+  }): Observable<any> {
+    const confirmedBy = this.authService.getUsername();
+    const finalPayload = { ...payload, confirmedBy };
+
+    return this.http.post(`${this.baseUrl}/attendance/mark`, finalPayload);
   }
 
-  // Fetch attendance details for all user by stop (if needed)
+  /**
+   * Gets attendance details by stop (optional use)
+   */
   getAttendanceDetailsByStop(stopId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/attendance/report/${stopId}`);
   }
 
+  /**
+   * Deletes a padyatri's attendance from a specific stop
+   */
   deletePadyatriByStop(padyatriId: number, stopId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/attendance/${padyatriId}/${stopId}`);
   }
+
+   /**
+   * Fetch the list of stops (for selection purposes).
+   */
+  getStops(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/stops`);
+  }
+
 }

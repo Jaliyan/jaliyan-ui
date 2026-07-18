@@ -1,40 +1,132 @@
-<header>
-  <div class="logo">
-    <a routerLink="/">Jalaram Padyatra</a>
-  </div>
-  <nav class="menu">
-    <!-- Hamburger Icon -->
-    <div class="hamburger" (click)="toggleMenu()">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+<mat-sidenav-container class="sidenav-container">
+
+  <!-- Sidebar (Mobile View) -->
+  <mat-sidenav #drawer mode="over" class="mat-sidenav" [opened]="false" (closedStart)="isMenuOpen = false">
+    <div class="sidebar-user-info" *ngIf="isLoggedIn">
+      <div class="user-avatar-wrapper">
+        <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="sidebar-avatar" />
+      </div>
+      <div class="sidebar-user-text">
+        <span class="welcome-label">Welcome,</span>
+        <span class="username">Jalaram</span>
+      </div>
     </div>
-    <!-- Menu List -->
-    <ul [class.active]="isMenuOpen">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      </li>
-      <li>
-        <a routerLink="/about" routerLinkActive="active">About</a>
-      </li>
-      <li>
-        <a routerLink="/events" routerLinkActive="active">Events</a>
-      </li>
-      <li>
-        <a routerLink="/donations" routerLinkActive="active">Donations</a>
-      </li>
-      <li>
-        <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      </li>
-      <li *ngIf="!isLoggedIn">
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a routerLink="/attendance" routerLinkActive="active">Attendance</a>
-      </li>
-      <li *ngIf="isLoggedIn">
-        <a href="#" (click)="logout()">Logout</a>
-      </li>
-    </ul>
-  </nav>
-</header>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
+      </a>
+      <a mat-list-item routerLink="/infodashboard" routerLinkActive="active">
+        <mat-icon>dining</mat-icon> Menu Info
+      </a>
+      <!-- <a mat-list-item routerLink="/about" routerLinkActive="active">
+        <mat-icon>info</mat-icon> About
+      </a>
+      <a mat-list-item routerLink="/contact" routerLinkActive="active">
+        <mat-icon>contact_mail</mat-icon> Contact
+      </a> -->
+
+      <ng-container *ngIf="!isLoggedIn">
+        <a mat-list-item routerLink="/login" routerLinkActive="active">
+          <mat-icon>login</mat-icon> Login
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="isLoggedIn">
+        <a mat-list-item routerLink="/padyatri/list" routerLinkActive="active">
+          <mat-icon>dashboard-cards</mat-icon> Dashboard
+        </a>
+        <a mat-list-item routerLink="/attendance/qrscan" routerLinkActive="active">
+          <mat-icon>how_to_reg</mat-icon> Attendance
+        </a>
+        <a mat-list-item routerLink="/report" routerLinkActive="active">
+          <mat-icon>analytics</mat-icon> Reports
+        </a>
+        <!-- <a mat-list-item routerLink="/foodmenu" routerLinkActive="active">
+          <mat-icon>restaurant_menu</mat-icon> Food Item
+        </a>
+        <a mat-list-item routerLink="/menuplanner" routerLinkActive="active">
+          <mat-icon>calendar_today</mat-icon> Menu Planner
+        </a> -->
+
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon> Logout
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="main-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="mobile-toggle">
+        <mat-icon class="hamburger-icon">menu</mat-icon>
+      </button>
+
+      <a routerLink="/" class="logo-text">Shree Jalaram Padyatra</a>
+      <span class="spacer"></span>
+
+      <!-- <mat-select [(value)]="selectedLang" (selectionChange)="changeLanguage($event.value)" class="lang-select">
+    <mat-option value="en">English</mat-option>
+    <mat-option value="gu">ગુજરાતી</mat-option>
+  </mat-select> -->
+
+      <!-- Desktop Menu -->
+      <nav class="desktop-menu">
+        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
+        </a>
+        <a mat-button routerLink="/infodashboard" routerLinkActive="active">
+        <mat-icon>dining</mat-icon> Menu Info
+      </a>
+        <!-- <a mat-button routerLink="/about" routerLinkActive="active">
+          <mat-icon>info</mat-icon> About
+        </a>
+        <a mat-button routerLink="/contact" routerLinkActive="active">
+          <mat-icon>contact_mail</mat-icon> Contact
+        </a> -->
+
+        <ng-container *ngIf="!isLoggedIn">
+          <a mat-button routerLink="/login" routerLinkActive="active">
+            <mat-icon>login</mat-icon> Login
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <a mat-button routerLink="/padyatri/list" routerLinkActive="active">
+            <mat-icon>dashboard-cards</mat-icon> Dashboard
+          </a>
+          <a mat-button routerLink="/attendance/qrscan" routerLinkActive="active">
+            <mat-icon>how_to_reg</mat-icon> Attendance
+          </a>
+          <a mat-button routerLink="/report" routerLinkActive="active">
+            <mat-icon>analytics</mat-icon> Reports
+          </a>
+          <!-- <a mat-button routerLink="/foodmenu" routerLinkActive="active">
+            <mat-icon>restaurant_menu</mat-icon> Food Item
+          </a>
+          <a mat-button routerLink="/menuplanner" routerLinkActive="active">
+            <mat-icon>calendar_today</mat-icon> Menu Planner
+          </a> -->
+
+          <!-- Dropdown Menu Trigger -->
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+            <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="avatar-img" />
+            <span>Welcome, Jalaram</span>
+            <mat-icon class="dropdown-icon">expand_more</mat-icon>
+          </button>
+        </ng-container>
+      </nav>
+    </mat-toolbar>
+
+    <!-- Dropdown Menu (Only when logged in) -->
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </mat-menu>
+
+    <!-- Page Content -->
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

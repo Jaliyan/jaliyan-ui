@@ -33,24 +33,34 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/", 
+                "input": "src/assets/",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css",
+              "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "canvg",
+              "qrcode",
+              "html2canvas"
+            ]
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -94,19 +104,21 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/", 
+                "input": "src/assets/",
                 "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
-
             ],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

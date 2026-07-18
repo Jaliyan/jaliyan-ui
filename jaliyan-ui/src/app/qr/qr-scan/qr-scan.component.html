@@ -1,0 +1,178 @@
+<div class="qr-main-container">
+
+  <!-- HEADER -->
+  <mat-toolbar color="primary" class="header">
+    Attendance - Item
+  </mat-toolbar>
+
+  <!-- FILTER AREA -->
+  <form [formGroup]="attendanceForm" class="filters-container">
+
+    <!-- Row 1: Operation Type -->
+    <!-- <div class="row">
+      <mat-button-toggle-group formControlName="operationType" color="primary" class="toggle-group">
+        <mat-button-toggle value="attendance">Attendance</mat-button-toggle>
+        <mat-button-toggle value="item">Item Distribution</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div> -->
+
+    <!-- TAB STYLE TOGGLE -->
+    <div class="tab-toggle-container">
+      <div class="tab-toggle" [class.active]="attendanceForm.get('operationType')?.value === 'attendance'"
+        (click)="attendanceForm.get('operationType')?.setValue('attendance')">
+        Attendance
+      </div>
+
+      <div class="tab-toggle" [class.active]="attendanceForm.get('operationType')?.value === 'item'"
+        (click)="attendanceForm.get('operationType')?.setValue('item')">
+        Item Distribution
+      </div>
+    </div>
+
+
+    <!-- Row 2: Stop Selection -->
+    <div class="row" *ngIf="attendanceForm.get('operationType')?.value === 'attendance'">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Select Stop</mat-label>
+        <mat-select formControlName="selectedStop">
+          <mat-option *ngFor="let stop of stops" [value]="stop.stopId">
+            {{ stop.stopName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 3: Item Selection (Only for Item Distribution) -->
+    <div class="row" *ngIf="attendanceForm.get('operationType')?.value === 'item'">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Select Items</mat-label>
+        <mat-select formControlName="selectedItem" multiple>
+          <mat-option *ngFor="let item of itemList" [value]="item.itemId">
+            {{ item.itemName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Mode Selection -->
+    <div class="row mode-row">
+      <div class="mode-box" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'manual'"
+        [class.disabled]="!canScan()" (click)="setMode('manual')">
+        <mat-icon>edit</mat-icon>
+        <span>Manual Entry</span>
+      </div>
+
+      <div class="mode-box" [class.selected]="attendanceForm.get('attendanceMode')?.value === 'qr'"
+        [class.disabled]="!canScan()" (click)="setMode('qr')">
+        <mat-icon>qr_code_scanner</mat-icon>
+        <span>QR Scan</span>
+      </div>
+    </div>
+
+    <p *ngIf="!canScan() && attendanceForm.get('operationType')?.value === 'attendance'" class="error-text">Please
+      select a stop first.</p>
+    <p *ngIf="!canScan() && attendanceForm.get('operationType')?.value === 'item'" class="error-text">Please select a
+      item first.</p>
+
+    <!-- MANUAL SEARCH -->
+    <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'" class="row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Search by Batch ID</mat-label>
+        <input matInput type="text" formControlName="batchSearch">
+        <button *ngIf="attendanceForm.get('batchSearch')?.value" matSuffix mat-icon-button (click)="clearBatchSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <!-- <button mat-raised-button color="primary" (click)="applyFilters()">Search</button> -->
+    </div>
+
+  </form>
+
+  <!-- QR SCANNER -->
+  <div class="qr-wrapper" *ngIf="attendanceForm.get('attendanceMode')?.value === 'qr' && canScan()">
+
+    <div class="qr-box" [ngClass]="{ 'shake': cooldownActive }" [style.border-color]="cooldownBorderColor">
+
+      <zxing-scanner (scanSuccess)="onQrScanned($event)"></zxing-scanner>
+
+      <div class="scan-status" *ngIf="cooldownActive">
+        {{ cooldownMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- MANUAL MODE TABLE / CARD LIST -->
+  <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'">
+
+    <!-- TABLE FOR DESKTOP / TABLET -->
+    <div *ngIf="!isMobile" class="table-wrapper">
+      <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let e">{{ e.firstName }} {{ e.lastName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="batchId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+          <td mat-cell *matCellDef="let e">{{ e.batchId | gujaratiConversion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
+          <td mat-cell *matCellDef="let e">{{ e.mobile }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let e">
+            <ng-container *ngIf="attendanceForm.get('operationType')?.value === 'attendance'">
+              <button mat-raised-button class="btn-present" color="primary"
+                (click)="markAttendance(e, true)">Present</button>
+            </ng-container>
+            <ng-container *ngIf="attendanceForm.get('operationType')?.value === 'item'">
+              <button mat-mini-fab color="accent" (click)="markItemGiven(e)">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" (click)="markItemNotGiven(e)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+    <!-- CARD LIST FOR MOBILE -->
+    <div class="card-list" *ngIf="isMobile">
+      <div class="card" *ngFor="let e of dataSource.filteredData">
+        <div class="card-row"><strong>Name:</strong> {{ e.firstName }} {{ e.lastName }}</div>
+        <div class="card-row"><strong>Batch ID:</strong> {{ e.batchId | gujaratiConversion }}</div>
+        <div class="card-row"><strong>Mobile:</strong> {{ e.mobile }}</div>
+
+        <div class="card-actions">
+          <ng-container *ngIf="attendanceForm.get('operationType')?.value === 'attendance'">
+            <button mat-flat-button color="primary" class="btn-present"
+              (click)="markAttendance(e, true)">Present</button>
+          </ng-container>
+          <ng-container *ngIf="attendanceForm.get('operationType')?.value === 'item'">
+            <button mat-mini-fab color="accent" (click)="markItemGiven(e)">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" (click)="markItemNotGiven(e)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

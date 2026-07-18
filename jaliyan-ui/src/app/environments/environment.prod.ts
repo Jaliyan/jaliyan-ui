@@ -1,5 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://api.example.com',  // Production API URL
+    apiUrl: 'https://www.shreejalarampadyatra.com/JalaramAPI/api',  // Production API URL
+    appUrl: 'https://www.shreejalarampadyatra.com'
   };
   

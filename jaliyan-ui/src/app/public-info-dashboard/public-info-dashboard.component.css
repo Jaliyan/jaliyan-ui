@@ -1,0 +1,127 @@
+.dashboard-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: 'Noto Sans Gujarati', 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.dashboard-header {
+  font-size: 2rem;
+  color: #f57c00;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+mat-expansion-panel {
+  margin-bottom: 24px;
+  border-radius: 12px !important;
+  background: white;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f57c00;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+mat-expansion-panel:hover {
+  box-shadow: 0 8px 24px rgba(245, 124, 0, 0.3);
+  border-color: #e65a00;
+}
+
+.mat-expansion-panel-header {
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+  color: #f57c00;
+  font-weight: 700;
+  padding: 16px 24px;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 3%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.dashboard-table thead {
+  background-color: #f5e0b3;
+  color: #000;
+  font-weight: 700;
+  border-bottom: 2px solid #f57c00;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1rem;
+  word-wrap: break-word;
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: #fff3e0;
+}
+
+.dashboard-table td:nth-child(1) {
+  white-space: nowrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  mat-expansion-panel {
+    margin-bottom: 16px;
+  }
+
+  .dashboard-table thead {
+    display: none;
+  }
+
+  .dashboard-table tbody tr {
+    display: block;
+    background: #fffdf8;
+    border: 1px solid #f5e0b3;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  .dashboard-table tbody tr td {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-table tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #f57c00;
+    flex: 0 0 40%;
+    text-align: left;
+    margin-right: 10px;
+  }
+
+  .dashboard-table tbody tr td span,
+  .dashboard-table tbody tr td a {
+    flex: 1;
+    word-break: break-word;
+  }
+}
+
+.loading, .error {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: red;
+}

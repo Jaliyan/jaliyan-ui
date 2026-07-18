@@ -1,44 +1,89 @@
-/* Reset margin and padding for body and html */
-body, html {
-    height: 100%;
-    margin: 0;
-  }
-  
-  /* This will wrap the header, carousel, and footer */
-  .main-content {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;  /* Make the main content fill the full height of the viewport */
-  }
-  
-  /* Header should be at the top, fixed height */
-  app-header {
-    height: 60px;  /* Adjust based on your design */
-    background-color: #333;
-    color: white;
-    text-align: center;
-    line-height: 60px;  /* Vertically center text */
-  }
-  
-  /* Footer should be at the bottom, fixed height */
-  app-footer {
-    height: 60px;  /* Adjust based on your design */
-    background-color: #333;
-    color: white;
-    text-align: center;
-    line-height: 60px;  /* Vertically center text */
-    margin-top: auto;  /* Push footer to the bottom */
-  }
-  
-  /* This ensures the carousel takes up remaining space */
-  .carousel-container {
-    flex-grow: 1;  /* The carousel takes up the remaining space between header and footer */
-    overflow-y: auto;  /* Enable scrolling if the carousel content overflows */
-  }
-  
-  /* You can also add some custom styles for the carousel if needed */
-  .carousel-container img {
-    width: 100%;  /* Make images fill the container */
-    height: auto;
-  }
-  
+/* ========== GLOBAL RESET ========== */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* prevent global scrollbars */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ========== ROOT APP LAYOUT ========== */
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ========== HEADER (fixed at top) ========== */
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px; /* or whatever your header height is */
+  z-index: 1000;
+}
+
+/* ========== MAIN CONTAINER (scrollable area) ========== */
+.main-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+  padding-top: 64px; /* space for fixed header */
+  padding-bottom: 60px; /* space for footer */
+  box-sizing: border-box;
+}
+
+/* ========== FOOTER (normal at bottom) ========== */
+app-footer {
+  height: 60px;
+  flex-shrink: 0;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  box-sizing: border-box;
+}
+
+
+/* Main content flex layout */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Page content scrollable area */
+.page-content {
+  flex: 1;
+  /* padding-top: 64px; Fixed toolbar height */
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Footer will naturally stick to bottom due to flex */
+app-footer {
+  flex-shrink: 0;
+}
+
+/* Ensure sidenav-container takes full height */
+.sidenav-container {
+  height: 100vh;
+}
+
+/* Toolbar fixed styles (already in your CSS) */
+.main-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #f57c00;
+  color: white;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}

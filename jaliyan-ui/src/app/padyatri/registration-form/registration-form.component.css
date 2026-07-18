@@ -1,0 +1,134 @@
+/* Container */
+.registration-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+  background: #f5f5f5;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Card */
+.registration-card {
+  width: 100%;
+  max-width: 900px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Form Title */
+.form-title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.form-title img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.form-title h2 {
+  margin: 0;
+  font-size: 26px;
+  /* font-weight: 600; */
+  color: var(--color-primary);
+}
+
+/* Form Grid & Rows */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.form-field {
+  flex: 1 1 calc(50% - 8px);
+  min-width: 220px;
+}
+
+@media (max-width: 768px) {
+  .form-field {
+    flex: 1 1 100%;
+  }
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.button-group button {
+  margin: 0 8px;
+}
+
+/* Photo Upload */
+.photo-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-button {
+  background-color: #005cbb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 36px;
+}
+
+.upload-button:hover {
+  background-color: #303f9f;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.photo-upload-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  max-width: 160px;
+}
+
+.photo-preview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+/* Change the background and text color of the dropdown panel */
+::ng-deep .mat-select-panel {
+  background-color: white; /* or any color you prefer */
+  color: #333; /* text color */
+  border-radius: 8px; /* optional, for rounded corners */
+}
+
+/* Optional: Hover effect for options */
+::ng-deep .mat-option:hover {
+  background-color: #e0e0e0;
+}

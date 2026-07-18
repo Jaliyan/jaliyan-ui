@@ -1,102 +1,473 @@
-/* General Header and Menu Styling */
-header {
-  background-color: #1A2A6C; /* Navy Blue */
-  color: #FFFFFF; /* White Text */
-  padding: 8px 30px; /* Reduced padding to halve the header height */
+/* Ensure sidenav takes the full height */
+.sidenav-container {
+  height: 100vh;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  flex-direction: column;
 }
 
-header .logo a {
-  font-size: 1.6rem;
+.mat-sidenav {
+  width: 250px;
+  background-color: #fffaf0;
+  color: black;
+}
+
+.mat-sidenav-content {
+  flex: 1;
+}
+
+/* Toolbar background and text */
+.mat-toolbar {
+  background-color: #f57c00;
+  color: white;
+  padding: 10px;
+}
+
+/* Logo styling */
+.logo-text {
   font-weight: bold;
-  color: #FFFFFF;
+  color: #ffffff;
+  font-size: 20px;
   text-decoration: none;
 }
 
-/* Navigation Menu */
-nav ul {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
+.spacer {
+  flex: 1 1 auto;
 }
 
-nav ul li {
-  margin-right: 25px;
-  /* Remove background color from the parent li element */
-  background-color: transparent; /* Ensure no background color on the li */
+/* Desktop menu */
+.desktop-menu {
+  display: inline-block;
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: #FFFFFF; /* White text by default */
-  font-weight: bold;
-  padding: 10px 15px;
+.desktop-menu a.mat-button {
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+}
+
+.desktop-menu a.mat-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  display: block; /* Ensure the link fills the entire li */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Ensure only background-color changes */
+  color: #FFD700;
 }
 
-/* Hover Effect: Only Change Background Color of the Link */
-nav ul li a:hover {
-  background-color: #00B5B8; /* Teal on hover */
-  color: #FFFFFF; /* Ensure text color stays white */
+/* Logout button in desktop menu */
+.desktop-menu a.logout-link {
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-/* Active Link */
-nav ul li a.active {
-  background-color: #F4A300; /* Gold color for active link */
-  color: #FFFFFF; /* Ensure active link color stays white */
+.desktop-menu a.logout-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFD700;
+  border-radius: 4px;
 }
 
-/* Hamburger Menu for Mobile */
-.hamburger {
+/* Sidenav menu items */
+.mat-nav-list a {
+  color: #5D4037;
+  font-weight: 500;
+}
+
+.mat-nav-list a:hover {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+/* Sidebar Icon color for visibility */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
+}
+
+/* Sidebar Item Hover Effect */
+.mat-sidenav .mat-nav-list a:hover {
+  background-color: rgba(245, 124, 0, 0.1); /* Highlight background */
+  color: #f57c00;
+}
+
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Change icon color to highlight color on hover */
+}
+
+/* Modify only the icons in the sidebar */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker color for sidebar icons */
+}
+
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Highlight color on hover */
+}
+
+/* For desktop, keep the icons white */
+.desktop-menu .mat-button mat-icon {
+  color: white; /* Keep desktop icons white */
+}
+
+/* Desktop Icon Hover Color */
+.desktop-menu .mat-button:hover mat-icon {
+  color: #FFD700; /* Change icon color on hover */
+}
+
+/* Ensure hamburger icon is always white */
+.mobile-toggle mat-icon {
+  color: white !important; /* Keep the hamburger icon white */
+}
+
+/* Mobile toggle for sidenav (hamburger) */
+.mobile-toggle {
   display: none;
-  cursor: pointer;
 }
 
-.hamburger div {
-  background-color: #FFFFFF;
-  height: 4px;
-  width: 30px;
-  margin: 5px;
-  transition: all 0.3s;
-}
-
-/* Mobile Menu Styling */
-@media screen and (max-width: 768px) {
-  nav ul {
+@media (max-width: 1024px) {
+  .desktop-menu a.mat-button:nth-child(n+6) {
     display: none;
-    flex-direction: column;
+  }
+
+  .more-menu-button {
+    display: inline-flex;
+  }
+}
+
+/* User Menu Button */
+.user-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+}
+
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-icon {
+  color: white;
+  font-size: 20px;
+}
+
+/* Base Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-toggle {
+    display: inline-flex;
+  }
+
+  .mat-sidenav {
+    width: 200px;
+  }
+
+  .mat-sidenav-content {
+    margin-left: 0;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .desktop-menu a {
+    display: block;
     width: 100%;
     text-align: center;
-    background-color: #1A2A6C; /* Navy Blue background for mobile */
   }
 
-  nav ul.active {
-    display: flex;
+  .more-menu-button {
+    display: inline-flex;
+  }
+}
+
+/* Sidebar User Info */
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5e0b3;
+  border-bottom: 1px solid #f57c00;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.user-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.sidebar-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f57c00;
+}
+
+.sidebar-user-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.welcome-label {
+  font-size: 14px;
+  color: #6d4c41;
+  margin: 0;
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4e342e;
+  margin: 0;
+}
+
+/* For mobile devices, stack avatar and text */
+@media (max-width: 768px) {
+  .sidebar-user-info {
+    flex-direction: column;
+    text-align: center;
   }
 
-  .hamburger {
-    display: block;
-  }
-  
-  .hamburger.open div:nth-child(1) {
-    transform: rotate(45deg);
-    position: relative;
-    top: 10px;
+  .sidebar-user-info .sidebar-avatar {
+    margin: 0 0 8px 0;
   }
 
-  .hamburger.open div:nth-child(2) {
-    opacity: 0;
+  .sidebar-user-text {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Sidebar Nav List */
+.mat-nav-list a {
+  color: #3E2723; /* Darker text color for sidebar */
+  font-weight: 500;
+}
+
+/* Sidebar Item Hover Effect */
+.mat-nav-list a:hover {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+/* Sidebar Icon Color */
+.mat-sidenav .mat-nav-list mat-icon {
+  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
+}
+
+/* Icon color change on hover */
+.mat-sidenav .mat-nav-list a:hover mat-icon {
+  color: #f57c00 !important; /* Highlight icon color on hover in sidebar */
+}
+
+/* User Info Text Color */
+.sidebar-user-text .welcome-label {
+  color: #6d4c41; /* Slightly darker color for welcome text */
+}
+
+.sidebar-user-text .username {
+  color: #4e342e; /* Dark color for username */
+}
+
+/* Ensure Material buttons use proper colors */
+.mat-mdc-button:not(:disabled) {
+  color: #ffffff; /* Button text should be white */
+}
+
+/* For mobile devices, ensure visibility of text and icons */
+@media (max-width: 768px) {
+  .mat-nav-list a {
+    color: #3E2723; /* Dark text color on mobile */
   }
 
-  .hamburger.open div:nth-child(3) {
-    transform: rotate(-45deg);
-    position: relative;
-    bottom: 10px;
+  .mat-nav-list a:hover {
+    background-color: rgba(245, 124, 0, 0.1);
+    color: #f57c00;
   }
+
+  .mat-nav-list mat-icon {
+    color: #3E2723; /* Dark icon color for mobile sidebar */
+  }
+
+  .mat-nav-list a:hover mat-icon {
+    color: #f57c00; /* Icon color change on hover in mobile sidebar */
+  }
+
+  .mat-sidenav .mat-list-item {
+    padding: 10px 16px;
+  }
+
+  .mat-sidenav .mat-list-item mat-icon {
+    font-size: 22px;
+  }
+  .mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
+  justify-content: flex-start !important;
+}
+
+/* Ensure all anchor links in sidenav align to left */
+.mat-sidenav .mat-mdc-list-item {
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+.mat-sidenav .mdc-list-item__content {
+  justify-content: flex-start !important;
+  text-align: left;
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.mat-sidenav .mat-icon {
+  margin-right: 12px;
+  font-size: 24px;
+  min-width: 24px;
+}
+
+.mat-sidenav .mdc-list-item__primary-text {
+  text-align: left;
+  white-space: normal; /* Allow line wrap if label is too long */
+}
+
+/* Optional: prevent text truncation */
+.mat-sidenav .mdc-list-item__primary-text {
+  overflow: visible;
+  text-overflow: initial;
+}
+
+}
+
+/* Highlight active links */
+a.active {
+  color: #f57c00 !important;
+  /* font-weight: bold; */
+  background-color: rgba(245, 124, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Better contrast for active desktop menu item */
+.desktop-menu a.active {
+  background-color: #ffffff;         /* Light background */
+  color: #f57c00 !important;         /* Match theme orange for text */
+  /* font-weight: bold; */
+  border-radius: 4px;
+}
+
+
+.mat-nav-list a.active {
+  color: #f57c00;
+  background-color: rgba(245, 124, 0, 0.1);
+}
+
+a.active mat-icon {
+  color: #f57c00 !important;
+}
+
+.desktop-menu a.active mat-icon {
+  color: #f57c00 !important;
+}
+
+/* .desktop-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFD700;
+  border-radius: 4px;
+} */
+
+/* Fix icon and text alignment in sidenav */
+.mat-sidenav .mat-list-item {
+  display: flex;
+  align-items: center;
+}
+
+.mat-sidenav .mat-list-item mat-icon {
+  margin-right: 12px; /* space between icon and text */
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.mat-sidenav .mat-list-item span {
+  vertical-align: middle;
+}
+
+.mat-sidenav .mat-list-item .mat-list-item-content {
+  padding: 0 !important;
+}
+
+/* FIX: Force all sidebar items (icon + text) to align left properly */
+.mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
+  justify-content: flex-start !important; /* Align content to the left */
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.mat-sidenav .mat-mdc-list-item .mat-icon {
+  font-size: 24px;
+  min-width: 24px;
+  margin-right: 8px;
+}
+
+.mat-sidenav .mat-mdc-list-item .mdc-list-item__primary-text {
+  text-align: left;
+}
+
+.lang-select {
+  color: white;
+  margin-left: 10px;
+  min-width: 110px;
+}
+.mat-mdc-select-value {
+  color: white !important;
+}
+@media (max-width: 768px) {
+  .lang-select {
+    min-width: 80px;
+    font-size: 13px;
+  }
+}
+
+/* ===== Fixed Header ===== */
+.main-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #f57c00;
+  color: white;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Main layout container */
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let content scroll below header */
+.mat-sidenav-content {
+  flex: 1;
+  overflow-y: auto; /* ✅ allow vertical scrolling */
+  padding-top: 64px; /* space for fixed toolbar */
+  box-sizing: border-box;
 }

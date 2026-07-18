@@ -1,0 +1,190 @@
+.qr-main-container {
+  padding: 16px;
+}
+
+.header {
+  margin-bottom: 16px;
+  font-size: 26px;
+  color: var(--color-primary);
+  justify-content: center;
+}
+
+/* FILTER CONTAINER */
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* MODE BOXES */
+.mode-row {
+  justify-content: center;
+}
+
+.mode-box {
+  border: 2px solid #bbb;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0 10px;
+  text-align: center;
+  width: 150px;
+  transition: 0.25s ease;
+}
+
+.mode-box.selected {
+  border-color: #3f51b5;
+  background: #e8eaf6;
+}
+
+.mode-box.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ERROR TEXT */
+.error-text {
+  text-align: center;
+  color: #e53935;
+  font-weight: bold;
+}
+
+/* QR SCANNER BOX */
+.qr-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qr-box {
+  border: 5px solid #f57c00;
+  padding: 16px;
+  border-radius: 16px;
+  width: 320px;
+  position: relative;
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+
+.scan-status {
+  position: absolute;
+  bottom: -28px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* DESKTOP TABLE */
+.table-wrapper table {
+  width: 100%;
+}
+
+/* MOBILE CARD MODE */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0px 3px 8px rgba(0,0,0,0.12);
+}
+
+.card-row {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+/* BUTTONS */
+.btn-present {
+  background: #4caf50 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+/* RESPONSIVE RULES */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: row;
+  }
+  .form-field {
+    min-width: 100%;
+  }
+}
+  
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* TAB-STYLE TOGGLE CONTAINER */
+.tab-toggle-container {
+  display: flex;
+  width: 100%;
+  background: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+/* INDIVIDUAL TAB */
+.tab-toggle {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #424242;
+  background: #f5f5f5;
+  transition: 0.25s ease-in-out;
+  border-bottom: 3px solid transparent;
+}
+
+/* ACTIVE TAB */
+.tab-toggle.active {
+  /* background: #3f51b5; */
+  color: black;
+  font-weight: 600;
+  border-bottom: 3px solid var(--color-primary);
+}
+
+/* Hover Effect */
+.tab-toggle:hover {
+  background: #e8e8e8;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .tab-toggle {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+}

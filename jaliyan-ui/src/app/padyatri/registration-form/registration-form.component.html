@@ -1,0 +1,113 @@
+<div class="registration-container">
+  <mat-card class="registration-card">
+    <!-- Title -->
+    <div class="form-title">
+      <img src="../../assets/images/Logo1.jpg" alt="Logo" />
+      <h2>Padyatri Registration</h2>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="padyatriForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <!-- Name Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" required />
+          <mat-error *ngIf="padyatriForm.get('firstName')?.hasError('required') && (padyatriForm.get('firstName')?.touched || formSubmitted)">
+            First Name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" required />
+          <mat-error *ngIf="padyatriForm.get('lastName')?.hasError('required') && (padyatriForm.get('lastName')?.touched || formSubmitted)">
+            Last Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Age & Gender Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" required />
+          <mat-error *ngIf="padyatriForm.get('age')?.hasError('required') && (padyatriForm.get('age')?.touched || formSubmitted)">
+            Age is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender" required>
+            <mat-option value="">-- Select Gender --</mat-option>
+            <mat-option value="Male">Male</mat-option>
+            <mat-option value="Female">Female</mat-option>
+            <mat-option value="Other">Other</mat-option>
+          </mat-select>
+          <mat-error *ngIf="padyatriForm.get('gender')?.hasError('required') && (padyatriForm.get('gender')?.touched || formSubmitted)">
+            Gender is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Contact Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Mobile</mat-label>
+          <input matInput formControlName="mobile" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Alternate Number</mat-label>
+          <input matInput formControlName="alternateNumber" />
+        </mat-form-field>
+      </div>
+
+      <!-- Emergency Contact Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Emergency Contact Name</mat-label>
+          <input matInput formControlName="emergencyContactName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Emergency Contact Number</mat-label>
+          <input matInput formControlName="emergencyContactNumber" />
+        </mat-form-field>
+      </div>
+
+      <!-- Address -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Address</mat-label>
+          <textarea matInput formControlName="address"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Photo Upload -->
+      <div class="form-row">
+        <div class="form-field photo-upload-wrapper">
+          <button type="button" class="upload-button" (click)="fileInput.click()">Choose Photo</button>
+          <span class="file-name" *ngIf="selectedPhotoFile">{{ selectedPhotoFile.name }}</span>
+          <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display: none;" />
+        </div>
+        <div class="photo-upload-container" *ngIf="preview">
+          <img [src]="preview" class="photo-preview" />
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-actions">
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="button" (click)="router.navigate(['/padyatri/list'])">Back</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
+            {{ editingId ? 'Update' : 'Register' }}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

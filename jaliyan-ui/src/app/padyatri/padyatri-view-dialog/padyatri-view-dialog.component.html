@@ -1,0 +1,64 @@
+<mat-card class="padyatri-card modern-card">
+  <!-- Header -->
+  <mat-card-header>
+    <div mat-card-avatar class="avatar">
+      <img *ngIf="photoUrl; else defaultIcon" [src]="photoUrl" alt="Padyatri Photo">
+      <ng-template #defaultIcon>
+        <mat-icon>person</mat-icon>
+      </ng-template>
+    </div>
+    <div class="header-info">
+      <mat-card-title>{{ data.firstName }} {{ data.lastName }}</mat-card-title>
+      <mat-card-subtitle>Batch ID: {{ data.batchId | gujaratiConversion }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+
+  <!-- Content -->
+  <mat-card-content class="content-scroll">
+    <div class="info-section">
+      <div class="info-item">
+        <mat-icon>wc</mat-icon>
+        <span class="label">Gender:</span>
+        <span class="value">{{ data.gender | gujaratiConversion }}</span>
+      </div>
+      <div class="info-item">
+        <mat-icon>calendar_today</mat-icon>
+        <span class="label">Age:</span>
+        <span class="value">{{ data.age | gujaratiConversion }}</span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-item">
+        <mat-icon>phone</mat-icon>
+        <span class="label">Mobile:</span>
+        <span class="value">{{ data.mobile }}</span>
+      </div>
+      <div class="info-item">
+        <mat-icon>home</mat-icon>
+        <span class="label">Address:</span>
+        <span class="value">{{ data.address || '-' }}</span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-item">
+        <mat-icon>emergency</mat-icon>
+        <span class="label">Emergency Name:</span>
+        <span class="value">{{ data.emergencyContactName }}</span>
+      </div>
+      <div class="info-item">
+        <mat-icon>call</mat-icon>
+        <span class="label">Emergency Phone:</span>
+        <span class="value">{{ data.emergencyContactNumber }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <!-- Footer -->
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="closeDialog()">
+      <mat-icon>close</mat-icon> Close
+    </button>
+  </mat-card-actions>
+</mat-card>

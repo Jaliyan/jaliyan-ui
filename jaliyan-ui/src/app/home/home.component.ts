@@ -1,47 +1,47 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+interface JourneyStep {
+  day: number;
+  from: string;
+  to: string;
+}
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  standalone: false,
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css'],
+  standalone: false
 })
-export class HomeComponent implements OnInit,OnDestroy {
+export class HomeComponent implements OnInit {
+  currentYear = new Date().getFullYear();
+  videoId = 'eLOuHnONEao'; // 🔹 Replace with your YouTube video ID
+  safeUrl!: SafeResourceUrl;
+  videoLoaded = false;
 
-  activeIndex = 0; // Index of the active slide
-  interval: any; 
-
-  slides = [
-    { image: 'assets/images/slide1.jpg', altText: 'Slide 1', title: 'Jalaram Padyatra', description: 'Join the sacred journey' },
-    { image: 'assets/images/slide2.jpg', altText: 'Slide 2', title: 'Spiritual Journey', description: 'Experience peace and devotion' },
-    { image: 'assets/images/slide1.jpg', altText: 'Slide 3', title: 'Faith and Devotion', description: 'Feel the divine blessings' }
+  journeyTimeline: JourneyStep[] = [
+    { day: 1, from: 'Porbandar', to: 'Stop 1' },
+    { day: 2, from: 'Stop 1', to: 'Stop 2' },
+    { day: 3, from: 'Stop 2', to: 'Stop 3' },
+    { day: 4, from: 'Stop 3', to: 'Virpur' }
   ];
 
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    // Optionally start automatic slide transitions
-    this.interval = setInterval(() => {
-      this.nextSlide();
-    }, 5000); // Automatically change slides every 5 seconds
-
-    console.log("Interval " + this.interval);
+    // Initialize the safe URL in case the video has already been loaded
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${this.videoId}?rel=0`);
   }
 
-  ngOnDestroy() {
-    // Clear the interval when the component is destroyed
-    console.log("Interval Destroy before" + this.interval);
-    if (this.interval) {
-      clearInterval(this.interval);
-    }
-    console.log("Interval After" + this.interval);
+  // Get the YouTube thumbnail URL dynamically based on videoId
+  get thumbnailUrl() {
+    return `https://img.youtube.com/vi/${this.videoId}/hqdefault.jpg`;
   }
 
-  nextSlide() {
-    this.activeIndex = (this.activeIndex + 1) % this.slides.length;
-  }
-
-
-  prevSlide() {
-    this.activeIndex = (this.activeIndex - 1 + this.slides.length) % this.slides.length;
+  // Function to load the video when the play button is clicked
+  loadVideo() {
+    const url = `https://www.youtube.com/embed/${this.videoId}?autoplay=1&rel=0`;
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.videoLoaded = true;
   }
 }

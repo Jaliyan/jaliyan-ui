@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { isTokenExpired } from '../common/token.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,17 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.getJwtToken()) {
+    const token = this.authService.getJwtToken();
+    const dataParam = next.queryParamMap.get('data');
+
+    if (token && !isTokenExpired(token)) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      if (dataParam) {
+        this.router.navigate(['/infodashboard']);
+      } else {
+        this.router.navigate(['/home']);
+      }
       return false;
     }
   }

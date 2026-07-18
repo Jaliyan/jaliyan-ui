@@ -1,0 +1,118 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.planned-menu {
+  margin-bottom: 30px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 6px;
+  background-color: #fefefe;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  margin-top: 30px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.no-menus {
+  font-style: italic;
+  color: #777;
+}
+
+.planned-menu {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.calendar-icon {
+  color: #3f51b5;
+  font-size: 24px;
+}
+
+.meal-type-block {
+  margin-bottom: 15px;
+}
+
+.meal-header {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  color: #444;
+}
+
+.meal-time {
+  font-size: 14px;
+  color: #666;
+}
+
+.menu-items {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.menu-items li {
+  padding: 4px 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.item-name {
+  font-weight: 500;
+}
+
+.item-description {
+  color: #666;
+}
+
+.meal-divider {
+  margin: 15px 0;
+}
+
+mat-expansion-panel {
+  margin-bottom: 15px;
+}
+
+mat-card {
+  padding: 15px;
+  background: #fff;
+}
+.meals-row {
+  display: flex;
+  gap: 30px; /* space between meal blocks */
+}
+
+.meal-block {
+  flex: 1 1 0;       /* allow to grow equally */
+  min-width: 200px;  /* optional, set minimum width */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  background-color: #fafafa;
+}
