@@ -31,7 +31,7 @@ export class RegistrationFormComponent implements OnInit {
     this.padyatriForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
-      age: [null, [Validators.required, Validators.min(0), Validators.max(150)]],
+      age: [null, [Validators.required, Validators.min(0), Validators.max(999)]],
       gender: ['', Validators.required],
       address: ['', Validators.maxLength(255)],
       mobile: ['', [Validators.required, Validators.maxLength(15)]],
