@@ -44,7 +44,7 @@
 
       <!-- Search -->
       <mat-form-field appearance="outline" class="search-field" *ngIf="currentDataSource.data.length">
-        <mat-label>Search by Batch ID</mat-label>
+        <mat-label>{{ 'SearchByNameOrBatch' | translate }}</mat-label>
         <input matInput (keyup)="applyFilter($event)" />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>

@@ -14,7 +14,8 @@ import { Router } from '@angular/router';
 import { PadyatriViewDialogComponent } from '../padyatri-view-dialog/padyatri-view-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../services/auth.service';
-import { englishToGujaratiDigits, gujaratiToEnglishDigits } from '../../common/number-utils';
+import { englishToGujaratiDigits } from '../../common/number-utils';
+import { padyatriSearchPredicate } from '../../common/padyatri-search';
 
 
 
@@ -55,28 +56,14 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadPadyatris();
 
-    this.dataSource.filterPredicate = (data, filter) => {
-      const normalizedFilter = gujaratiToEnglishDigits(filter.toLowerCase());
-      const batchId = gujaratiToEnglishDigits(data.batchId.toString());
-      const name = data.firstName?.toLowerCase() || '';
-      const mobile = gujaratiToEnglishDigits(data.mobile?.toString() || '');
-      return (
-        batchId.includes(normalizedFilter) //||
-        // name.includes(normalizedFilter) ||
-        // mobile.includes(normalizedFilter)
-      );
-    };
+    this.dataSource.filterPredicate = padyatriSearchPredicate;
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    this.dataSource.filterPredicate = (data, filter) => {
-      const normalizedFilter = gujaratiToEnglishDigits(filter.toLowerCase());
-      const batchId = gujaratiToEnglishDigits(data.batchId.toString());
-      return batchId.includes(normalizedFilter);
-    };
+    this.dataSource.filterPredicate = padyatriSearchPredicate;
 
     this.dataSource.filter = ''; // initialize filter
   }
@@ -126,8 +113,7 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    //this.dataSource.filter = filterValue;
-    this.dataSource.filter = gujaratiToEnglishDigits(filterValue);
+    this.dataSource.filter = filterValue;
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

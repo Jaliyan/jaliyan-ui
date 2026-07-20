@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { AttendanceService } from '../services/attendance.service';
 import { DistributionService } from '../services/distribution.service';
 import { PadyatriAttendance, PadyatriItem } from '../common/padyatri.model';
-import { gujaratiToEnglishDigits } from '../common/number-utils';
+import { padyatriSearchPredicate } from '../common/padyatri-search';
 
 @Component({
   selector: 'app-report',
@@ -163,14 +163,9 @@ export class ReportComponent implements OnInit, AfterViewInit {
 
     const ds = this.currentDataSource;
 
-    ds.filterPredicate = (data: any, filter: string) => {
-        const batchId = String(data.batchId).toLowerCase();
-        return (
-          batchId.includes(filter)
-        );
-      };
+    ds.filterPredicate = padyatriSearchPredicate;
 
-    ds.filter = gujaratiToEnglishDigits(value);
+    ds.filter = value;
 
     if (ds.paginator) ds.paginator.firstPage();
   }

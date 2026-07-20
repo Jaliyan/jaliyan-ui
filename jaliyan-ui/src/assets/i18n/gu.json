@@ -29,5 +29,6 @@
   "Register": "નોંધણી કરો",
   "Update": "અપડેટ કરો",
   "RequiredField": "આ ફીલ્ડ ફરજિયાત છે",
-  "MaxCharacters": "મહત્તમ {{count}} અક્ષરો મંજૂર"
+  "MaxCharacters": "મહત્તમ {{count}} અક્ષરો મંજૂર",
+  "SearchByNameOrBatch": "નામ અથવા બેચ આઈડી થી શોધો"
 }

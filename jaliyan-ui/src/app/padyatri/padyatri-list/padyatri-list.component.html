@@ -16,7 +16,7 @@
       <!-- Search Bar -->
       <mat-form-field appearance="outline" class="search-bar">
         <mat-icon matPrefix>search</mat-icon>
-        <input matInput placeholder="Search by Batch ID" (input)="applyFilter($event)" />
+        <input matInput [placeholder]="'SearchByNameOrBatch' | translate" (input)="applyFilter($event)" />
       </mat-form-field>
 
       <!-- DESKTOP TABLE VIEW -->

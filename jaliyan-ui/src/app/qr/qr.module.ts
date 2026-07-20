@@ -24,6 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from '../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -56,7 +57,8 @@ import { SharedModule } from '../shared/shared.module';
     MatNativeDateModule,
     MatRadioModule,
     MatButtonToggleModule,
-    SharedModule
+    SharedModule,
+    TranslateModule
   ]
 })
 export class QrModule { }

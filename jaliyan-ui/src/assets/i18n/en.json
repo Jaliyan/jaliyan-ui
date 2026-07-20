@@ -29,5 +29,6 @@
   "Register": "Register",
   "Update": "Update",
   "RequiredField": "This field is required",
-  "MaxCharacters": "Maximum {{count}} characters allowed"
+  "MaxCharacters": "Maximum {{count}} characters allowed",
+  "SearchByNameOrBatch": "Search by name or batch id"
 }

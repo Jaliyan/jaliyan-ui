@@ -78,7 +78,7 @@
     <!-- MANUAL SEARCH -->
     <div *ngIf="attendanceForm.get('attendanceMode')?.value === 'manual'" class="row">
       <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Search by Batch ID</mat-label>
+        <mat-label>{{ 'SearchByNameOrBatch' | translate }}</mat-label>
         <input matInput type="text" formControlName="batchSearch">
         <button *ngIf="attendanceForm.get('batchSearch')?.value" matSuffix mat-icon-button (click)="clearBatchSearch()">
           <mat-icon>close</mat-icon>

@@ -11,7 +11,7 @@ import { Padyatri } from '../../common/padyatri.model';
 import { DistributionService } from '../../services/distribution.service';
 import { AuthService } from '../../services/auth.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { gujaratiToEnglishDigits } from '../../common/number-utils';
+import { padyatriSearchPredicate } from '../../common/padyatri-search';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -148,14 +148,8 @@ export class QrScanComponent implements OnInit, AfterViewInit {
     let searchValue = this.attendanceForm.get('batchSearch')?.value;
     searchValue = searchValue ? String(searchValue).trim().toLowerCase() : '';
 
-    this.dataSource.filterPredicate = (data: Padyatri, filter: string) => {
-      const batchId = String(data.batchId).toLowerCase();
-      return (
-        batchId.includes(filter)
-      );
-    };
-
-    this.dataSource.filter = gujaratiToEnglishDigits(searchValue);
+    this.dataSource.filterPredicate = padyatriSearchPredicate;
+    this.dataSource.filter = searchValue;
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

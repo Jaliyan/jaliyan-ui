@@ -7,11 +7,7 @@ import { InsuranceService } from '../../services/insurance.service';
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 import { PadyatriInsurance, InsuranceSummary } from '../../common/insurance.model';
-import { transliterateGujarati } from '../../common/transliterate';
-import {
-  gujaratiToEnglishDigits,
-  englishToGujaratiDigits
-} from '../../common/number-utils';
+import { matchesPadyatriSearch } from '../../common/padyatri-search';
 
 type StatusFilter = 'all' | 'received' | 'pending';
 
@@ -157,31 +153,11 @@ export class InsuranceMappingComponent implements OnInit {
       return false;
     }
 
-    if (!query) {
-      return true;
-    }
-
-    // Build a haystack that is searchable by name and batch id, in both scripts.
-    const batchEn = gujaratiToEnglishDigits(row.batchId?.toString() ?? '');
-    const batchGu = englishToGujaratiDigits(row.batchId?.toString() ?? '');
-    const haystack = [
-      row.fullName,
-      transliterateGujarati(row.fullName),
-      batchEn,
-      batchGu,
-      row.mobile ?? ''
-    ]
-      .join(' ')
-      .toLowerCase()
-      .replace(/\s+/g, '');
-
-    // The query may itself be typed in English or Gujarati.
-    const queryVariants = [
-      query,
-      transliterateGujarati(query),
-      gujaratiToEnglishDigits(query)
-    ].map(v => v.toLowerCase().replace(/\s+/g, ''));
-
-    return queryVariants.some(v => v && haystack.includes(v));
+    // Free-text search by name or batch id (English / Gujarati), shared with the
+    // other list screens so matching behaviour stays consistent.
+    return matchesPadyatriSearch(
+      { name: row.fullName, batchId: row.batchId, mobile: row.mobile },
+      query
+    );
   }
 }
