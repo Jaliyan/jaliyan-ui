@@ -1,0 +1,151 @@
+.insurance-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 0 12px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+mat-card-subtitle.text-center {
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+/* Summary */
+.summary-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.summary-item {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.summary-item.total {
+  background: #455a64;
+}
+
+.summary-item.received {
+  background: #2e7d32;
+}
+
+.summary-item.pending {
+  background: #ef6c00;
+}
+
+/* Coverage progress */
+.coverage-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 20px;
+}
+
+.coverage-progress mat-progress-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.coverage-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Filters */
+.filter-toggle-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.loading-row {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 0;
+  color: #757575;
+}
+
+/* Table */
+.table-container {
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.done-row {
+  background: rgba(46, 125, 50, 0.06);
+}
+
+/* Status badges */
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.received {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status.pending {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+/* Mobile cards */
+.mobile-card {
+  margin-bottom: 10px;
+}
+
+.mobile-card.done {
+  background: rgba(46, 125, 50, 0.06);
+}
+
+.mobile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mobile-row .name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.mobile-row .sub {
+  font-size: 13px;
+  color: #555;
+}
+
+.mobile-row .right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}

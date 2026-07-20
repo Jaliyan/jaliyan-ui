@@ -1,0 +1,121 @@
+<div class="insurance-container">
+  <mat-card>
+    <mat-card-title class="text-center">Insurance Cover Mapping</mat-card-title>
+    <mat-card-subtitle class="text-center">
+      Find a padyatri by the English name on the cover, write the batch id on it, then mark it received.
+    </mat-card-subtitle>
+
+    <mat-card-content>
+
+      <!-- Coverage summary -->
+      <div class="summary-bar">
+        <div class="summary-item total">Total: {{ summary.total }}</div>
+        <div class="summary-item received">Received: {{ summary.received }}</div>
+        <div class="summary-item pending">Pending: {{ summary.pending }}</div>
+      </div>
+
+      <div class="coverage-progress">
+        <mat-progress-bar mode="determinate" [value]="coveragePercent"></mat-progress-bar>
+        <span class="coverage-label">{{ coveragePercent }}% covered</span>
+      </div>
+
+      <!-- Status filter -->
+      <div class="filter-toggle-row">
+        <mat-button-toggle-group [value]="statusFilter" (change)="setStatusFilter($event.value)">
+          <mat-button-toggle value="all">All</mat-button-toggle>
+          <mat-button-toggle value="pending">Pending</mat-button-toggle>
+          <mat-button-toggle value="received">Received</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <!-- Search -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search by name or batch id (English / ગુજરાતી)</mat-label>
+        <input matInput [value]="searchText" (keyup)="onSearch($any($event.target).value)"
+          placeholder="e.g. Ramesh or રમેશ or 101" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading-row">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!loading && !dataSource.filteredData.length" class="empty-state">
+        No padyatri found for this search / filter.
+      </div>
+
+      <!-- MOBILE CARD VIEW -->
+      <div *ngIf="!loading && isMobile">
+        <mat-card class="mobile-card" *ngFor="let row of dataSource.filteredData"
+          [class.done]="row.insuranceReceived">
+          <div class="mobile-row">
+            <div class="left">
+              <div class="name">{{ row.fullName }}</div>
+              <div class="sub">Batch ID: <strong>{{ row.batchId | gujaratiConversion }}</strong></div>
+              <div class="sub">Mobile: {{ row.mobile }}</div>
+            </div>
+            <div class="right">
+              <span class="status" [ngClass]="row.insuranceReceived ? 'received' : 'pending'">
+                {{ row.insuranceReceived ? 'Received' : 'Pending' }}
+              </span>
+              <button mat-raised-button [color]="row.insuranceReceived ? 'warn' : 'primary'"
+                [disabled]="updatingId === row.padyatriId" (click)="toggleReceived(row)">
+                {{ row.insuranceReceived ? 'Undo' : 'Mark Received' }}
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- DESKTOP / TABLET TABLE VIEW -->
+      <div class="table-container mat-elevation-z2"
+        *ngIf="!loading && !isMobile && dataSource.filteredData.length">
+        <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+          <ng-container matColumnDef="batchId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+            <td mat-cell *matCellDef="let row"><strong>{{ row.batchId | gujaratiConversion }}</strong></td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="fullName">Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="mobile">
+            <th mat-header-cell *matHeaderCellDef>Mobile</th>
+            <td mat-cell *matCellDef="let row">{{ row.mobile }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status" [ngClass]="row.insuranceReceived ? 'received' : 'pending'">
+                {{ row.insuranceReceived ? 'Received' : 'Pending' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-raised-button [color]="row.insuranceReceived ? 'warn' : 'primary'"
+                [disabled]="updatingId === row.padyatriId" (click)="toggleReceived(row)">
+                {{ row.insuranceReceived ? 'Undo' : 'Mark Received' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [class.done-row]="row.insuranceReceived"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" pageSize="25" showFirstLastButtons></mat-paginator>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>

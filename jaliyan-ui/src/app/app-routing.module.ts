@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'attendance',
     loadChildren: () => import('./qr/qr.module').then(m => m.QrModule)
   },
+  {
+    path: 'insurance',
+    loadChildren: () => import('./insurance/insurance.module').then(m => m.InsuranceModule)
+  },
 
   { path: '**', redirectTo: 'home' } // Wildcard route
 ];
