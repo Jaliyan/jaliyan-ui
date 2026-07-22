@@ -20,6 +20,15 @@ export class PadyatriService {
   }
 
   /**
+   * Fetch every padyatri registered for a specific padyatra (year) — used by the
+   * read-only archive/history screen so past years can be reviewed.
+   * @param padyatraId - The padyatra (year) to fetch registrations for.
+   */
+  getPadyatrisByPadyatra(padyatraId: number): Observable<Padyatri[]> {
+    return this.http.get<Padyatri[]>(`${this.baseUrl}/padyatri/byPadyatra/${padyatraId}`);
+  }
+
+  /**
    * Fetch a specific Padyatri (padyatri) by ID.
    * @param padyatriId - The ID of the Padyatri to fetch.
    */

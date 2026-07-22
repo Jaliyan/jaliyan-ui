@@ -32,4 +32,15 @@ export class MenuplannerService {
   getItinerary(): Observable<DayItinerary[]> {
     return this.http.get<DayItinerary[]>(`${this.baseUrl}/mealItinerary`);
   }
+
+  /**
+   * UI-driven itinerary built live from the Menu Planner + Stops.
+   * When padyatraId is omitted the backend uses the active padyatra.
+   * Same DayItinerary shape as getItinerary(), so the Menu Info screen and the
+   * archive can render either. This is what reflects planner edits immediately.
+   */
+  getItineraryFromPlanner(padyatraId?: number): Observable<DayItinerary[]> {
+    const q = padyatraId != null ? `?padyatraId=${padyatraId}` : '';
+    return this.http.get<DayItinerary[]>(`${this.baseUrl}/mealItineraryFromPlanner${q}`);
+  }
 }

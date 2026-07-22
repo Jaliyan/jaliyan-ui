@@ -1,0 +1,58 @@
+<div class="stop-manage">
+  <div class="page-head">
+    <button mat-stroked-button routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
+    </button>
+    <h1>{{ 'ADMIN.STOP.TITLE' | translate }}</h1>
+    <button mat-raised-button color="primary" (click)="openForm()" [disabled]="!activePadyatra">
+      <mat-icon>add_location_alt</mat-icon> {{ 'ADMIN.STOP.ADD' | translate }}
+    </button>
+  </div>
+
+  <app-padyatra-banner [padyatra]="activePadyatra"></app-padyatra-banner>
+
+  <div class="spinner-wrap" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading">
+    <div class="empty" *ngIf="!activePadyatra">
+      {{ 'ADMIN.NO_ACTIVE' | translate }}
+    </div>
+
+    <div class="empty" *ngIf="activePadyatra && dayGroups.length === 0">
+      {{ 'ADMIN.STOP.EMPTY' | translate }}
+    </div>
+
+    <mat-card class="day-card" *ngFor="let day of dayGroups">
+      <div class="day-head">
+        <mat-icon>today</mat-icon>
+        <span>{{ 'ADMIN.STOP.DAY' | translate }} {{ day.dayNumber }}</span>
+      </div>
+
+      <div class="stop-row" *ngFor="let stop of day.stops">
+        <div class="stop-info">
+          <div class="stop-name-gu">{{ stop.nameGu }}</div>
+          <div class="stop-name-en">
+            #{{ stop.sequence }} · {{ stop.nameEn }}
+            <span *ngIf="mealTypeName(stop)" class="meal-chip">{{ mealTypeName(stop) }}</span>
+            <span *ngIf="stop.stopDate"> · {{ stop.stopDate | date:'dd MMM' }}</span>
+          </div>
+        </div>
+        <div class="stop-actions">
+          <button mat-icon-button *ngIf="stop.mapUrl" (click)="openMap(stop)"
+                  [matTooltip]="'ADMIN.STOP.OPEN_MAP' | translate">
+            <mat-icon>map</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openForm(stop)" [matTooltip]="'ADMIN.EDIT' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="remove(stop)"
+                  [matTooltip]="'ADMIN.DELETE' | translate">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

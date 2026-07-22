@@ -1,0 +1,18 @@
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.full {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row mat-form-field {
+  flex: 1;
+}

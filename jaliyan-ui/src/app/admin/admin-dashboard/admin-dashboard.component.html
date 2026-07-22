@@ -1,0 +1,25 @@
+<div class="admin-dashboard">
+  <div class="admin-header">
+    <h1><mat-icon>admin_panel_settings</mat-icon> {{ 'ADMIN.TITLE' | translate }}</h1>
+    <p class="subtitle">{{ 'ADMIN.SUBTITLE' | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <app-padyatra-banner *ngIf="activePadyatra" [padyatra]="activePadyatra"></app-padyatra-banner>
+    <mat-card class="active-banner" *ngIf="!activePadyatra">
+      <div class="active-info warn">
+        <mat-icon class="active-icon">warning</mat-icon>
+        <div class="active-name">{{ 'ADMIN.NO_ACTIVE' | translate }}</div>
+      </div>
+    </mat-card>
+  </ng-container>
+
+  <div class="tiles">
+    <mat-card class="tile" *ngFor="let tile of tiles" (click)="open(tile)" tabindex="0"
+              (keyup.enter)="open(tile)">
+      <mat-icon class="tile-icon">{{ tile.icon }}</mat-icon>
+      <h3>{{ tile.title }}</h3>
+      <p>{{ tile.description }}</p>
+    </mat-card>
+  </div>
+</div>

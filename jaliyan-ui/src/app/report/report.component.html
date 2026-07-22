@@ -26,7 +26,7 @@
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Select Stop</mat-label>
           <mat-select [(ngModel)]="selectedStopId">
-            <mat-option *ngFor="let loc of locations" [value]="loc.stopId">{{ loc.stopName }}</mat-option>
+            <mat-option *ngFor="let loc of locations" [value]="loc.stopId">{{ loc.nameGu || loc.nameEn || loc.stopName }}</mat-option>
           </mat-select>
         </mat-form-field>
 

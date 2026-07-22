@@ -29,6 +29,10 @@ const routes: Routes = [
     path: 'insurance',
     loadChildren: () => import('./insurance/insurance.module').then(m => m.InsuranceModule)
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
 
   { path: '**', redirectTo: 'home' } // Wildcard route
 ];

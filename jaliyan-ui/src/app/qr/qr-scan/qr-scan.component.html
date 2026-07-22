@@ -36,7 +36,7 @@
         <mat-label>Select Stop</mat-label>
         <mat-select formControlName="selectedStop">
           <mat-option *ngFor="let stop of stops" [value]="stop.stopId">
-            {{ stop.stopName }}
+            {{ stop.nameGu || stop.nameEn || stop.stopName }}
           </mat-option>
         </mat-select>
       </mat-form-field>

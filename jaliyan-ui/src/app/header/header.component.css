@@ -1,57 +1,97 @@
-/* Ensure sidenav takes the full height */
+/* ============================================================
+   HEADER / TOOLBAR / SIDENAV — Sandy Shores design tokens
+   Premium deep app bar · gold accents · ivory drawer
+============================================================ */
+
+/* Sidenav shell */
 .sidenav-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--color-bg);
 }
 
 .mat-sidenav {
-  width: 250px;
-  background-color: #fffaf0;
-  color: black;
+  width: 260px;
+  background-color: var(--ivory);
+  color: var(--ink);
+  border-right: 1px solid var(--color-border);
 }
 
 .mat-sidenav-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* Toolbar background and text */
+/* ============================================================
+   TOP TOOLBAR
+============================================================ */
 .mat-toolbar {
-  background-color: #f57c00;
-  color: white;
-  padding: 10px;
+  background: linear-gradient(135deg, var(--clay) 0%, var(--clay-dark) 100%);
+  color: #fff;
+  padding: 0 clamp(12px, 3vw, 24px);
+  height: var(--header-height);
+  box-shadow: var(--shadow-md);
 }
 
-/* Logo styling */
 .logo-text {
-  font-weight: bold;
+  font-family: var(--font-serif);
+  font-weight: 600;
   color: #ffffff;
-  font-size: 20px;
+  font-size: clamp(18px, 2.4vw, 22px);
+  letter-spacing: 0.3px;
   text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+.logo-text:hover {
+  color: var(--gold-soft);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
-/* Desktop menu */
+/* ============================================================
+   DESKTOP MENU
+============================================================ */
 .desktop-menu {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.desktop-menu a.mat-button {
-  color: white;
+.desktop-menu a.mat-button,
+.desktop-menu a.mat-mdc-button {
+  color: #fff;
   font-weight: 500;
   padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.desktop-menu a.mat-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  color: #FFD700;
+.desktop-menu a.mat-button:hover,
+.desktop-menu a.mat-mdc-button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--gold-soft);
 }
 
-/* Logout button in desktop menu */
+/* Active route highlight */
+.desktop-menu a.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 -2px 0 var(--gold-soft);
+}
+
+.desktop-menu .mat-button mat-icon,
+.desktop-menu .mat-mdc-button mat-icon {
+  color: inherit;
+}
+
+/* Logout link */
 .desktop-menu a.logout-link {
   color: #ffffff;
   font-weight: 600;
@@ -60,83 +100,78 @@
 
 .desktop-menu a.logout-link:hover {
   background-color: rgba(255, 255, 255, 0.15);
-  color: #FFD700;
-  border-radius: 4px;
+  color: var(--gold-soft);
+  border-radius: var(--radius-sm);
 }
 
-/* Sidenav menu items */
+/* ============================================================
+   SIDENAV NAV LIST
+============================================================ */
 .mat-nav-list a {
-  color: #5D4037;
+  color: var(--ink);
   font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .mat-nav-list a:hover {
-  background-color: rgba(245, 124, 0, 0.1);
-  color: #f57c00;
+  background-color: rgba(200, 109, 57, 0.10);
+  color: var(--clay);
 }
 
-/* Sidebar Icon color for visibility */
+.mat-nav-list a.active {
+  background-color: rgba(200, 109, 57, 0.12);
+  color: var(--clay-dark);
+  font-weight: 600;
+}
+
 .mat-sidenav .mat-nav-list mat-icon {
-  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
+  color: var(--deep) !important;
 }
 
-/* Sidebar Item Hover Effect */
-.mat-sidenav .mat-nav-list a:hover {
-  background-color: rgba(245, 124, 0, 0.1); /* Highlight background */
-  color: #f57c00;
+.mat-sidenav .mat-nav-list a:hover mat-icon,
+.mat-sidenav .mat-nav-list a.active mat-icon {
+  color: var(--clay) !important;
 }
 
-.mat-sidenav .mat-nav-list a:hover mat-icon {
-  color: #f57c00 !important; /* Change icon color to highlight color on hover */
-}
-
-/* Modify only the icons in the sidebar */
-.mat-sidenav .mat-nav-list mat-icon {
-  color: #3E2723 !important; /* Darker color for sidebar icons */
-}
-
-.mat-sidenav .mat-nav-list a:hover mat-icon {
-  color: #f57c00 !important; /* Highlight color on hover */
-}
-
-/* For desktop, keep the icons white */
-.desktop-menu .mat-button mat-icon {
-  color: white; /* Keep desktop icons white */
-}
-
-/* Desktop Icon Hover Color */
-.desktop-menu .mat-button:hover mat-icon {
-  color: #FFD700; /* Change icon color on hover */
-}
-
-/* Ensure hamburger icon is always white */
-.mobile-toggle mat-icon {
-  color: white !important; /* Keep the hamburger icon white */
-}
-
-/* Mobile toggle for sidenav (hamburger) */
+/* ============================================================
+   HAMBURGER (mobile)
+============================================================ */
 .mobile-toggle {
   display: none;
 }
 
+.mobile-toggle mat-icon,
+.hamburger-icon {
+  color: #fff !important;
+}
+
 @media (max-width: 1024px) {
-  .desktop-menu a.mat-button:nth-child(n+6) {
+  .desktop-menu a.mat-button:nth-child(n + 6),
+  .desktop-menu a.mat-mdc-button:nth-child(n + 6) {
     display: none;
   }
-
   .more-menu-button {
     display: inline-flex;
   }
 }
 
-/* User Menu Button */
+/* ============================================================
+   USER MENU
+============================================================ */
 .user-menu-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: #fff;
   font-weight: 500;
   padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.user-menu-button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .avatar-img {
@@ -144,20 +179,17 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--gold);
 }
 
 .dropdown-icon {
-  color: white;
+  color: #fff;
   font-size: 20px;
 }
 
-/* Base Styles */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* Mobile Styles */
+/* ============================================================
+   MOBILE STYLES
+============================================================ */
 @media (max-width: 768px) {
   .desktop-menu {
     display: none;
@@ -168,36 +200,24 @@ body {
   }
 
   .mat-sidenav {
-    width: 200px;
+    width: min(80vw, 300px);
   }
 
   .mat-sidenav-content {
     margin-left: 0;
   }
-
-  .logo-text {
-    font-size: 18px;
-  }
-
-  .desktop-menu a {
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
-
-  .more-menu-button {
-    display: inline-flex;
-  }
 }
 
-/* Sidebar User Info */
+/* ============================================================
+   SIDEBAR USER INFO
+============================================================ */
 .sidebar-user-info {
   display: flex;
   align-items: center;
-  padding: 16px;
-  background-color: #f5e0b3;
-  border-bottom: 1px solid #f57c00;
-  margin-bottom: 10px;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, var(--gold-soft) 0%, var(--ivory-warm) 100%);
+  border-bottom: 1px solid var(--gold);
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
@@ -213,30 +233,31 @@ body {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f57c00;
+  border: 2px solid var(--gold);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-user-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .welcome-label {
-  font-size: 14px;
-  color: #6d4c41;
+  font-size: 13px;
+  color: var(--ink-soft);
   margin: 0;
 }
 
 .username {
-  font-size: 16px;
-  font-weight: bold;
-  color: #4e342e;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--deep);
   margin: 0;
 }
 
-/* For mobile devices, stack avatar and text */
 @media (max-width: 768px) {
   .sidebar-user-info {
     flex-direction: column;
@@ -251,62 +272,6 @@ body {
     flex-direction: column;
     align-items: center;
   }
-}
-
-/* Sidebar Nav List */
-.mat-nav-list a {
-  color: #3E2723; /* Darker text color for sidebar */
-  font-weight: 500;
-}
-
-/* Sidebar Item Hover Effect */
-.mat-nav-list a:hover {
-  background-color: rgba(245, 124, 0, 0.1);
-  color: #f57c00;
-}
-
-/* Sidebar Icon Color */
-.mat-sidenav .mat-nav-list mat-icon {
-  color: #3E2723 !important; /* Darker icon color for better visibility in sidebar */
-}
-
-/* Icon color change on hover */
-.mat-sidenav .mat-nav-list a:hover mat-icon {
-  color: #f57c00 !important; /* Highlight icon color on hover in sidebar */
-}
-
-/* User Info Text Color */
-.sidebar-user-text .welcome-label {
-  color: #6d4c41; /* Slightly darker color for welcome text */
-}
-
-.sidebar-user-text .username {
-  color: #4e342e; /* Dark color for username */
-}
-
-/* Ensure Material buttons use proper colors */
-.mat-mdc-button:not(:disabled) {
-  color: #ffffff; /* Button text should be white */
-}
-
-/* For mobile devices, ensure visibility of text and icons */
-@media (max-width: 768px) {
-  .mat-nav-list a {
-    color: #3E2723; /* Dark text color on mobile */
-  }
-
-  .mat-nav-list a:hover {
-    background-color: rgba(245, 124, 0, 0.1);
-    color: #f57c00;
-  }
-
-  .mat-nav-list mat-icon {
-    color: #3E2723; /* Dark icon color for mobile sidebar */
-  }
-
-  .mat-nav-list a:hover mat-icon {
-    color: #f57c00; /* Icon color change on hover in mobile sidebar */
-  }
 
   .mat-sidenav .mat-list-item {
     padding: 10px 16px;
@@ -315,159 +280,8 @@ body {
   .mat-sidenav .mat-list-item mat-icon {
     font-size: 22px;
   }
+
   .mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
-  justify-content: flex-start !important;
-}
-
-/* Ensure all anchor links in sidenav align to left */
-.mat-sidenav .mat-mdc-list-item {
-  justify-content: flex-start !important;
-  text-align: left;
-}
-
-.mat-sidenav .mdc-list-item__content {
-  justify-content: flex-start !important;
-  text-align: left;
-  align-items: center;
-  gap: 12px;
-  padding-left: 8px;
-}
-
-.mat-sidenav .mat-icon {
-  margin-right: 12px;
-  font-size: 24px;
-  min-width: 24px;
-}
-
-.mat-sidenav .mdc-list-item__primary-text {
-  text-align: left;
-  white-space: normal; /* Allow line wrap if label is too long */
-}
-
-/* Optional: prevent text truncation */
-.mat-sidenav .mdc-list-item__primary-text {
-  overflow: visible;
-  text-overflow: initial;
-}
-
-}
-
-/* Highlight active links */
-a.active {
-  color: #f57c00 !important;
-  /* font-weight: bold; */
-  background-color: rgba(245, 124, 0, 0.1);
-  border-radius: 4px;
-}
-
-/* Better contrast for active desktop menu item */
-.desktop-menu a.active {
-  background-color: #ffffff;         /* Light background */
-  color: #f57c00 !important;         /* Match theme orange for text */
-  /* font-weight: bold; */
-  border-radius: 4px;
-}
-
-
-.mat-nav-list a.active {
-  color: #f57c00;
-  background-color: rgba(245, 124, 0, 0.1);
-}
-
-a.active mat-icon {
-  color: #f57c00 !important;
-}
-
-.desktop-menu a.active mat-icon {
-  color: #f57c00 !important;
-}
-
-/* .desktop-menu a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #FFD700;
-  border-radius: 4px;
-} */
-
-/* Fix icon and text alignment in sidenav */
-.mat-sidenav .mat-list-item {
-  display: flex;
-  align-items: center;
-}
-
-.mat-sidenav .mat-list-item mat-icon {
-  margin-right: 12px; /* space between icon and text */
-  font-size: 24px;
-  vertical-align: middle;
-}
-
-.mat-sidenav .mat-list-item span {
-  vertical-align: middle;
-}
-
-.mat-sidenav .mat-list-item .mat-list-item-content {
-  padding: 0 !important;
-}
-
-/* FIX: Force all sidebar items (icon + text) to align left properly */
-.mat-sidenav .mat-mdc-list-item .mdc-list-item__content {
-  justify-content: flex-start !important; /* Align content to the left */
-  align-items: center;
-  gap: 12px;
-  padding-left: 8px;
-}
-
-.mat-sidenav .mat-mdc-list-item .mat-icon {
-  font-size: 24px;
-  min-width: 24px;
-  margin-right: 8px;
-}
-
-.mat-sidenav .mat-mdc-list-item .mdc-list-item__primary-text {
-  text-align: left;
-}
-
-.lang-select {
-  color: white;
-  margin-left: 10px;
-  min-width: 110px;
-}
-.mat-mdc-select-value {
-  color: white !important;
-}
-@media (max-width: 768px) {
-  .lang-select {
-    min-width: 80px;
-    font-size: 13px;
+    justify-content: flex-start !important;
   }
-}
-
-/* ===== Fixed Header ===== */
-.main-toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: #f57c00;
-  color: white;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Main layout container */
-.sidenav-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Let content scroll below header */
-.mat-sidenav-content {
-  flex: 1;
-  overflow-y: auto; /* ✅ allow vertical scrolling */
-  padding-top: 64px; /* space for fixed toolbar */
-  box-sizing: border-box;
 }

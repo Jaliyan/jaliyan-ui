@@ -3,7 +3,7 @@ html, body {
   height: 100%;
   margin: 0;
   overflow: hidden; /* prevent global scrollbars */
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ========== ROOT APP LAYOUT ========== */
@@ -29,7 +29,7 @@ app-header {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #fff;
+  background-color: var(--color-bg);
   padding-top: 64px; /* space for fixed header */
   padding-bottom: 60px; /* space for footer */
   box-sizing: border-box;
@@ -39,7 +39,7 @@ app-header {
 app-footer {
   height: 60px;
   flex-shrink: 0;
-  background-color: #333;
+  background-color: var(--deep);
   color: white;
   text-align: center;
   line-height: 60px;
@@ -54,12 +54,13 @@ app-footer {
   min-height: 100vh;
 }
 
-/* Page content scrollable area */
+/* Page content scrollable area (the single scroller) */
 .page-content {
   flex: 1;
-  /* padding-top: 64px; Fixed toolbar height */
+  min-height: 0;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Footer will naturally stick to bottom due to flex */
@@ -72,14 +73,11 @@ app-footer {
   height: 100vh;
 }
 
-/* Toolbar fixed styles (already in your CSS) */
+/* Toolbar sits at the top of the flex column (no longer fixed) */
 .main-toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: static;
   z-index: 1000;
-  background-color: #f57c00;
+  background: linear-gradient(135deg, var(--clay) 0%, var(--clay-dark) 100%);
   color: white;
   height: 64px;
   display: flex;

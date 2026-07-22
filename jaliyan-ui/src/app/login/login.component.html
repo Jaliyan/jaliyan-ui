@@ -1,81 +1,93 @@
 <div class="login-page">
-  <div class="login-container">
-    <div class="login-card-wrapper">
-      <mat-card class="login-card mat-elevation-z8">
-        <div class="login-logo">
-          <img src="../../assets/images/Logo_old.jpg" alt="Logo" />
-        </div>
-<!-- 
-        <h2 class="login-title">Welcome Back</h2>
-        <p class="login-subtitle">Sign in to continue to your dashboard</p> -->
+  <div class="login-shell">
 
-        <form (ngSubmit)="onLogin()" #loginForm="ngForm" autocomplete="off">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Username</mat-label>
-            <input
-              matInput
-              name="username"
-              [(ngModel)]="username"
-              required
-              #usernameModel="ngModel"
-              style="margin-left: 10px;"
-            />
-            <mat-error *ngIf="usernameModel.invalid && usernameModel.touched">
-              Username is required
-            </mat-error>
-          </mat-form-field>
+    <!-- Devotional welcome panel -->
+    <aside class="login-aside">
+      <app-ram-mandala variant="on-dark" class="login-aside-mandala" aria-hidden="true"></app-ram-mandala>
+      <!-- Text overlay commented out for now — can be re-enabled later
+      <div class="login-aside-inner">
+        <span class="login-om">ॐ</span>
+        <h1 class="login-aside-title">શ્રી જલારામ પદયાત્રા</h1>
+        <p class="login-aside-sub">
+          પોરબંદર થી વિરપુર — શ્રદ્ધા, સેવા અને ભક્તિનો મહાયજ્ઞ
+        </p>
+        <span class="login-aside-verse">બોલો જય જલારામ</span>
+      </div>
+      -->
+    </aside>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Password</mat-label>
-            <input
-              matInput
-              type="password"
-              name="password"
-              [(ngModel)]="password"
-              required
-              #passwordModel="ngModel"
-              style="margin-left: 10px;"
-            />
-            <mat-error *ngIf="passwordModel.invalid && passwordModel.touched">
-              Password is required
-            </mat-error>
-          </mat-form-field>
-<!-- 
-          <div class="login-options">
-            <mat-checkbox [(ngModel)]="rememberMe" name="rememberMe">
-              Remember Me
-            </mat-checkbox>
-            <a class="forgot-password" routerLink="/forgot-password">
-              Forgot Password?
-            </a>
-          </div> -->
+    <!-- Login form -->
+    <section class="login-form-side">
+      <div class="login-brand">
+        <img src="../../assets/images/Logo_old.jpg" alt="Shree Jalaram Padyatra" />
+      </div>
+      <h2 class="login-title">ટીમ લોગિન</h2>
+      <p class="login-subtitle">Sign in to continue to your dashboard</p>
 
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" autocomplete="off" class="login-form">
+        <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+          <mat-label>Username</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input
+            matInput
+            name="username"
+            [(ngModel)]="username"
+            required
+            #usernameModel="ngModel"
+          />
+          <mat-error *ngIf="usernameModel.invalid && usernameModel.touched">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+          <mat-label>Password</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            name="password"
+            [(ngModel)]="password"
+            required
+            #passwordModel="ngModel"
+          />
           <button
-            mat-raised-button
-            color="primary"
-            class="login-button"
-            type="submit"
-            [disabled]="loading || loginForm.invalid"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hide = !hide"
+            [attr.aria-label]="hide ? 'Show password' : 'Hide password'"
           >
-            <mat-progress-spinner
-              *ngIf="loading"
-              diameter="20"
-              mode="indeterminate"
-              color="accent"
-              class="spinner"
-            ></mat-progress-spinner>
-            <span *ngIf="!loading">Login</span>
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-        </form>
+          <mat-error *ngIf="passwordModel.invalid && passwordModel.touched">
+            Password is required
+          </mat-error>
+        </mat-form-field>
 
-        <div class="login-footer">
-          <span>© 2025 Shree Jalaram Padyatra. All rights reserved.</span>
-        </div>
-      </mat-card>
-    </div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="login-button"
+          type="submit"
+          [disabled]="loading || loginForm.invalid"
+        >
+          <mat-progress-spinner
+            *ngIf="loading"
+            diameter="20"
+            mode="indeterminate"
+            class="spinner"
+          ></mat-progress-spinner>
+          <span *ngIf="!loading" class="login-button-label">
+            <mat-icon>login</mat-icon> Login
+          </span>
+        </button>
+      </form>
 
-    <!-- <div class="login-illustration">
-      <img src="../../assets/images/PorbandarToVirpur.png" alt="Illustration" />
-    </div> -->
+      <div class="login-footer">
+        © {{ currentYear }} Shree Jalaram Padyatra. All rights reserved.
+      </div>
+    </section>
+
   </div>
 </div>

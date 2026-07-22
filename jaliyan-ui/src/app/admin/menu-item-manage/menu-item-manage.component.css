@@ -1,0 +1,80 @@
+.menu-item-manage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-head h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.form-card {
+  margin: 12px 0 20px;
+  padding: 16px;
+}
+
+.form-card-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.item-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.name-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.desc-field {
+  flex: 2;
+  min-width: 220px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.actions-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.editing-row {
+  background: #fff8e1;
+}
+
+.empty {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 32px;
+}

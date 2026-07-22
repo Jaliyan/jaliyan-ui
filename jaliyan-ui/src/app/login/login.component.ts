@@ -15,6 +15,8 @@ export class LoginComponent {
   password: string = '';
   rememberMe: boolean = false;
   loading: boolean = false;
+  hide: boolean = true;
+  currentYear: number = new Date().getFullYear();
 
   constructor(
     private authService: AuthService,

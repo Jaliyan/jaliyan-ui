@@ -1,0 +1,129 @@
+<div class="archive">
+  <div class="page-head">
+    <button mat-stroked-button routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
+    </button>
+    <h1>{{ 'ADMIN.ARCHIVE.TITLE' | translate }}</h1>
+  </div>
+
+  <p class="hint">
+    <mat-icon>history</mat-icon>
+    {{ 'ADMIN.ARCHIVE.HINT' | translate }}
+  </p>
+
+  <div class="spinner-wrap" *ngIf="loadingList">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loadingList">
+    <mat-form-field appearance="outline" class="padyatra-select">
+      <mat-label>{{ 'ADMIN.ARCHIVE.SELECT_YEAR' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedPadyatraId" (selectionChange)="onPadyatraChange()">
+        <mat-option *ngFor="let p of padyatras" [value]="p.padyatraId">
+          {{ p.year }} — {{ p.nameGu }}
+          <span *ngIf="p.isActive"> ({{ 'ADMIN.ACTIVE' | translate }})</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-padyatra-banner [padyatra]="selectedPadyatra"></app-padyatra-banner>
+
+    <div class="spinner-wrap" *ngIf="loadingData">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <mat-tab-group *ngIf="!loadingData" animationDuration="0ms">
+
+      <!-- ===================== PADYATRIS ===================== -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>groups</mat-icon>&nbsp;
+          {{ 'ADMIN.ARCHIVE.PADYATRIS' | translate }} ({{ padyatris.length | gujaratiConversion }})
+        </ng-template>
+
+        <div class="tab-body">
+          <div class="empty" *ngIf="padyatris.length === 0">{{ 'ADMIN.ARCHIVE.NO_PADYATRIS' | translate }}</div>
+          <div class="table-wrap" *ngIf="padyatris.length > 0">
+            <table mat-table [dataSource]="padyatris" class="mat-elevation-z1">
+              <ng-container matColumnDef="batchId">
+                <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.ARCHIVE.BATCH' | translate }}</th>
+                <td mat-cell *matCellDef="let p">{{ p.batchId | gujaratiConversion }}</td>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PADYATRA.NAME' | translate }}</th>
+                <td mat-cell *matCellDef="let p">{{ p.firstName }} {{ p.lastName }}</td>
+              </ng-container>
+              <ng-container matColumnDef="mobile">
+                <th mat-header-cell *matHeaderCellDef>{{ 'Mobile' | translate }}</th>
+                <td mat-cell *matCellDef="let p">{{ p.mobile | gujaratiConversion }}</td>
+              </ng-container>
+              <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef>{{ 'Age' | translate }}</th>
+                <td mat-cell *matCellDef="let p">{{ p.age | gujaratiConversion }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- ===================== STOPS ===================== -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>place</mat-icon>&nbsp; {{ 'ADMIN.STOP.TITLE' | translate }}
+        </ng-template>
+
+        <div class="tab-body">
+          <div class="empty" *ngIf="dayGroups.length === 0">{{ 'ADMIN.STOP.EMPTY' | translate }}</div>
+          <mat-card class="day-card" *ngFor="let day of dayGroups">
+            <div class="day-head">
+              <mat-icon>today</mat-icon>
+              <span>{{ 'ADMIN.STOP.DAY' | translate }} {{ day.dayNumber | gujaratiConversion }}</span>
+            </div>
+            <div class="stop-row" *ngFor="let stop of day.stops">
+              <div class="stop-info">
+                <div class="stop-name-gu">{{ stop.nameGu }}</div>
+                <div class="stop-name-en">#{{ stop.sequence }} · {{ stop.nameEn }}</div>
+              </div>
+              <a *ngIf="stop.mapUrl" mat-icon-button [href]="stop.mapUrl" target="_blank"
+                 rel="noopener" [matTooltip]="'ADMIN.STOP.OPEN_MAP' | translate">
+                <mat-icon>map</mat-icon>
+              </a>
+            </div>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- ===================== MENU ===================== -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>restaurant_menu</mat-icon>&nbsp; {{ 'ADMIN.ARCHIVE.MENU' | translate }}
+        </ng-template>
+
+        <div class="tab-body">
+          <div class="empty" *ngIf="itinerary.length === 0">{{ 'ADMIN.ARCHIVE.NO_MENU' | translate }}</div>
+          <mat-card class="day-card" *ngFor="let day of itinerary">
+            <div class="day-head">
+              <mat-icon>event</mat-icon>
+              <span>{{ day.date }}</span>
+            </div>
+            <div class="meal-row" *ngFor="let meal of day.meals">
+              <div class="meal-name">{{ meal.type }}</div>
+              <div class="meal-items">
+                <mat-chip-set>
+                  <mat-chip *ngFor="let item of (meal.menu || [])">{{ item }}</mat-chip>
+                </mat-chip-set>
+                <a *ngIf="meal.location?.mapUrl && meal.location?.mapUrl !== '#'"
+                   [href]="meal.location?.mapUrl" target="_blank" rel="noopener" class="meal-loc">
+                  <mat-icon>place</mat-icon> {{ meal.location?.name }}
+                </a>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </ng-container>
+</div>

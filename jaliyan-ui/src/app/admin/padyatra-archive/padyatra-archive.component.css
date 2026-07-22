@@ -1,0 +1,109 @@
+.archive {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.page-head h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(0, 0, 0, 0.6);
+  background: #f2f6ff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+}
+
+.padyatra-select {
+  width: 100%;
+  max-width: 360px;
+}
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.tab-body {
+  padding: 16px 4px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.day-card {
+  margin-bottom: 16px;
+  padding: 8px 16px 12px;
+}
+
+.day-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #3f51b5;
+}
+
+.stop-row,
+.meal-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.stop-row:last-child,
+.meal-row:last-child {
+  border-bottom: none;
+}
+
+.stop-info {
+  flex: 1;
+}
+
+.stop-name-gu {
+  font-weight: 600;
+}
+
+.stop-name-en {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+}
+
+.meal-name {
+  width: 130px;
+  font-weight: 600;
+  color: #5d4037;
+}
+
+.meal-items {
+  flex: 1;
+}
+
+.empty {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 32px;
+}

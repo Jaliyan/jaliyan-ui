@@ -16,7 +16,9 @@ export class PublicInfoDashboardComponent implements OnInit {
   constructor(private menuplanner: MenuplannerService) { }
 
   ngOnInit(): void {
-    this.menuplanner.getItinerary().subscribe({
+    // Use the planner-driven itinerary so anything updated in the Menu Planner
+    // (and the stop locations from Admin) is reflected here immediately.
+    this.menuplanner.getItineraryFromPlanner().subscribe({
       next: (data) => {
         // Convert meals object to array and sort by id
         this.itinerary = data.map(day => ({

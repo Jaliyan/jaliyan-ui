@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" fill="none" stroke="#C4A05A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- centre petal -->
+  <path d="M120 150 C112 96 112 60 120 30 C128 60 128 96 120 150 Z"/>
+  <!-- inner side petals -->
+  <path d="M120 150 C96 104 84 78 74 52 C104 74 118 104 120 150 Z"/>
+  <path d="M120 150 C144 104 156 78 166 52 C136 74 122 104 120 150 Z"/>
+  <!-- outer side petals -->
+  <path d="M120 150 C78 120 54 100 34 78 C74 92 108 116 120 150 Z"/>
+  <path d="M120 150 C162 120 186 100 206 78 C166 92 132 116 120 150 Z"/>
+  <!-- base leaves -->
+  <path d="M120 150 C70 150 40 146 14 138 C48 152 92 152 120 150 Z"/>
+  <path d="M120 150 C170 150 200 146 226 138 C192 152 148 152 120 150 Z"/>
+</svg>

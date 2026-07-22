@@ -50,6 +50,7 @@ import { ToastService } from './services/toast.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from './shared/shared.module';
+import { RamMandalaComponent } from './shared/ram-mandala/ram-mandala.component';
 
 
 // Factory function for HTTP loader
@@ -102,6 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTabsModule,
     QrModule,
     SharedModule,
+    RamMandalaComponent,
     ZXingScannerModule,
     TranslateModule.forRoot({
       loader: {

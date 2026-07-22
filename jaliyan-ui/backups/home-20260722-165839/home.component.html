@@ -1,0 +1,205 @@
+<div class="home">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wm wm-mandala">
+    <div class="hero-media reveal from-right">
+      <span class="hero-glow"></span>
+      <img src="../../assets/images/jalarambapaimg.png" class="hero-image" alt="Shree Jalaram Bapa" />
+    </div>
+
+    <div class="hero-text reveal from-left">
+      <span class="flourish">✦&nbsp;&nbsp;❖&nbsp;&nbsp;✦</span>
+      <span class="kicker">આસ્થાનો મહાપર્વ</span>
+      <h1 class="hero-title">શ્રી જલારામ પદયાત્રા</h1>
+      <p class="hero-desc">
+        <b>શ્રદ્ધાનો મહાકુંભ.</b> અનેક વર્ષોથી આયોજીત આ અલૌકિક અને ભવ્ય પદયાત્રા, ૪ દિવસની કઠોર
+        તપસ્યા સમાન છે — ભક્તિનો હિલોળા લેતો મહાસાગર.
+        <b>જલારામ બાપાના સાક્ષાત આશીર્વાદનો મહાયજ્ઞ છે!</b>
+      </p>
+      <div class="hero-cta">
+        <a routerLink="/infodashboard" class="btn btn-primary">
+          <mat-icon>restaurant_menu</mat-icon> ભોજન માહિતી
+        </a>
+        <a href="#journey-video" class="btn btn-ghost">
+          <mat-icon>play_circle</mat-icon> યાત્રા જુઓ
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS BAND ============ -->
+  <section class="stats reveal wm wm-swastik">
+    <div class="stat">
+      <span class="stat-n">૪</span>
+      <span class="stat-l">દિવસ</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">૧૨૬</span>
+      <span class="stat-l">કિલોમીટર</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">સુદામાપુરી</span>
+      <span class="stat-l">પ્રારંભ</span>
+    </div>
+    <div class="stat">
+      <span class="stat-n">વિરપુરધામ</span>
+      <span class="stat-l">વિરામ</span>
+    </div>
+  </section>
+
+  <!-- ============ OVERVIEW / SACRED JOURNEY ============ -->
+  <section class="overview">
+    <div class="sec-head reveal">
+      <span class="flourish">❖</span>
+      <h2 class="sec-title">પવિત્ર યાત્રા</h2>
+      <p class="sec-sub">શ્રદ્ધા, શક્તિ અને ભક્તિનો સંગમ</p>
+    </div>
+
+    <div class="overview-cards">
+      <article class="card reveal from-left">
+        <div class="icon-circle"><mat-icon>directions_walk</mat-icon></div>
+        <h3>૪ દિવસ — ૧૨૬ કિમી</h3>
+        <p>સુદામાપુરી થી વિરપુરધામ, માત્ર યાત્રા નહી, જલારામબાપાના આશીર્વાદનો મહાયજ્ઞ!!</p>
+      </article>
+
+      <article class="card reveal from-up">
+        <div class="icon-circle"><mat-icon>temple_hindu</mat-icon></div>
+        <h3>લક્ષ્ય, શક્તિ અને ભક્તિ</h3>
+        <p>લક્ષ્ય એક — વિરપુરધામ, શક્તિ એક — જલારામબાપાનું નામ, અનેક ભક્તો, એક જ પરિણામ!!</p>
+      </article>
+
+      <article class="card reveal from-right">
+        <div class="icon-circle"><mat-icon>group</mat-icon></div>
+        <h3>આસ્થાની અવિરત ધારા</h3>
+        <p>જ્યાં શક્તિ અને જીવંત પ્રેમ મળે છે, ત્યાં અલૌકિક ભક્તિની આ પદયાત્રા સુવર્ણ ઇતિહાસ સર્જે છે!!</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ JOURNEY TIMELINE ============ -->
+  <section class="journey wm wm-lotus">
+    <div class="sec-head reveal">
+      <span class="flourish">❖</span>
+      <h2 class="sec-title">યાત્રાનો માર્ગ</h2>
+      <p class="sec-sub">પોરબંદર થી વિરપુર — ૪ દિવસ, ૧૨૬ કિમી</p>
+    </div>
+
+    <ol class="timeline">
+      <li class="timeline-item reveal from-up"
+          [style.transition-delay.ms]="i * 120"
+          *ngFor="let d of journey; let i = index">
+        <span class="timeline-marker">{{ d.day }}</span>
+        <div class="timeline-card">
+          <span class="timeline-day">દિવસ {{ d.day }} · {{ d.title }}</span>
+          <h3 class="timeline-place">{{ d.place }}</h3>
+          <p class="timeline-note">{{ d.note }}</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ PRASAD / BHOJAN TEASER ============ -->
+  <section class="prasad">
+    <div class="prasad-inner wm wm-mandala">
+      <div class="prasad-icon reveal from-left"><mat-icon>volunteer_activism</mat-icon></div>
+      <div class="prasad-text reveal from-left rd-1">
+        <span class="kicker">મહાપ્રસાદ · અન્નદાન</span>
+        <h2 class="prasad-title">ભક્તિ સાથે ભોજનની સેવા</h2>
+        <p>યાત્રા દરમિયાન દરરોજ નિઃશુલ્ક મહાપ્રસાદ અને અન્નદાનની વ્યવસ્થા. આજનું ભોજન મેનૂ જુઓ.</p>
+      </div>
+      <a routerLink="/infodashboard" class="btn btn-primary reveal from-right rd-2">
+        <mat-icon>restaurant_menu</mat-icon> ભોજન માહિતી
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO PLAYER (playlist) ============ -->
+  <section class="video-section reveal from-up" id="journey-video">
+    <div class="sec-head">
+      <span class="flourish">❖</span>
+      <h2 class="sec-title">Watch Our Journey</h2>
+      <p class="sec-sub">ભક્તિ અને શ્રદ્ધાની ઝલક</p>
+    </div>
+
+    <!-- Single player showing ALL channel videos (playlist). New uploads appear automatically. -->
+    <div class="video-frame">
+      <iframe
+        [src]="playerUrl"
+        title="Shree Jalaram Padyatra"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="video-actions">
+      <a [href]="channelUrl" target="_blank" rel="noopener" class="btn btn-ghost">
+        <mat-icon>open_in_new</mat-icon> YouTube પર બધા વીડિયો જુઓ
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ GUIDELINES / FAQ ============ -->
+  <section class="faq">
+    <div class="sec-head reveal">
+      <span class="flourish">❖</span>
+      <h2 class="sec-title">યાત્રિકો માટે માર્ગદર્શન</h2>
+      <p class="sec-sub">વારંવાર પૂછાતા પ્રશ્નો</p>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item reveal" *ngFor="let f of faqs">
+        <summary>
+          <span class="faq-q">{{ f.q }}</span>
+          <mat-icon class="faq-chevron">expand_more</mat-icon>
+        </summary>
+        <p class="faq-a">{{ f.a }}</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ JOIN / STAY CONNECTED ============ -->
+  <section class="join reveal wm wm-mandala wm-on-dark">
+    <span class="flourish">✦&nbsp;&nbsp;❖&nbsp;&nbsp;✦</span>
+    <h2 class="join-title">યાત્રા સાથે જોડાયેલા રહો</h2>
+    <p class="join-sub">દરેક અપડેટ, દર્શન અને ભક્તિની ક્ષણ માટે અમને અનુસરો</p>
+    <div class="join-cta">
+      <a [href]="channelUrl" target="_blank" rel="noopener" class="btn btn-primary">
+        <mat-icon>subscriptions</mat-icon> YouTube પર જુઓ
+      </a>
+      <a href="https://www.instagram.com/shreejalarampadyatra" target="_blank" rel="noopener" class="btn btn-ghost btn-ghost--light">
+        <mat-icon>photo_camera</mat-icon> Instagram
+      </a>
+      <a routerLink="/login" class="btn btn-ghost btn-ghost--light">
+        <mat-icon>login</mat-icon> ટીમ લોગિન
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ VERSE STRIP ============ -->
+  <section class="verse reveal">
+    <span class="verse-q">“</span>
+    <blockquote>બોલો જય જલારામ — શ્રદ્ધા રાખો, સેવા કરો, ને પ્રભુના નામમાં લીન થાઓ.</blockquote>
+    <cite>— શ્રી જલારામ બાપા</cite>
+  </section>
+
+  <!-- ============ SOCIAL ============ -->
+  <div class="social-sidebar">
+    <a href="https://www.instagram.com/shreejalarampadyatra" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="../../assets/images/instagram.svg" alt="Instagram" class="social-icon-img">
+    </a>
+    <a href="https://www.youtube.com/@ShreeJalaramPadyatra" target="_blank" rel="noopener" aria-label="YouTube">
+      <img src="../../assets/images/youtube.svg" alt="YouTube" class="social-icon-img">
+    </a>
+  </div>
+
+  <div class="social-floating">
+    <a href="https://www.instagram.com/shreejalarampadyatra" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="../../assets/images/instagram.svg" alt="Instagram" class="social-icon-img">
+    </a>
+    <a href="https://www.youtube.com/@ShreeJalaramPadyatra" target="_blank" rel="noopener" aria-label="YouTube">
+      <img src="../../assets/images/youtube.svg" alt="YouTube" class="social-icon-img">
+    </a>
+  </div>
+
+</div>
