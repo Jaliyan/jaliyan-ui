@@ -1,84 +1,178 @@
-<div class="container">
-  <h2>Menu Planner</h2>
+<div class="page-wrapper">
 
-  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
-
-    <!-- Menu Date Dropdown -->
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Menu Date</mat-label>
-      <mat-select formControlName="mealDateId">
-        <mat-option *ngFor="let date of menuDates" [value]="date.mealDateId">
-          {{ date.menuDate | date: 'fullDate' }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Meal Type Dropdown -->
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Meal Type</mat-label>
-      <mat-select formControlName="mealTypeId">
-        <mat-option *ngFor="let meal of mealTypes" [value]="meal.mealTypeId">
-          {{ meal.name }} ({{ meal.fromTime }} - {{ meal.toTime }})
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Menu Item Dropdown with Search -->
-    <!-- Menu Item Dropdown with Search -->
-<mat-form-field appearance="fill" class="full-width">
-  <mat-label>Select Menu Items</mat-label>
-  <mat-select formControlName="menuItemIds" multiple>
-
-    <!-- ✅ ngx-mat-select-search must be inside a mat-option -->
-    <mat-option>
-      <ngx-mat-select-search
-        [formControl]="itemFilterCtrl"
-        placeholderLabel="Search menu items"
-        noEntriesFoundLabel="No matching items found">
-      </ngx-mat-select-search>
-    </mat-option>
-
-    <mat-option *ngFor="let item of filteredMenuItems" [value]="item.menuItemId">
-      {{ item.name }} - {{ item.description }}
-    </mat-option>
-
-  </mat-select>
-</mat-form-field>
-
-
-    <button mat-raised-button color="primary" type="submit" [disabled]="menuForm.invalid">
-      Save Menu
-    </button>
-  </form>
-
-  <hr />
-
-<h2>Planned Menus</h2>
-<p *ngIf="plannedMenus.length === 0">No menus planned yet.</p>
-
-<mat-accordion *ngIf="plannedMenus.length > 0">
-  <mat-expansion-panel *ngFor="let menu of plannedMenus" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{ menu.menuDate | date: 'fullDate' }}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    <mat-card>
-  <div class="meals-row">
-    <div class="meal-block" *ngFor="let meal of menu.mealTypes">
-      <strong>{{ meal.mealType }} ({{ meal.fromTime }} - {{ meal.toTime }}):</strong>
-      <ul>
-        <li *ngFor="let item of meal.menuItems">
-          {{ item.menuItemName }} - {{ item.description }}
-        </li>
-      </ul>
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="heading">
+      <a mat-button class="back-link" routerLink="/admin">
+        <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
+      </a>
+      <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+      <h2 class="title">{{ 'PLANNER.TITLE' | translate }}</h2>
+      <p class="subtitle">{{ 'PLANNER.SUBTITLE' | translate }}</p>
     </div>
   </div>
-</mat-card>
 
-  </mat-expansion-panel>
-</mat-accordion>
+  <!-- No active padyatra -->
+  <div class="empty-state" *ngIf="!loading && !activePadyatra">
+    <span class="empty-icon"><mat-icon>event_busy</mat-icon></span>
+    <p>{{ 'ADMIN.NO_ACTIVE' | translate }}</p>
+  </div>
 
+  <div class="planner-grid" *ngIf="activePadyatra">
 
+    <!-- ============ Compose form card ============ -->
+    <section class="form-card">
+      <div class="card-head">
+        <span class="card-icon"><mat-icon>{{ editingId ? 'edit_calendar' : 'restaurant_menu' }}</mat-icon></span>
+        <div class="card-head-text">
+          <h3>{{ (editingId ? 'PLANNER.EDIT_TITLE' : 'PLANNER.COMPOSE') | translate }}</h3>
+          <span class="card-sub">{{ 'PLANNER.COMPOSE_SUB' | translate }}</span>
+        </div>
+      </div>
+
+      <form [formGroup]="menuForm" (ngSubmit)="onSubmit()" class="planner-form">
+
+        <div class="field-row">
+          <!-- Menu Date (Gujarati, no time) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PLANNER.MENU_DATE' | translate }}</mat-label>
+            <mat-icon matPrefix class="field-icon">event</mat-icon>
+            <mat-select formControlName="menuDate" panelClass="planner-select-panel">
+              <mat-option *ngFor="let d of plannerDates" [value]="d.value">{{ d.label }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="menuForm.get('menuDate')?.hasError('required')">
+              {{ 'ADMIN.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="field-row two">
+          <!-- Stop -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PLANNER.STOP' | translate }}</mat-label>
+            <mat-icon matPrefix class="field-icon">place</mat-icon>
+            <mat-select formControlName="stopId" panelClass="planner-select-panel">
+              <mat-option *ngFor="let s of stops" [value]="s.stopId">{{ s.nameGu }} ({{ s.nameEn }})</mat-option>
+            </mat-select>
+            <mat-error *ngIf="menuForm.get('stopId')?.hasError('required')">
+              {{ 'ADMIN.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Sequence time (order only, not displayed elsewhere) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PLANNER.TIME' | translate }}</mat-label>
+            <mat-icon matPrefix class="field-icon">schedule</mat-icon>
+            <mat-select formControlName="sequenceTime" panelClass="planner-select-panel">
+              <mat-option *ngFor="let t of timeOptions" [value]="t.value">{{ t.label }}</mat-option>
+            </mat-select>
+            <mat-hint>{{ 'PLANNER.TIME_HINT' | translate }}</mat-hint>
+            <mat-error *ngIf="menuForm.get('sequenceTime')?.hasError('required')">
+              {{ 'ADMIN.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Menu Type -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'PLANNER.MENU_TYPE' | translate }}</mat-label>
+          <mat-icon matPrefix class="field-icon">lunch_dining</mat-icon>
+          <mat-select formControlName="menuTypeId" panelClass="planner-select-panel">
+            <mat-option *ngFor="let t of menuTypes" [value]="t.menuTypeId">{{ t.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="menuForm.get('menuTypeId')?.hasError('required')">
+            {{ 'ADMIN.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Menu Items multi-select with search -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'PLANNER.MENU_ITEMS' | translate }}</mat-label>
+          <mat-icon matPrefix class="field-icon">restaurant</mat-icon>
+          <mat-select formControlName="menuItemIds" multiple panelClass="planner-select-panel">
+            <mat-option class="search-option">
+              <ngx-mat-select-search
+                [formControl]="itemFilterCtrl"
+                [placeholderLabel]="'PLANNER.SEARCH_ITEMS' | translate"
+                [noEntriesFoundLabel]="'PLANNER.NO_ITEMS' | translate">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let item of filteredMenuItems" [value]="item.menuItemId">
+              {{ item.name }}<span *ngIf="item.description"> - {{ item.description }}</span>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="menuForm.get('menuItemIds')?.hasError('required')">
+            {{ 'ADMIN.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button class="btn-save" type="submit" [disabled]="saving">
+            <mat-icon>{{ editingId ? 'save' : 'add' }}</mat-icon>
+            {{ (editingId ? 'ADMIN.SAVE' : 'PLANNER.SAVE') | translate }}
+          </button>
+          <button mat-button class="btn-cancel" type="button" *ngIf="editingId" (click)="cancelEdit()">
+            {{ 'ADMIN.CANCEL' | translate }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ Planned menus ============ -->
+    <section class="planned-card">
+      <div class="card-head">
+        <span class="card-icon card-icon--deep"><mat-icon>event_available</mat-icon></span>
+        <div class="card-head-text">
+          <h3>{{ 'PLANNER.PLANNED' | translate }}</h3>
+          <span class="card-sub">{{ 'PLANNER.PLANNED_SUB' | translate }}</span>
+        </div>
+        <span class="count-pill" *ngIf="scheduleCount > 0">{{ scheduleCount }}</span>
+      </div>
+
+      <div class="spinner-wrap" *ngIf="loading">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="!loading && scheduleGroups.length === 0">
+        <span class="empty-icon"><mat-icon>no_meals</mat-icon></span>
+        <p>{{ 'PLANNER.EMPTY' | translate }}</p>
+        <span class="empty-hint">{{ 'PLANNER.EMPTY_HINT' | translate }}</span>
+      </div>
+
+      <mat-accordion *ngIf="!loading && scheduleGroups.length > 0" class="menu-accordion" multi>
+        <mat-expansion-panel *ngFor="let group of scheduleGroups" class="menu-panel" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="date-chip"><mat-icon>calendar_today</mat-icon></span>
+              <span class="date-text">{{ group.label }}</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="sched-list">
+            <div class="sched-row" *ngFor="let row of group.rows" [class.editing]="row.scheduleId === editingId">
+              <div class="sched-main">
+                <span class="sched-type">{{ row.menuTypeName }}</span>
+                <span class="sched-stop">
+                  <mat-icon>place</mat-icon>
+                  <a *ngIf="row.mapUrl" [href]="row.mapUrl" target="_blank" rel="noopener">{{ row.stopNameGu }}</a>
+                  <span *ngIf="!row.mapUrl">{{ row.stopNameGu }}</span>
+                </span>
+                <span class="sched-items">{{ itemNames(row) }}</span>
+              </div>
+              <div class="sched-actions">
+                <button mat-icon-button class="icon-btn act-edit" (click)="edit(row)" [matTooltip]="'ADMIN.EDIT' | translate">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="icon-btn act-delete" (click)="remove(row)" [matTooltip]="'ADMIN.DELETE' | translate">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </section>
+
+  </div>
 </div>

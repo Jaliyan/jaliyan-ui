@@ -1,18 +1,14 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AttendanceService } from '../../services/attendance.service';
 import { PadyatriService } from '../../services/padyatri.service';
 import { ToastService } from '../../services/toast.service';
 import { Padyatri } from '../../common/padyatri.model';
 import { DistributionService } from '../../services/distribution.service';
 import { AuthService } from '../../services/auth.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { padyatriSearchPredicate } from '../../common/padyatri-search';
 import { forkJoin } from 'rxjs';
+import { DataGridColumn } from '../../shared/data-grid/data-grid.types';
 
 @Component({
   selector: 'app-qr-scan',
@@ -20,16 +16,25 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./qr-scan.component.css'],
   standalone: false
 })
-export class QrScanComponent implements OnInit, AfterViewInit {
+export class QrScanComponent implements OnInit {
   attendanceForm!: FormGroup;
   padyatri: Padyatri[] = [];
   stops: any[] = [];
   itemList: any[] = [];
 
-  dataSource = new MatTableDataSource<Padyatri>();
-  displayedColumns: string[] = ['batchId', 'name', 'mobile', 'actions'];
+  /** Grid columns for the manual attendance / item list. */
+  columns: DataGridColumn[] = [
+    {
+      key: 'name', header: 'Name', type: 'avatar', sortable: true, filterable: true,
+      format: (_v, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim()
+    },
+    { key: 'batchId', header: 'Batch ID', type: 'badge', sortable: true, filterable: true, gujaratiDigits: true },
+    { key: 'mobile', header: 'Mobile', type: 'text', sortable: true, filterable: true, icon: 'call' }
+  ];
 
-  isMobile = false;
+  /** Shared name/batch/mobile search reused by the grid. */
+  searchPredicate = padyatriSearchPredicate;
+
   lastScanTime = 0;
   scanCooldown = 2000;
 
@@ -39,16 +44,11 @@ export class QrScanComponent implements OnInit, AfterViewInit {
 
   userName: any;
 
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort!: MatSort;
-
-
   constructor(
     private fb: FormBuilder,
     private padyatriService: PadyatriService,
     private attendanceService: AttendanceService,
     private toast: ToastService,
-    private bpObserver: BreakpointObserver,
     private distributionService: DistributionService,
     private authService: AuthService
   ) {
@@ -60,54 +60,18 @@ export class QrScanComponent implements OnInit, AfterViewInit {
     this.loadStops();
     this.loadPadyatris();
 
-    this.bpObserver.observe([Breakpoints.Handset]).subscribe((result) => {
-      this.isMobile = result.matches;
-    });
-
     this.distributionService.getItems().subscribe({
       next: (items) => (this.itemList = items),
       error: (err: any) => console.error(err),
     });
-
-    // Live search
-    this.attendanceForm.get('batchSearch')?.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => this.applyFilters());
   }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    // Fix sorting on new data load
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'name':
-          return `${item.firstName} ${item.lastName}`.toLowerCase();
-        default:
-          return (item as any)[property];
-      }
-    };
-  }
-
-  ngAfterViewChecked() {
-    if (this.dataSource && this.paginator && this.dataSource.paginator !== this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-    if (this.dataSource && this.sort && this.dataSource.sort !== this.sort) {
-      this.dataSource.sort = this.sort;
-    }
-  }
-
 
   buildForm() {
     this.attendanceForm = this.fb.group({
       operationType: ['attendance'],
       selectedStop: [''],
-      // selectedItem: [''],
       selectedItem: [[]],
       attendanceMode: [''],
-      batchSearch: [''],
     });
   }
 
@@ -122,10 +86,6 @@ export class QrScanComponent implements OnInit, AfterViewInit {
     this.padyatriService.getPadyatris().subscribe({
       next: (data) => {
         this.padyatri = data;
-        this.dataSource = new MatTableDataSource(data);
-
-        if (this.paginator) this.dataSource.paginator = this.paginator;
-        if (this.sort) this.dataSource.sort = this.sort;
       },
       error: () => this.toast.show('Failed to load padyatris', 'error'),
     });
@@ -145,21 +105,7 @@ export class QrScanComponent implements OnInit, AfterViewInit {
   }
 
   applyFilters() {
-    let searchValue = this.attendanceForm.get('batchSearch')?.value;
-    searchValue = searchValue ? String(searchValue).trim().toLowerCase() : '';
-
-    this.dataSource.filterPredicate = padyatriSearchPredicate;
-    this.dataSource.filter = searchValue;
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-
-
-  clearBatchSearch() {
-    this.attendanceForm.get('batchSearch')?.setValue('');
+    // Search is now handled by the shared data grid.
   }
 
   setMode(mode: 'manual' | 'qr') {

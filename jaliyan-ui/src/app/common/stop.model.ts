@@ -35,9 +35,11 @@ export interface CreateStopDto {
   padyatraId: number;
   nameEn: string;
   nameGu: string;
-  dayNumber: number;
+  /** Deprecated: stops are now a flat list. Kept optional for backward compat. */
+  dayNumber?: number;
   stopDate?: string;
-  sequence: number;
+  /** Deprecated: stops are no longer sequenced. Kept optional for backward compat. */
+  sequence?: number;
   mealTypeId?: number | null;
   mapUrl?: string;
   latitude?: number | null;

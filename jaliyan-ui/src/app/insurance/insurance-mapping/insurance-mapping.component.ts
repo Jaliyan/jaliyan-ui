@@ -1,15 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
 import { InsuranceService } from '../../services/insurance.service';
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 import { PadyatriInsurance, InsuranceSummary } from '../../common/insurance.model';
-import { matchesPadyatriSearch } from '../../common/padyatri-search';
-
-type StatusFilter = 'all' | 'received' | 'pending';
+import { padyatriSearchPredicate } from '../../common/padyatri-search';
+import { DataGridColumn, DataGridQuickFilter } from '../../shared/data-grid/data-grid.types';
 
 @Component({
   selector: 'app-insurance-mapping',
@@ -18,65 +13,57 @@ type StatusFilter = 'all' | 'received' | 'pending';
   standalone: false
 })
 export class InsuranceMappingComponent implements OnInit {
-  displayedColumns: string[] = ['batchId', 'name', 'mobile', 'status', 'actions'];
-  dataSource = new MatTableDataSource<PadyatriInsurance>([]);
+  /** Rows shown in the grid. */
+  rows: PadyatriInsurance[] = [];
+
+  /** Grid column configuration. */
+  columns: DataGridColumn[] = [];
+
+  /** Quick status filter chips (the grid prepends an "All" chip). */
+  quickFilters: DataGridQuickFilter[] = [
+    { key: 'pending', label: 'Pending', predicate: (r) => !r.insuranceReceived },
+    { key: 'received', label: 'Received', predicate: (r) => r.insuranceReceived }
+  ];
+
+  /** Shared name/batch/mobile search reused by the grid. */
+  searchPredicate = padyatriSearchPredicate;
 
   summary: InsuranceSummary = { total: 0, received: 0, pending: 0 };
-  statusFilter: StatusFilter = 'all';
-  searchText = '';
   loading = false;
-  isMobile = false;
   updatingId: number | null = null;
-
-  // The table (and its paginator/sort) live inside an *ngIf that is false until
-  // data has loaded, so setters attach them to the dataSource the moment they
-  // appear in the DOM. Using ngAfterViewInit would run too early and leave the
-  // paginator disconnected ("0 of 0").
-  @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
-    if (paginator) {
-      this.dataSource.paginator = paginator;
-    }
-  }
-
-  @ViewChild(MatSort) set matSort(sort: MatSort) {
-    if (sort) {
-      this.dataSource.sort = sort;
-    }
-  }
 
   constructor(
     private insuranceService: InsuranceService,
     private toastService: ToastService,
-    private authService: AuthService,
-    private breakpointObserver: BreakpointObserver
-  ) {
-    this.breakpointObserver
-      .observe([Breakpoints.HandsetPortrait])
-      .subscribe(result => (this.isMobile = result.matches));
-  }
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.dataSource.filterPredicate = (row, filter) => this.matchesFilter(row, filter);
+    this.buildColumns();
     this.loadList();
   }
 
-  loadList(): void {
-    this.loading = true;
-    this.insuranceService.getInsuranceList().subscribe({
-      next: data => {
-        this.dataSource.data = data;
-        this.updateSummary(data);
-        this.applyCurrentFilter();
-        this.loading = false;
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-        }
+  private buildColumns(): void {
+    this.columns = [
+      {
+        key: 'name', header: 'Name', type: 'avatar',
+        sortable: true, filterable: true,
+        format: (_v, row) => row.fullName
       },
-      error: () => {
-        this.toastService.show('Failed to load insurance list', 'error');
-        this.loading = false;
+      {
+        key: 'batchId', header: 'Batch ID', type: 'badge',
+        sortable: true, filterable: true, gujaratiDigits: true
+      },
+      {
+        key: 'mobile', header: 'Mobile', type: 'text',
+        sortable: true, filterable: true, icon: 'call'
+      },
+      {
+        key: 'insuranceReceived', header: 'Status', type: 'status',
+        sortable: true,
+        statusTrueLabel: 'Received', statusFalseLabel: 'Pending', statusTruePositive: true
       }
-    });
+    ];
   }
 
   /** Coverage percentage for the progress bar. */
@@ -84,14 +71,19 @@ export class InsuranceMappingComponent implements OnInit {
     return this.summary.total ? Math.round((this.summary.received / this.summary.total) * 100) : 0;
   }
 
-  onSearch(value: string): void {
-    this.searchText = value;
-    this.applyCurrentFilter();
-  }
-
-  setStatusFilter(filter: StatusFilter): void {
-    this.statusFilter = filter;
-    this.applyCurrentFilter();
+  loadList(): void {
+    this.loading = true;
+    this.insuranceService.getInsuranceList().subscribe({
+      next: data => {
+        this.rows = data;
+        this.updateSummary(data);
+        this.loading = false;
+      },
+      error: () => {
+        this.toastService.show('Failed to load insurance list', 'error');
+        this.loading = false;
+      }
+    });
   }
 
   toggleReceived(row: PadyatriInsurance): void {
@@ -108,8 +100,8 @@ export class InsuranceMappingComponent implements OnInit {
         next: () => {
           row.insuranceReceived = received;
           row.receivedTime = received ? new Date().toISOString() : null;
-          this.updateSummary(this.dataSource.data);
-          this.applyCurrentFilter();
+          this.updateSummary(this.rows);
+          this.rows = [...this.rows]; // re-trigger the grid's filtering
           this.updatingId = null;
           this.toastService.show(
             received ? 'Insurance marked as received' : 'Insurance mark removed',
@@ -130,34 +122,5 @@ export class InsuranceMappingComponent implements OnInit {
       received,
       pending: data.length - received
     };
-  }
-
-  /**
-   * A single filter string is fed to MatTable's filterPredicate. We pack both the
-   * status filter and the free-text search into it (separated by "|") so a single
-   * predicate can honour both.
-   */
-  private applyCurrentFilter(): void {
-    this.dataSource.filter = `${this.statusFilter}|${this.searchText.trim().toLowerCase()}`;
-  }
-
-  private matchesFilter(row: PadyatriInsurance, filter: string): boolean {
-    const [status, ...rest] = filter.split('|');
-    const query = rest.join('|');
-
-    // Status filter
-    if (status === 'received' && !row.insuranceReceived) {
-      return false;
-    }
-    if (status === 'pending' && row.insuranceReceived) {
-      return false;
-    }
-
-    // Free-text search by name or batch id (English / Gujarati), shared with the
-    // other list screens so matching behaviour stays consistent.
-    return matchesPadyatriSearch(
-      { name: row.fullName, batchId: row.batchId, mobile: row.mobile },
-      query
-    );
   }
 }

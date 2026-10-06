@@ -54,6 +54,7 @@ export class PadyatraManageComponent implements OnInit {
       width: '560px',
       maxWidth: '95vw',
       maxHeight: '90vh',
+      panelClass: 'admin-form-dialog',
       data: padyatra ? { ...padyatra } : null
     });
 

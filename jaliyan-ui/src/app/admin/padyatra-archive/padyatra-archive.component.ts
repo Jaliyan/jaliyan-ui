@@ -9,6 +9,8 @@ import { Padyatra } from '../../common/padyatra.model';
 import { Padyatri } from '../../common/padyatri.model';
 import { Stop } from '../../common/stop.model';
 import { DayItinerary } from '../../common/public-info-dashboard.model';
+import { padyatriSearchPredicate } from '../../common/padyatri-search';
+import { DataGridColumn } from '../../shared/data-grid/data-grid.types';
 
 interface DayGroup {
   dayNumber: number;
@@ -36,7 +38,20 @@ export class PadyatraArchiveComponent implements OnInit {
   loadingList = true;
   loadingData = false;
 
-  displayedColumns = ['batchId', 'name', 'mobile', 'age'];
+  /** Grid columns for the read-only padyatris list. */
+  padyatriColumns: DataGridColumn[] = [
+    {
+      key: 'name', header: 'ADMIN.PADYATRA.NAME', type: 'avatar',
+      translateHeader: true, sortable: true, filterable: true,
+      format: (_v, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim()
+    },
+    { key: 'batchId', header: 'ADMIN.ARCHIVE.BATCH', type: 'badge', translateHeader: true, sortable: true, filterable: true, gujaratiDigits: true },
+    { key: 'mobile', header: 'Mobile', type: 'text', translateHeader: true, sortable: true, filterable: true, icon: 'call' },
+    { key: 'age', header: 'Age', type: 'text', translateHeader: true, sortable: true, filterable: true, gujaratiDigits: true }
+  ];
+
+  /** Shared name/batch/mobile search reused by the grid. */
+  searchPredicate = padyatriSearchPredicate;
 
   constructor(
     private padyatraService: PadyatraService,

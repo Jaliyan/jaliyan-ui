@@ -1,24 +1,4 @@
-.dialog-body {
-  display: flex;
-  flex-direction: column;
-  padding-top: 8px;
-}
+/* Dialog chrome (header/body/.form-section/.hint/.row/buttons) is shared
+   globally under `.admin-form-dialog` in src/styles.scss so every admin
+   dialog stays consistent. Nothing component-scoped is needed here. */
 
-.full {
-  width: 100%;
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-}
-
-.row mat-form-field {
-  flex: 1;
-}
-
-.range-error {
-  color: #d32f2f;
-  font-size: 0.8rem;
-  margin: -8px 0 12px;
-}

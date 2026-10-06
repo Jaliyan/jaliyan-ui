@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FoodItem, MealType, MenuDate } from '../common/fooditem.model';
 import { DayItinerary } from '../common/public-info-dashboard.model';
+import { MenuScheduleDto, MenuScheduleView } from '../common/menu-schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,33 @@ export class MenuplannerService {
   getMealTypes(): Observable<MealType[]> {
     return this.http.get<MealType[]>(`${this.baseUrl}/getMealType`);
   }
-  saveMenu(menu: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/createMenuSchedule`, menu);
+
+  /* =====================================================================
+     Menu Schedule CRUD (Menu Planner). A schedule row = date + stop +
+     menu type + menu items, ordered within a date by sequenceTime.
+     See docs/menu-planner-refactor-api.md.
+     ===================================================================== */
+
+  /** All planned menu rows for a padyatra (defaults to the active one). */
+  getSchedules(padyatraId?: number): Observable<MenuScheduleView[]> {
+    const q = padyatraId != null ? `?padyatraId=${padyatraId}` : '';
+    return this.http.get<MenuScheduleView[]>(`${this.baseUrl}/schedules${q}`);
   }
 
-   getPlannedMenus(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/grouped-menu`);
+  createSchedule(dto: MenuScheduleDto): Observable<MenuScheduleView> {
+    return this.http.post<MenuScheduleView>(`${this.baseUrl}/createSchedule`, dto);
+  }
+
+  updateSchedule(dto: MenuScheduleDto): Observable<MenuScheduleView> {
+    return this.http.put<MenuScheduleView>(`${this.baseUrl}/updateSchedule`, dto);
+  }
+
+  deleteSchedule(scheduleId: number, updatedBy: string): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: { scheduleId, updatedBy }
+    };
+    return this.http.delete(`${this.baseUrl}/deleteSchedule`, options);
   }
 
   getItinerary(): Observable<DayItinerary[]> {

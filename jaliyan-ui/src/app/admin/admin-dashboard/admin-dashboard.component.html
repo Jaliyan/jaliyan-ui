@@ -1,25 +1,32 @@
 <div class="admin-dashboard">
-  <div class="admin-header">
-    <h1><mat-icon>admin_panel_settings</mat-icon> {{ 'ADMIN.TITLE' | translate }}</h1>
-    <p class="subtitle">{{ 'ADMIN.SUBTITLE' | translate }}</p>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="heading">
+      <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+      <h1 class="title"><mat-icon>admin_panel_settings</mat-icon> {{ 'ADMIN.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'ADMIN.SUBTITLE' | translate }}</p>
+    </div>
   </div>
 
+  <!-- Active padyatra -->
   <ng-container *ngIf="!loading">
     <app-padyatra-banner *ngIf="activePadyatra" [padyatra]="activePadyatra"></app-padyatra-banner>
-    <mat-card class="active-banner" *ngIf="!activePadyatra">
-      <div class="active-info warn">
-        <mat-icon class="active-icon">warning</mat-icon>
-        <div class="active-name">{{ 'ADMIN.NO_ACTIVE' | translate }}</div>
-      </div>
-    </mat-card>
+    <div class="no-active" *ngIf="!activePadyatra">
+      <mat-icon>warning</mat-icon>
+      <span>{{ 'ADMIN.NO_ACTIVE' | translate }}</span>
+    </div>
   </ng-container>
 
+  <!-- Management tiles -->
   <div class="tiles">
-    <mat-card class="tile" *ngFor="let tile of tiles" (click)="open(tile)" tabindex="0"
-              (keyup.enter)="open(tile)">
-      <mat-icon class="tile-icon">{{ tile.icon }}</mat-icon>
-      <h3>{{ tile.title }}</h3>
-      <p>{{ tile.description }}</p>
-    </mat-card>
+    <button type="button" class="tile" *ngFor="let tile of tiles" (click)="open(tile)">
+      <span class="tile-icon"><mat-icon>{{ tile.icon }}</mat-icon></span>
+      <span class="tile-text">
+        <span class="tile-title">{{ tile.title }}</span>
+        <span class="tile-desc">{{ tile.description }}</span>
+      </span>
+      <mat-icon class="tile-go">arrow_forward</mat-icon>
+    </button>
   </div>
 </div>

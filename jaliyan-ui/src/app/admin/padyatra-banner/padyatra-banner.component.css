@@ -1,56 +1,73 @@
 .padyatra-banner {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 18px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border: 1px solid #ffcc80;
+  gap: 10px;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: var(--sand, #F3EBDC);
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  border-left: 4px solid var(--color-primary, #C86D39);
+  box-shadow: var(--shadow-1, 0 1px 3px rgba(0, 0, 0, .06));
 }
 
 .banner-logo {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e65100;
-  background: #fff;
+  padding: 1px;
+  background: var(--color-primary, #C86D39);
+  border: 2px solid var(--color-surface, #fff);
+  box-shadow: 0 1px 5px rgba(200, 109, 57, .3);
 }
 
 .banner-text {
   flex: 1;
-  line-height: 1.35;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
 }
 
 .banner-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #bf360c;
+  font-family: var(--font-serif, serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--deep, var(--color-primary));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .banner-dates {
-  font-size: 0.95rem;
-  color: #5d4037;
-}
-
-.banner-en {
-  font-size: 0.78rem;
-  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+  color: var(--color-text-soft, #766B5E);
+  white-space: nowrap;
 }
 
 .banner-flag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #2e7d32;
+  color: #2f6b3e;
+  background: #e5f3e8;
+  padding: 3px 10px;
+  border-radius: 999px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .banner-flag mat-icon {
-  font-size: 18px;
-  height: 18px;
-  width: 18px;
+  font-size: 15px;
+  height: 15px;
+  width: 15px;
+}
+
+@media (max-width: 520px) {
+  .banner-dates { display: none; }
 }

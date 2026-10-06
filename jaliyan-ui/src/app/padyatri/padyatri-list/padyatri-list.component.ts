@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { PadyatriService } from '../../services/padyatri.service';
 import { ToastService } from '../../services/toast.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { IdCardComponent } from '../id-card/id-card.component';
 import { MatDialog } from '@angular/material/dialog';
 import html2canvas from 'html2canvas';
@@ -14,8 +11,10 @@ import { Router } from '@angular/router';
 import { PadyatriViewDialogComponent } from '../padyatri-view-dialog/padyatri-view-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from '../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 import { englishToGujaratiDigits } from '../../common/number-utils';
 import { padyatriSearchPredicate } from '../../common/padyatri-search';
+import { DataGridColumn, DataGridQuickFilter } from '../../shared/data-grid/data-grid.types';
 
 
 
@@ -25,16 +24,25 @@ import { padyatriSearchPredicate } from '../../common/padyatri-search';
   styleUrls: ['./padyatri-list.component.css'],
   standalone: false
 })
-export class PadyatriListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['batchId', 'firstName', 'mobile', 'actions'];
-  selectedPadyatris: any[] = [];
-  isMobile = false;
+export class PadyatriListComponent implements OnInit {
+  /** Rows shown in the grid. */
+  padyatris: any[] = [];
 
-  dataSource = new MatTableDataSource<any>([]);
+  /** Grid column configuration. */
+  columns: DataGridColumn[] = [];
+
+  /** Quick status filter chips (the grid prepends an "All" chip). */
+  quickFilters: DataGridQuickFilter[] = [
+    { key: 'active', label: 'Active', translate: true, predicate: (r) => !r.isReturn },
+    { key: 'returned', label: 'Returned', translate: true, predicate: (r) => r.isReturn }
+  ];
+
+  /** Shared name/batch/mobile search reused by the grid. */
+  searchPredicate = padyatriSearchPredicate;
+
+  selectedPadyatris: any[] = [];
   userName: any;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('bulkCardContainer', { static: false }) bulkCardContainer!: ElementRef;
 
   constructor(
@@ -44,28 +52,56 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
     this.userName = this.authService.getUsername();
-    this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
-      .subscribe(result => {
-        this.isMobile = result.matches;
-      });
   }
 
   ngOnInit(): void {
+    this.buildColumns();
     this.loadPadyatris();
-
-    this.dataSource.filterPredicate = padyatriSearchPredicate;
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  private buildColumns(): void {
+    this.columns = [
+      {
+        key: 'name', header: 'Padyatri', type: 'avatar',
+        translateHeader: true, sortable: true, filterable: true,
+        format: (_v, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
+        subtitleFormat: (row) => this.buildSubtitle(row)
+      },
+      {
+        key: 'batchId', header: 'BatchID', type: 'badge',
+        translateHeader: true, sortable: true, filterable: true,
+        gujaratiDigits: true
+      },
+      {
+        key: 'mobile', header: 'Mobile', type: 'text',
+        translateHeader: true, sortable: true, filterable: true, icon: 'call'
+      },
+      {
+        key: 'isReturn', header: 'Status', type: 'status',
+        translateHeader: true, sortable: true,
+        statusTrueLabel: 'Returned', statusFalseLabel: 'Active', translateStatus: true
+      }
+    ];
+  }
 
-    this.dataSource.filterPredicate = padyatriSearchPredicate;
+  private buildSubtitle(row: any): string {
+    const age = row?.age != null ? `${this.translate.instant('Age')} ${englishToGujaratiDigits(row.age)}` : '';
+    const gender = row?.gender ? ` · ${row.gender}` : '';
+    return `${age}${gender}`.trim();
+  }
 
-    this.dataSource.filter = ''; // initialize filter
+  /** Opens the detail dialog when a mobile card is tapped. */
+  openMobile = (row: any): void => {
+    this.openMobileActions(row);
+  };
+
+  /** Total registered padyatris. */
+  get totalCount(): number {
+    return this.padyatris.length;
   }
 
   viewPadyatri(padyatri: any) {
@@ -95,13 +131,7 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
   loadPadyatris(): void {
     this.padyatriService.getPadyatris().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-        }
+        this.padyatris = data;
       },
       error: () => this.toastService.show('Failed to load data', 'error')
     });
@@ -109,15 +139,6 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
 
   toGujaratiDigits(value: string | number): string {
     return englishToGujaratiDigits(value);
-  }
-
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   addNewPadyatri(): void {
@@ -163,14 +184,14 @@ export class PadyatriListComponent implements OnInit, AfterViewInit {
 
   toggleAllRows(event: any): void {
     if (event.checked) {
-      this.selectedPadyatris = [...this.dataSource.filteredData];
+      this.selectedPadyatris = [...this.padyatris];
     } else {
       this.selectedPadyatris = [];
     }
   }
 
   isAllSelected(): boolean {
-    return this.selectedPadyatris.length === this.dataSource.filteredData.length;
+    return this.selectedPadyatris.length === this.padyatris.length;
   }
 
   isSomeSelected(): boolean {

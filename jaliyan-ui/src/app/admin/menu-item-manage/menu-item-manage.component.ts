@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { FooditemsService } from '../../services/fooditems.service';
 import { PadyatraService } from '../../services/padyatra.service';
 import { ToastService } from '../../services/toast.service';
@@ -22,6 +22,8 @@ export class MenuItemManageComponent implements OnInit {
   editingId: number | null = null;
   userName: string;
   activePadyatra: Padyatra | null = null;
+
+  @ViewChild(FormGroupDirective) private formDir?: FormGroupDirective;
 
   constructor(
     private foodService: FooditemsService,
@@ -66,6 +68,9 @@ export class MenuItemManageComponent implements OnInit {
 
   cancelEdit(): void {
     this.editingId = null;
+    // resetForm() also clears the directive's "submitted" flag so the required
+    // error doesn't re-appear on the now-empty field after a successful save.
+    this.formDir?.resetForm({ name: '', description: '' });
     this.form.reset({ name: '', description: '' });
   }
 

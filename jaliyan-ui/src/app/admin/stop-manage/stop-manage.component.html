@@ -1,15 +1,62 @@
 <div class="stop-manage">
-  <div class="page-head">
-    <button mat-stroked-button routerLink="/admin">
-      <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
-    </button>
-    <h1>{{ 'ADMIN.STOP.TITLE' | translate }}</h1>
-    <button mat-raised-button color="primary" (click)="openForm()" [disabled]="!activePadyatra">
-      <mat-icon>add_location_alt</mat-icon> {{ 'ADMIN.STOP.ADD' | translate }}
-    </button>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="heading">
+      <a mat-button class="back-link" routerLink="/admin">
+        <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
+      </a>
+      <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+      <h1 class="title">{{ 'ADMIN.STOP.TITLE' | translate }}</h1>
+    </div>
   </div>
 
   <app-padyatra-banner [padyatra]="activePadyatra"></app-padyatra-banner>
+
+  <!-- Add / Edit form -->
+  <div class="form-card" *ngIf="activePadyatra">
+    <div class="form-card-title">
+      <mat-icon>{{ editingId ? 'edit' : 'add_location_alt' }}</mat-icon>
+      {{ (editingId ? 'ADMIN.STOP.EDIT_TITLE' : 'ADMIN.STOP.ADD_TITLE') | translate }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="item-form">
+      <mat-form-field appearance="outline" class="name-field">
+        <mat-label>{{ 'ADMIN.STOP.NAME_GU' | translate }}</mat-label>
+        <input matInput formControlName="nameGu" maxlength="150" />
+        <mat-error *ngIf="form.get('nameGu')?.hasError('required')">
+          {{ 'ADMIN.REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="name-field">
+        <mat-label>{{ 'ADMIN.STOP.NAME_EN' | translate }}</mat-label>
+        <input matInput formControlName="nameEn" maxlength="150" />
+        <mat-error *ngIf="form.get('nameEn')?.hasError('required')">
+          {{ 'ADMIN.REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="url-field">
+        <mat-label>{{ 'ADMIN.STOP.MAP_URL' | translate }}</mat-label>
+        <mat-icon matPrefix class="field-prefix">place</mat-icon>
+        <input matInput formControlName="mapUrl" maxlength="500" placeholder="https://maps.app.goo.gl/..." />
+        <mat-error *ngIf="form.get('mapUrl')?.hasError('pattern')">
+          {{ 'ADMIN.STOP.MAP_INVALID' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-flat-button class="btn-save" type="submit" [disabled]="saving">
+          <mat-icon>{{ editingId ? 'save' : 'add' }}</mat-icon>
+          {{ (editingId ? 'ADMIN.SAVE' : 'ADMIN.ADD') | translate }}
+        </button>
+        <button mat-button class="btn-cancel" type="button" *ngIf="editingId" (click)="cancelEdit()">
+          {{ 'ADMIN.CANCEL' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
 
   <div class="spinner-wrap" *ngIf="loading">
     <mat-spinner diameter="40"></mat-spinner>
@@ -17,42 +64,53 @@
 
   <div *ngIf="!loading">
     <div class="empty" *ngIf="!activePadyatra">
-      {{ 'ADMIN.NO_ACTIVE' | translate }}
+      <mat-icon>event_busy</mat-icon>
+      <div>{{ 'ADMIN.NO_ACTIVE' | translate }}</div>
     </div>
 
-    <div class="empty" *ngIf="activePadyatra && dayGroups.length === 0">
-      {{ 'ADMIN.STOP.EMPTY' | translate }}
+    <div class="table-card" *ngIf="activePadyatra">
+      <table mat-table [dataSource]="stops">
+
+        <ng-container matColumnDef="nameGu">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.STOP.NAME_GU' | translate }}</th>
+          <td mat-cell *matCellDef="let stop">
+            <span class="item-name"><mat-icon>place</mat-icon> {{ stop.nameGu }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nameEn">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.STOP.NAME_EN' | translate }}</th>
+          <td mat-cell *matCellDef="let stop" class="desc-cell">{{ stop.nameEn }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-col">{{ 'ADMIN.ACTIONS' | translate }}</th>
+          <td mat-cell *matCellDef="let stop" class="actions-col">
+            <div class="row-actions">
+              <button mat-icon-button class="icon-btn act-map" *ngIf="stop.mapUrl" (click)="openMap(stop)"
+                      [matTooltip]="'ADMIN.STOP.OPEN_MAP' | translate">
+                <mat-icon>place</mat-icon>
+              </button>
+              <button mat-icon-button class="icon-btn act-edit" (click)="edit(stop)" [matTooltip]="'ADMIN.EDIT' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="icon-btn act-delete" (click)="remove(stop)"
+                      [matTooltip]="'ADMIN.DELETE' | translate">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['nameGu', 'nameEn', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['nameGu', 'nameEn', 'actions'];"
+            [class.editing-row]="row.stopId === editingId"></tr>
+      </table>
+
+      <div class="empty" *ngIf="stops.length === 0">
+        <mat-icon>wrong_location</mat-icon>
+        <div>{{ 'ADMIN.STOP.EMPTY' | translate }}</div>
+      </div>
     </div>
-
-    <mat-card class="day-card" *ngFor="let day of dayGroups">
-      <div class="day-head">
-        <mat-icon>today</mat-icon>
-        <span>{{ 'ADMIN.STOP.DAY' | translate }} {{ day.dayNumber }}</span>
-      </div>
-
-      <div class="stop-row" *ngFor="let stop of day.stops">
-        <div class="stop-info">
-          <div class="stop-name-gu">{{ stop.nameGu }}</div>
-          <div class="stop-name-en">
-            #{{ stop.sequence }} · {{ stop.nameEn }}
-            <span *ngIf="mealTypeName(stop)" class="meal-chip">{{ mealTypeName(stop) }}</span>
-            <span *ngIf="stop.stopDate"> · {{ stop.stopDate | date:'dd MMM' }}</span>
-          </div>
-        </div>
-        <div class="stop-actions">
-          <button mat-icon-button *ngIf="stop.mapUrl" (click)="openMap(stop)"
-                  [matTooltip]="'ADMIN.STOP.OPEN_MAP' | translate">
-            <mat-icon>map</mat-icon>
-          </button>
-          <button mat-icon-button (click)="openForm(stop)" [matTooltip]="'ADMIN.EDIT' | translate">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="remove(stop)"
-                  [matTooltip]="'ADMIN.DELETE' | translate">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </div>
-    </mat-card>
   </div>
 </div>

@@ -1,67 +1,109 @@
-<h2 mat-dialog-title>
-  {{ (isEdit ? 'ADMIN.PADYATRA.EDIT_TITLE' : 'ADMIN.PADYATRA.ADD_TITLE') | translate }}
-</h2>
+<div class="dialog-head">
+  <div class="dialog-head-text">
+    <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+    <h2 mat-dialog-title>
+      {{ (isEdit ? 'ADMIN.PADYATRA.EDIT_TITLE' : 'ADMIN.PADYATRA.ADD_TITLE') | translate }}
+    </h2>
+  </div>
+  <button mat-icon-button class="head-close" type="button" (click)="cancel()" [attr.aria-label]="'ADMIN.CANCEL' | translate">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content class="dialog-body">
 
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'ADMIN.PADYATRA.NAME_GU' | translate }}</mat-label>
-      <input matInput formControlName="nameGu" maxlength="150" />
-      <mat-error *ngIf="form.get('nameGu')?.hasError('required')">
-        {{ 'ADMIN.REQUIRED' | translate }}
-      </mat-error>
-    </mat-form-field>
+    <section class="form-section">
+      <div class="section-head">
+        <mat-icon>info</mat-icon>
+        <span>{{ 'ADMIN.PADYATRA.SECTION_DETAILS' | translate }}</span>
+      </div>
 
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'ADMIN.PADYATRA.NAME_EN' | translate }}</mat-label>
-      <input matInput formControlName="nameEn" maxlength="150" />
-      <mat-error *ngIf="form.get('nameEn')?.hasError('required')">
-        {{ 'ADMIN.REQUIRED' | translate }}
-      </mat-error>
-    </mat-form-field>
+      <p class="hint">
+        <mat-icon>info</mat-icon>
+        {{ 'ADMIN.PADYATRA.DIALOG_SUBTITLE' | translate }}
+      </p>
 
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'ADMIN.YEAR' | translate }}</mat-label>
-      <input matInput type="number" formControlName="year" />
-      <mat-hint>{{ 'ADMIN.PADYATRA.YEAR_HINT' | translate }}</mat-hint>
-      <mat-error *ngIf="form.get('year')?.invalid">
-        {{ 'ADMIN.PADYATRA.YEAR_INVALID' | translate }}
-      </mat-error>
-    </mat-form-field>
-
-    <div class="row">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'ADMIN.PADYATRA.START_DATE' | translate }}</mat-label>
-        <input matInput type="date" formControlName="startDate" />
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'ADMIN.PADYATRA.NAME_GU' | translate }}</mat-label>
+        <mat-icon matPrefix>translate</mat-icon>
+        <input matInput formControlName="nameGu" maxlength="150" />
+        <mat-error *ngIf="form.get('nameGu')?.hasError('required')">
+          {{ 'ADMIN.REQUIRED' | translate }}
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'ADMIN.PADYATRA.END_DATE' | translate }}</mat-label>
-        <input matInput type="date" formControlName="endDate" />
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'ADMIN.PADYATRA.NAME_EN' | translate }}</mat-label>
+        <mat-icon matPrefix>badge</mat-icon>
+        <input matInput formControlName="nameEn" maxlength="150" />
+        <mat-error *ngIf="form.get('nameEn')?.hasError('required')">
+          {{ 'ADMIN.REQUIRED' | translate }}
+        </mat-error>
       </mat-form-field>
-    </div>
 
-    <div class="range-error" *ngIf="form.hasError('dateRange')">
-      {{ 'ADMIN.PADYATRA.DATE_RANGE' | translate }}
-    </div>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'ADMIN.YEAR' | translate }}</mat-label>
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <input matInput type="number" formControlName="year" />
+        <mat-hint>{{ 'ADMIN.PADYATRA.YEAR_HINT' | translate }}</mat-hint>
+        <mat-error *ngIf="form.get('year')?.invalid">
+          {{ 'ADMIN.PADYATRA.YEAR_INVALID' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </section>
 
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'ADMIN.PADYATRA.DESC_GU' | translate }}</mat-label>
-      <textarea matInput rows="2" formControlName="descriptionGu" maxlength="500"></textarea>
-    </mat-form-field>
+    <section class="form-section">
+      <div class="section-head">
+        <mat-icon>date_range</mat-icon>
+        <span>{{ 'ADMIN.PADYATRA.SECTION_SCHEDULE' | translate }}</span>
+      </div>
 
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'ADMIN.PADYATRA.DESC_EN' | translate }}</mat-label>
-      <textarea matInput rows="2" formControlName="descriptionEn" maxlength="500"></textarea>
-    </mat-form-field>
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ADMIN.PADYATRA.START_DATE' | translate }}</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate" placeholder="dd-mmm-yyyy" readonly (click)="startPicker.open()" />
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ADMIN.PADYATRA.END_DATE' | translate }}</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="dd-mmm-yyyy" readonly (click)="endPicker.open()" />
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="range-error" *ngIf="form.hasError('dateRange')">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ 'ADMIN.PADYATRA.DATE_RANGE' | translate }}</span>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="section-head">
+        <mat-icon>notes</mat-icon>
+        <span>{{ 'ADMIN.PADYATRA.SECTION_ABOUT' | translate }}</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'ADMIN.PADYATRA.DESC_GU' | translate }}</mat-label>
+        <textarea matInput rows="2" formControlName="descriptionGu" maxlength="500"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'ADMIN.PADYATRA.DESC_EN' | translate }}</mat-label>
+        <textarea matInput rows="2" formControlName="descriptionEn" maxlength="500"></textarea>
+      </mat-form-field>
+    </section>
 
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="cancel()">{{ 'ADMIN.CANCEL' | translate }}</button>
-    <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
-      {{ 'ADMIN.SAVE' | translate }}
+    <button mat-button class="btn-cancel" type="button" (click)="cancel()">{{ 'ADMIN.CANCEL' | translate }}</button>
+    <button mat-flat-button class="btn-save" type="submit" [disabled]="submitting">
+      <mat-icon>{{ isEdit ? 'check_circle' : 'save' }}</mat-icon> {{ 'ADMIN.SAVE' | translate }}
     </button>
   </mat-dialog-actions>
 </form>

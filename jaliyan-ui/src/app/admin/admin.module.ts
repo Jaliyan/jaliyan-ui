@@ -17,6 +17,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DdMmmYyyyDateAdapter, DD_MMM_YYYY_FORMATS } from './admin-date-formats';
 
 // Translation
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -29,8 +32,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { PadyatraManageComponent } from './padyatra-manage/padyatra-manage.component';
 import { PadyatraFormDialogComponent } from './padyatra-form-dialog/padyatra-form-dialog.component';
 import { StopManageComponent } from './stop-manage/stop-manage.component';
-import { StopFormDialogComponent } from './stop-form-dialog/stop-form-dialog.component';
 import { MenuItemManageComponent } from './menu-item-manage/menu-item-manage.component';
+import { MenuTypeManageComponent } from './menu-type-manage/menu-type-manage.component';
 import { PadyatraArchiveComponent } from './padyatra-archive/padyatra-archive.component';
 import { PadyatraBannerComponent } from './padyatra-banner/padyatra-banner.component';
 
@@ -44,8 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PadyatraManageComponent,
     PadyatraFormDialogComponent,
     StopManageComponent,
-    StopFormDialogComponent,
     MenuItemManageComponent,
+    MenuTypeManageComponent,
     PadyatraArchiveComponent,
     PadyatraBannerComponent
   ],
@@ -68,6 +71,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDividerModule,
     MatTabsModule,
     MatChipsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
@@ -76,6 +81,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
       extend: true
     })
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: DdMmmYyyyDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DD_MMM_YYYY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class AdminModule {}

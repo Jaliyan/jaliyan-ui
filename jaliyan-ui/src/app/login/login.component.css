@@ -124,6 +124,23 @@
   font-weight: 600;
   border-radius: var(--radius-md);
   position: relative;
+  transition: opacity .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+/* Clearly-disabled state (MDC doesn't style this strongly by default) */
+.login-button[disabled],
+.login-button.mat-mdc-button-disabled,
+.login-button:disabled {
+  background: var(--gold-soft) !important;
+  color: var(--ink-soft) !important;
+  box-shadow: none !important;
+  opacity: 1;
+  filter: grayscale(0.2);
+  cursor: not-allowed;
+}
+
+.login-button:not([disabled]):hover {
+  box-shadow: 0 10px 22px rgba(200, 109, 57, .35);
 }
 .login-button-label {
   display: inline-flex;

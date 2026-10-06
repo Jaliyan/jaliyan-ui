@@ -1,13 +1,10 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { FooditemsService } from '../services/fooditems.service';
 import { FoodItem } from '../common/fooditem.model';
 import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
+import { DataGridColumn } from '../shared/data-grid/data-grid.types';
 
 @Component({
   selector: 'app-food-menu',
@@ -15,16 +12,22 @@ import { ToastService } from '../services/toast.service';
   templateUrl: './food-menu.component.html',
   styleUrl: './food-menu.component.css'
 })
-export class FoodMenuComponent implements AfterViewInit, OnInit {
+export class FoodMenuComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatSidenav;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   newItem: FoodItem = { name: '', description: '' };
   isEditMode = false;
   currentItemId: number | null = null;
-  dataSource = new MatTableDataSource<FoodItem>([]);
-  displayedColumns: string[] = ['name', 'description', 'actions'];
+
+  /** Rows shown in the grid. */
+  items: FoodItem[] = [];
+
+  /** Grid column configuration. */
+  columns: DataGridColumn[] = [
+    { key: 'name', header: 'Name', type: 'text', sortable: true, filterable: true, icon: 'restaurant' },
+    { key: 'description', header: 'Description', type: 'text', sortable: true, filterable: true }
+  ];
+
   userName: any;
 
 
@@ -40,21 +43,11 @@ export class FoodMenuComponent implements AfterViewInit, OnInit {
 
   loadItems() {
     this.foodItemService.getItems().subscribe(data => {
-      this.dataSource.data = data;
-      // this.dataSource.paginator = this.paginator;
+      this.items = data;
     }, (err) => {
       this.toastService.show('Failed to load Menu Items.', 'error');
     }
     );
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    this.dataSource.filterPredicate = (data, filter) =>
-      data.name.toLowerCase().includes(filter) || data.description.toLowerCase().includes(filter);
-
   }
 
   openDrawer() {
@@ -136,10 +129,5 @@ export class FoodMenuComponent implements AfterViewInit, OnInit {
 
   closeDrawer() {
     this.drawer.close();
-  }
-
-  applyFilter(event: KeyboardEvent) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 }

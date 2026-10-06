@@ -1,64 +1,63 @@
-<mat-card class="padyatri-card modern-card">
-  <!-- Header -->
-  <mat-card-header>
-    <div mat-card-avatar class="avatar">
-      <img *ngIf="photoUrl; else defaultIcon" [src]="photoUrl" alt="Padyatri Photo">
-      <ng-template #defaultIcon>
-        <mat-icon>person</mat-icon>
-      </ng-template>
-    </div>
-    <div class="header-info">
-      <mat-card-title>{{ data.firstName }} {{ data.lastName }}</mat-card-title>
-      <mat-card-subtitle>Batch ID: {{ data.batchId | gujaratiConversion }}</mat-card-subtitle>
-    </div>
-  </mat-card-header>
+<div class="pv-dialog">
 
-  <!-- Content -->
-  <mat-card-content class="content-scroll">
-    <div class="info-section">
-      <div class="info-item">
-        <mat-icon>wc</mat-icon>
-        <span class="label">Gender:</span>
-        <span class="value">{{ data.gender | gujaratiConversion }}</span>
-      </div>
-      <div class="info-item">
-        <mat-icon>calendar_today</mat-icon>
-        <span class="label">Age:</span>
-        <span class="value">{{ data.age | gujaratiConversion }}</span>
-      </div>
+  <!-- Header banner -->
+  <div class="pv-header">
+    <button mat-icon-button class="pv-close-x" (click)="closeDialog()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="pv-avatar">
+      <img *ngIf="photoUrl; else defaultIcon" [src]="photoUrl" alt="Padyatri Photo" />
+      <ng-template #defaultIcon><mat-icon>person</mat-icon></ng-template>
     </div>
 
-    <div class="info-section">
-      <div class="info-item">
-        <mat-icon>phone</mat-icon>
-        <span class="label">Mobile:</span>
-        <span class="value">{{ data.mobile }}</span>
-      </div>
-      <div class="info-item">
-        <mat-icon>home</mat-icon>
-        <span class="label">Address:</span>
-        <span class="value">{{ data.address || '-' }}</span>
-      </div>
+    <div class="pv-title">{{ data.firstName }} {{ data.lastName }}</div>
+    <div class="pv-badges">
+      <span class="pv-batch">{{ 'BatchID' | translate }}: {{ data.batchId | gujaratiConversion }}</span>
+      <span class="pv-status" [class.returned]="data.isReturn">
+        {{ (data.isReturn ? 'Returned' : 'Active') | translate }}
+      </span>
     </div>
+  </div>
 
-    <div class="info-section">
-      <div class="info-item">
-        <mat-icon>emergency</mat-icon>
-        <span class="label">Emergency Name:</span>
-        <span class="value">{{ data.emergencyContactName }}</span>
-      </div>
-      <div class="info-item">
-        <mat-icon>call</mat-icon>
-        <span class="label">Emergency Phone:</span>
-        <span class="value">{{ data.emergencyContactNumber }}</span>
-      </div>
+  <!-- Details -->
+  <div class="pv-body">
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>wc</mat-icon></span>
+      <span class="pv-label">{{ 'Gender' | translate }}</span>
+      <span class="pv-value">{{ (data.gender | translate) || '-' }}</span>
     </div>
-  </mat-card-content>
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>cake</mat-icon></span>
+      <span class="pv-label">{{ 'Age' | translate }}</span>
+      <span class="pv-value">{{ data.age | gujaratiConversion }}</span>
+    </div>
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>call</mat-icon></span>
+      <span class="pv-label">{{ 'Mobile' | translate }}</span>
+      <span class="pv-value">{{ data.mobile || '-' }}</span>
+    </div>
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>home</mat-icon></span>
+      <span class="pv-label">{{ 'Address' | translate }}</span>
+      <span class="pv-value">{{ data.address || '-' }}</span>
+    </div>
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>emergency</mat-icon></span>
+      <span class="pv-label">{{ 'EmergencyContactName' | translate }}</span>
+      <span class="pv-value">{{ data.emergencyContactName || '-' }}</span>
+    </div>
+    <div class="pv-item">
+      <span class="pv-ico"><mat-icon>contact_phone</mat-icon></span>
+      <span class="pv-label">{{ 'EmergencyContactNumber' | translate }}</span>
+      <span class="pv-value">{{ data.emergencyContactNumber || '-' }}</span>
+    </div>
+  </div>
 
   <!-- Footer -->
-  <mat-card-actions align="end">
-    <button mat-raised-button color="primary" (click)="closeDialog()">
-      <mat-icon>close</mat-icon> Close
+  <div class="pv-actions">
+    <button mat-flat-button class="pv-close" (click)="closeDialog()">
+      <mat-icon>check</mat-icon> {{ 'Close' | translate }}
     </button>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</div>

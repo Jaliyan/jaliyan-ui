@@ -1,82 +1,213 @@
+/* =========================================================
+   MENU INFO (public info dashboard) — Sandy Shores theme.
+========================================================= */
+
 .dashboard-wrapper {
   max-width: 960px;
   margin: 0 auto;
-  padding: 16px;
-  font-family: 'Noto Sans Gujarati', 'Segoe UI', sans-serif;
-  color: #333;
+  padding: 24px 16px 48px;
+  font-family: var(--font-sans, 'Noto Sans Gujarati', sans-serif);
+  color: var(--ink, #2C2927);
+}
+
+/* ---------- HEADER ---------- */
+.dashboard-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--color-primary-dark, var(--color-primary));
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold, #CBA378), transparent);
 }
 
 .dashboard-header {
-  font-size: 2rem;
-  color: #f57c00;
-  margin-bottom: 24px;
-  text-align: center;
+  margin: 0;
+  font-family: var(--font-serif, serif);
+  font-weight: 600;
+  color: var(--deep, var(--color-primary));
+  font-size: 28px;
+  line-height: 1.15;
 }
 
+.dashboard-sub {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-soft, #766B5E);
+}
+
+/* ---------- PANELS ---------- */
 mat-expansion-panel {
-  margin-bottom: 24px;
-  border-radius: 12px !important;
-  background: white;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #f57c00;
+  margin-bottom: 18px;
+  border-radius: var(--radius-lg, 16px) !important;
+  background: var(--ivory, #FBF6EC);
+  box-shadow: var(--shadow-1, 0 2px 8px rgba(60, 48, 36, 0.08));
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  overflow: hidden;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 mat-expansion-panel:hover {
-  box-shadow: 0 8px 24px rgba(245, 124, 0, 0.3);
-  border-color: #e65a00;
+  box-shadow: var(--shadow-2, 0 6px 18px rgba(0, 0, 0, .1));
+  border-color: var(--gold, #CBA378);
 }
 
 .mat-expansion-panel-header {
-  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
-  color: #f57c00;
-  font-weight: 700;
-  padding: 16px 24px;
+  background: var(--sand, #F3EBDC);
+  padding: 8px 20px;
+  height: 62px;
 }
 
+.mat-expansion-panel-header.mat-expanded {
+  border-bottom: 1px solid var(--gold-soft, #E7D6BC);
+}
+
+.date-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-serif, serif);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--deep, var(--color-primary));
+}
+
+.date-chip {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary, #C86D39);
+  background: var(--gold-soft, #E7D6BC);
+}
+
+.date-chip mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- TABLE ---------- */
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 3%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  margin-top: 8px;
+  border-radius: var(--radius-md, 12px);
   overflow: hidden;
   table-layout: fixed;
 }
 
 .dashboard-table thead {
-  background-color: #f5e0b3;
-  color: #000;
+  background: var(--ivory, #FBF6EC);
+  color: var(--deep, var(--color-primary));
+  border-bottom: 2px solid var(--gold-soft, #E7D6BC);
+}
+
+.dashboard-table th {
   font-weight: 700;
-  border-bottom: 2px solid #f57c00;
+  font-size: 12px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
 }
 
 .dashboard-table th,
 .dashboard-table td {
   padding: 14px 16px;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 1rem;
+  border-bottom: 1px solid #f0e8d8;
+  font-size: 15px;
   word-wrap: break-word;
+  color: var(--ink, #2C2927);
+}
+
+.dashboard-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .dashboard-table tbody tr:hover {
-  background-color: #fff3e0;
+  background: rgba(231, 214, 188, .28);
 }
 
-.dashboard-table td:nth-child(1) {
-  white-space: nowrap;
+.meal-type {
+  font-weight: 700;
+  color: var(--color-primary-dark, #A9552A);
 }
 
-/* Mobile Responsive */
+.muted {
+  color: var(--color-text-soft, #766B5E);
+}
+
+.map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #EA4335;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.map-link mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.map-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- EMPTY / STATUS ---------- */
+.empty {
+  text-align: center;
+  color: var(--color-text-soft, #766B5E);
+  padding: 48px 20px;
+}
+
+.empty mat-icon {
+  font-size: 46px;
+  width: 46px;
+  height: 46px;
+  color: var(--gold, #CBA378);
+  margin-bottom: 8px;
+}
+
+.loading, .error {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 16px;
+  color: var(--color-text-soft, #766B5E);
+}
+
+.error {
+  color: #c0392b;
+}
+
+/* ---------- MOBILE ---------- */
 @media (max-width: 768px) {
   .dashboard-wrapper {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  mat-expansion-panel {
-    margin-bottom: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .dashboard-table thead {
@@ -85,9 +216,9 @@ mat-expansion-panel:hover {
 
   .dashboard-table tbody tr {
     display: block;
-    background: #fffdf8;
-    border: 1px solid #f5e0b3;
-    border-radius: 8px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--gold-soft, #E7D6BC);
+    border-radius: 10px;
     margin-bottom: 12px;
     padding: 0;
   }
@@ -96,15 +227,20 @@ mat-expansion-panel:hover {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 10px 12px;
-    font-size: 0.9rem;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #f0e8d8;
+  }
+
+  .dashboard-table tbody tr td:last-child {
+    border-bottom: none;
   }
 
   .dashboard-table tbody tr td::before {
     content: attr(data-label);
-    font-weight: 600;
-    color: #f57c00;
-    flex: 0 0 40%;
+    font-weight: 700;
+    color: var(--deep, var(--color-primary));
+    flex: 0 0 38%;
     text-align: left;
     margin-right: 10px;
   }
@@ -114,14 +250,4 @@ mat-expansion-panel:hover {
     flex: 1;
     word-break: break-word;
   }
-}
-
-.loading, .error {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 1.2rem;
-}
-
-.error {
-  color: red;
 }

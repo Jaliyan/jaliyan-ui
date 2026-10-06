@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { LanguageService } from '../services/language.service';
+import { PwaService } from '../services/pwa.service';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,8 @@ export class HeaderComponent {
   private langSub!: Subscription;
   private destroy$ = new Subject<void>();
 
-  constructor(private authService: AuthService, private languageService: LanguageService) {
+  constructor(private authService: AuthService, private languageService: LanguageService,
+    public pwa: PwaService) {
 
     this.authSubscription = this.authService.isLoggedIn$.subscribe((isLoggedIn: boolean) => {
       this.isLoggedIn = isLoggedIn;  // Update the login status when the auth state changes
@@ -56,5 +58,9 @@ export class HeaderComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  installApp(): void {
+    this.pwa.promptInstall();
   }
 }

@@ -40,6 +40,12 @@ export class AdminDashboardComponent implements OnInit {
       route: '/admin/menu-items'
     },
     {
+      title: 'Menu Types',
+      description: 'Maintain meal types (breakfast, lunch, dinner, prasad).',
+      icon: 'lunch_dining',
+      route: '/admin/menu-types'
+    },
+    {
       title: 'Menu Planner',
       description: 'Plan which menu is served on which day and meal.',
       icon: 'calendar_month',

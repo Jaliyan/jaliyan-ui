@@ -1,113 +1,198 @@
 <div class="registration-container">
-  <mat-card class="registration-card">
-    <!-- Title -->
-    <div class="form-title">
-      <img src="../../assets/images/Logo1.jpg" alt="Logo" />
-      <h2>Padyatri Registration</h2>
+  <div class="registration-card">
+
+    <!-- Header -->
+    <div class="form-header">
+      <div class="logo-ring">
+        <img src="assets/images/Logo1.jpg" alt="Logo" />
+      </div>
+      <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+      <h2 class="title">{{ 'PadyatriRegistration' | translate }}</h2>
+    </div>
+
+    <!-- Quick-fill from previous years (add mode only) -->
+    <div class="prefill" *ngIf="!editingId">
+      <div class="prefill-head">
+        <mat-icon class="lead">manage_search</mat-icon>
+        <div class="prefill-head-text">
+          <span class="prefill-title">{{ 'PrefillFromPast' | translate }}</span>
+          <span class="prefill-sub">{{ 'PrefillHint' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="prefill-search-row">
+        <mat-form-field appearance="outline" class="prefill-field">
+          <mat-label>{{ 'SearchByNamePhone' | translate }}</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [formControl]="prefillControl" (keyup.enter)="runPrefillSearch()"
+                 [placeholder]="'SearchByNamePhone' | translate" />
+        </mat-form-field>
+        <button type="button" mat-flat-button class="btn-search" (click)="runPrefillSearch()" [disabled]="prefillLoading">
+          <mat-icon>search</mat-icon> {{ 'Search' | translate }}
+        </button>
+      </div>
+
+      <div class="prefill-loading" *ngIf="prefillLoading">
+        <mat-spinner diameter="22"></mat-spinner>
+        <span>{{ 'Loading' | translate }}</span>
+      </div>
+
+      <ul class="prefill-results" *ngIf="!prefillLoading && prefillResults.length">
+        <li *ngFor="let opt of prefillResults" (click)="applyPrefill(opt)">
+          <span class="pr-avatar"><mat-icon>person</mat-icon></span>
+          <span class="pr-info">
+            <span class="pr-name">{{ opt.fullName }}</span>
+            <span class="pr-meta">
+              <span class="pr-mobile" *ngIf="opt.padyatri.mobile"><mat-icon>call</mat-icon>{{ opt.padyatri.mobile }}</span>
+              <span class="pr-year" *ngIf="opt.year">{{ opt.year }}</span>
+            </span>
+          </span>
+          <mat-icon class="pr-pick">arrow_forward</mat-icon>
+        </li>
+      </ul>
+
+      <div class="prefill-empty" *ngIf="!prefillLoading && prefillSearched && !prefillResults.length">
+        {{ 'NoPadyatriFound' | translate }}
+      </div>
+    </div>
+
+    <!-- Prefilled notice -->
+    <div class="prefill-note" *ngIf="prefilledFrom">
+      <mat-icon>auto_awesome</mat-icon>
+      <span class="pn-text">
+        {{ 'PrefilledNote' | translate }} <strong>{{ prefilledFrom.fullName }}</strong>
+        <ng-container *ngIf="prefilledFrom.year"> ({{ prefilledFrom.year }})</ng-container>
+      </span>
+      <button type="button" class="pn-clear" (click)="clearPrefill()" [attr.aria-label]="'Clear' | translate">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
 
     <!-- Form -->
     <form [formGroup]="padyatriForm" (ngSubmit)="onSubmit()" class="form-grid">
 
-      <!-- Name Row -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstName" required />
-          <mat-error *ngIf="padyatriForm.get('firstName')?.hasError('required') && (padyatriForm.get('firstName')?.touched || formSubmitted)">
-            First Name is required
-          </mat-error>
-        </mat-form-field>
+      <!-- Personal Details -->
+      <section class="form-section span-2">
+        <div class="section-head"><mat-icon>person</mat-icon> {{ 'PersonalDetails' | translate }}</div>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastName" required />
-          <mat-error *ngIf="padyatriForm.get('lastName')?.hasError('required') && (padyatriForm.get('lastName')?.touched || formSubmitted)">
-            Last Name is required
-          </mat-error>
-        </mat-form-field>
-      </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'FirstName' | translate }}</mat-label>
+            <input matInput formControlName="firstName" required />
+            <mat-error *ngIf="padyatriForm.get('firstName')?.hasError('required') && (padyatriForm.get('firstName')?.touched || formSubmitted)">
+              {{ 'RequiredField' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-      <!-- Age & Gender Row -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Age</mat-label>
-          <input matInput type="number" formControlName="age" required />
-          <mat-error *ngIf="padyatriForm.get('age')?.hasError('required') && (padyatriForm.get('age')?.touched || formSubmitted)">
-            Age is required
-          </mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'LastName' | translate }}</mat-label>
+            <input matInput formControlName="lastName" required />
+            <mat-error *ngIf="padyatriForm.get('lastName')?.hasError('required') && (padyatriForm.get('lastName')?.touched || formSubmitted)">
+              {{ 'RequiredField' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Gender</mat-label>
-          <mat-select formControlName="gender" required>
-            <mat-option value="">-- Select Gender --</mat-option>
-            <mat-option value="Male">Male</mat-option>
-            <mat-option value="Female">Female</mat-option>
-            <mat-option value="Other">Other</mat-option>
-          </mat-select>
-          <mat-error *ngIf="padyatriForm.get('gender')?.hasError('required') && (padyatriForm.get('gender')?.touched || formSubmitted)">
-            Gender is required
-          </mat-error>
-        </mat-form-field>
-      </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'Age' | translate }}</mat-label>
+            <input matInput type="number" formControlName="age" required />
+            <mat-error *ngIf="padyatriForm.get('age')?.hasError('required') && (padyatriForm.get('age')?.touched || formSubmitted)">
+              {{ 'RequiredField' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-      <!-- Contact Row -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Mobile</mat-label>
-          <input matInput formControlName="mobile" required />
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'Gender' | translate }}</mat-label>
+            <mat-select formControlName="gender" required>
+              <mat-option value="Male">{{ 'Male' | translate }}</mat-option>
+              <mat-option value="Female">{{ 'Female' | translate }}</mat-option>
+              <mat-option value="Other">{{ 'Other' | translate }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="padyatriForm.get('gender')?.hasError('required') && (padyatriForm.get('gender')?.touched || formSubmitted)">
+              {{ 'RequiredField' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </section>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Alternate Number</mat-label>
-          <input matInput formControlName="alternateNumber" />
-        </mat-form-field>
-      </div>
+      <!-- Contact Details -->
+      <section class="form-section">
+        <div class="section-head"><mat-icon>call</mat-icon> {{ 'ContactDetails' | translate }}</div>
 
-      <!-- Emergency Contact Row -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Emergency Contact Name</mat-label>
-          <input matInput formControlName="emergencyContactName" />
-        </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'Mobile' | translate }}</mat-label>
+            <input matInput formControlName="mobile" required />
+            <mat-error *ngIf="padyatriForm.get('mobile')?.hasError('required') && (padyatriForm.get('mobile')?.touched || formSubmitted)">
+              {{ 'RequiredField' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Emergency Contact Number</mat-label>
-          <input matInput formControlName="emergencyContactNumber" />
-        </mat-form-field>
-      </div>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'AlternateNumber' | translate }}</mat-label>
+            <input matInput formControlName="alternateNumber" />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <!-- Emergency Contact -->
+      <section class="form-section">
+        <div class="section-head"><mat-icon>emergency</mat-icon> {{ 'EmergencyContact' | translate }}</div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'EmergencyContactName' | translate }}</mat-label>
+            <input matInput formControlName="emergencyContactName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'EmergencyContactNumber' | translate }}</mat-label>
+            <input matInput formControlName="emergencyContactNumber" />
+          </mat-form-field>
+        </div>
+      </section>
 
       <!-- Address -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Address</mat-label>
-          <textarea matInput formControlName="address"></textarea>
-        </mat-form-field>
-      </div>
+      <section class="form-section">
+        <div class="section-head"><mat-icon>home</mat-icon> {{ 'Address' | translate }}</div>
 
-      <!-- Photo Upload -->
-      <div class="form-row">
-        <div class="form-field photo-upload-wrapper">
-          <button type="button" class="upload-button" (click)="fileInput.click()">Choose Photo</button>
-          <span class="file-name" *ngIf="selectedPhotoFile">{{ selectedPhotoFile.name }}</span>
-          <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display: none;" />
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full">
+            <mat-label>{{ 'Address' | translate }}</mat-label>
+            <textarea matInput rows="3" formControlName="address"></textarea>
+          </mat-form-field>
         </div>
-        <div class="photo-upload-container" *ngIf="preview">
-          <img [src]="preview" class="photo-preview" />
-        </div>
-      </div>
+      </section>
 
-      <!-- Buttons -->
-      <div class="form-actions">
-        <div class="button-group">
-          <button mat-raised-button color="primary" type="button" (click)="router.navigate(['/padyatri/list'])">Back</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="padyatriForm.invalid || submitting">
-            {{ editingId ? 'Update' : 'Register' }}
+      <!-- Photo -->
+      <section class="form-section">
+        <div class="section-head"><mat-icon>photo_camera</mat-icon> {{ 'PhotoUpload' | translate }}</div>
+
+        <div class="photo-row">
+          <button type="button" class="upload-button" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon> {{ 'ChoosePhoto' | translate }}
           </button>
+          <span class="file-name" *ngIf="selectedPhotoFile">{{ selectedPhotoFile.name }}</span>
+          <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
+
+          <div class="photo-preview-wrap" *ngIf="preview">
+            <img [src]="preview" class="photo-preview" alt="Preview" />
+          </div>
         </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button mat-stroked-button class="btn-back" type="button" (click)="router.navigate(['/padyatri/list'])">
+          <mat-icon>arrow_back</mat-icon> {{ 'Back' | translate }}
+        </button>
+        <button mat-flat-button class="btn-submit" type="submit" [disabled]="padyatriForm.invalid || submitting">
+          <mat-icon>{{ editingId ? 'save' : 'person_add' }}</mat-icon>
+          {{ (editingId ? 'Update' : 'Register') | translate }}
+        </button>
       </div>
 
     </form>
-  </mat-card>
+  </div>
 </div>

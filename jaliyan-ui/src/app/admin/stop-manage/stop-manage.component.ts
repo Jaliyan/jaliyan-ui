@@ -1,18 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators, AbstractControl } from '@angular/forms';
 import { StopService } from '../../services/stop.service';
 import { PadyatraService } from '../../services/padyatra.service';
-import { MenuplannerService } from '../../services/menuplanner.service';
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../services/auth.service';
 import { Padyatra } from '../../common/padyatra.model';
 import { Stop } from '../../common/stop.model';
-import { StopFormDialogComponent } from '../stop-form-dialog/stop-form-dialog.component';
-
-interface DayGroup {
-  dayNumber: number;
-  stops: Stop[];
-}
 
 @Component({
   selector: 'app-stop-manage',
@@ -21,30 +14,38 @@ interface DayGroup {
   standalone: false
 })
 export class StopManageComponent implements OnInit {
-  /** Stops are always managed for the single ACTIVE padyatra. Past years are read-only in the archive. */
+  /** Stops are managed for the single ACTIVE padyatra. Past years are read-only in the archive. */
   activePadyatra: Padyatra | null = null;
-  dayGroups: DayGroup[] = [];
+  stops: Stop[] = [];
   loading = true;
+  saving = false;
+  form!: FormGroup;
+  editingId: number | null = null;
   userName: string;
-  private mealTypeNames = new Map<number, string>();
+
+  @ViewChild(FormGroupDirective) private formDir?: FormGroupDirective;
 
   constructor(
     private stopService: StopService,
     private padyatraService: PadyatraService,
-    private menuService: MenuplannerService,
     private toast: ToastService,
     private auth: AuthService,
-    private dialog: MatDialog
+    private fb: FormBuilder
   ) {
     this.userName = this.auth.getUsername() || 'Admin';
   }
 
   ngOnInit(): void {
-    this.loading = true;
-    this.menuService.getMealTypes().subscribe({
-      next: (types) => (types ?? []).forEach(t => this.mealTypeNames.set(t.mealTypeId, t.name)),
-      error: () => {}
+    this.form = this.fb.group({
+      nameGu: ['', [Validators.required, Validators.maxLength(150)]],
+      nameEn: ['', [Validators.required, Validators.maxLength(150)]],
+      mapUrl: ['', [
+        Validators.maxLength(500),
+        (control: AbstractControl) => control.value ? Validators.pattern(/^https?:\/\/.+/)(control) : null
+      ]]
     });
+
+    this.loading = true;
     this.padyatraService.getActive().subscribe({
       next: (p) => {
         this.activePadyatra = p ?? null;
@@ -63,14 +64,14 @@ export class StopManageComponent implements OnInit {
 
   loadStops(): void {
     if (!this.activePadyatra) {
-      this.dayGroups = [];
+      this.stops = [];
       this.loading = false;
       return;
     }
     this.loading = true;
     this.stopService.getByPadyatra(this.activePadyatra.padyatraId).subscribe({
       next: (stops) => {
-        this.dayGroups = this.groupByDay(stops ?? []);
+        this.stops = stops ?? [];
         this.loading = false;
       },
       error: () => {
@@ -80,57 +81,71 @@ export class StopManageComponent implements OnInit {
     });
   }
 
-  private groupByDay(stops: Stop[]): DayGroup[] {
-    const map = new Map<number, Stop[]>();
-    for (const s of stops) {
-      const day = s.dayNumber ?? 1;
-      if (!map.has(day)) map.set(day, []);
-      map.get(day)!.push(s);
-    }
-    return Array.from(map.entries())
-      .sort((a, b) => a[0] - b[0])
-      .map(([dayNumber, list]) => ({
-        dayNumber,
-        stops: list.sort((a, b) => (a.sequence ?? 0) - (b.sequence ?? 0))
-      }));
+  edit(stop: Stop): void {
+    this.editingId = stop.stopId ?? null;
+    this.form.patchValue({
+      nameGu: stop.nameGu,
+      nameEn: stop.nameEn,
+      mapUrl: stop.mapUrl ?? ''
+    });
   }
 
-  openForm(stop?: Stop): void {
+  cancelEdit(): void {
+    this.editingId = null;
+    this.formDir?.resetForm({ nameGu: '', nameEn: '', mapUrl: '' });
+    this.form.reset({ nameGu: '', nameEn: '', mapUrl: '' });
+  }
+
+  save(): void {
     if (!this.activePadyatra) {
       this.toast.show('Activate a padyatra first.', 'warning');
       return;
     }
-    const ref = this.dialog.open(StopFormDialogComponent, {
-      width: '560px',
-      maxWidth: '95vw',
-      maxHeight: '90vh',
-      data: {
-        padyatraId: this.activePadyatra.padyatraId,
-        stop: stop ? { ...stop } : null
+    if (this.form.invalid || this.saving) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    this.saving = true;
+    const v = this.form.value;
+    const base = {
+      padyatraId: this.activePadyatra.padyatraId,
+      nameGu: v.nameGu.trim(),
+      nameEn: v.nameEn.trim(),
+      mapUrl: (v.mapUrl || '').trim()
+    };
+
+    const request$ = this.editingId
+      ? this.stopService.update({ ...base, stopId: this.editingId, updatedBy: this.userName })
+      : this.stopService.create({ ...base, createdBy: this.userName });
+
+    request$.subscribe({
+      next: () => {
+        this.toast.show(this.editingId ? 'Stop updated.' : 'Stop added.', 'success');
+        this.saving = false;
+        this.cancelEdit();
+        this.loadStops();
+      },
+      error: () => {
+        this.saving = false;
+        this.toast.show('Failed to save stop.', 'error');
       }
-    });
-    ref.afterClosed().subscribe((saved) => {
-      if (saved) this.loadStops();
     });
   }
 
   remove(stop: Stop): void {
-    const ok = confirm(`Delete stop "${stop.nameEn}" (Day ${stop.dayNumber})?`);
+    const ok = confirm(`Delete stop "${stop.nameEn}"?`);
     if (!ok) return;
     this.stopService.delete(stop.stopId, this.userName).subscribe({
       next: () => {
         this.toast.show('Stop deleted.', 'success');
+        if (this.editingId === stop.stopId) this.cancelEdit();
         this.loadStops();
       },
-      error: () => this.toast.show('Failed to delete stop.', 'error')
+      error: () => this.toast.show('Failed to delete. It may be used in a planned menu.', 'error')
     });
   }
 
   openMap(stop: Stop): void {
     if (stop.mapUrl) window.open(stop.mapUrl, '_blank', 'noopener');
-  }
-
-  mealTypeName(stop: Stop): string {
-    return stop.mealTypeId != null ? (this.mealTypeNames.get(stop.mealTypeId) ?? '') : '';
   }
 }

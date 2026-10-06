@@ -1,0 +1,169 @@
+<!-- Toolbar: global search + quick filter chips -->
+<div class="toolbar" *ngIf="searchable || quickFilterOptions.length">
+  <div class="search" *ngIf="searchable">
+    <mat-icon>search</mat-icon>
+    <input type="text" [placeholder]="searchPlaceholder | translate" (input)="onSearch($event)" />
+  </div>
+
+  <div class="filters" *ngIf="quickFilterOptions.length">
+    <button type="button" class="chip-filter"
+      *ngFor="let f of quickFilterOptions"
+      [class.active]="activeQuickFilter === f.key"
+      (click)="setQuickFilter(f.key)">
+      {{ f.translate ? (f.label | translate) : f.label }}
+    </button>
+  </div>
+</div>
+
+<!-- DESKTOP TABLE VIEW -->
+<div *ngIf="!isMobile" class="table-card">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!col.sortable">
+        <div class="th-inner">
+          <span class="th-label">{{ col.translateHeader ? (col.header | translate) : col.header }}</span>
+          <button *ngIf="col.filterable" type="button" mat-icon-button class="filter-btn"
+            [class.active]="isColumnFiltered(col.key)"
+            [matMenuTriggerFor]="filterMenu"
+            (click)="$event.stopPropagation(); openColumnMenu(col)"
+            [matTooltip]="'Filter' | translate">
+            <mat-icon>filter_alt</mat-icon>
+          </button>
+        </div>
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        <ng-container [ngSwitch]="col.type">
+
+          <div *ngSwitchCase="'avatar'" class="person">
+            <div class="avatar" [ngClass]="getAvatarClass(row)">{{ getInitials(col, row) }}</div>
+            <div class="person-text">
+              <div class="pname">{{ getCellText(col, row) }}</div>
+              <div class="psub" *ngIf="getSubtitle(col, row)">{{ getSubtitle(col, row) }}</div>
+            </div>
+          </div>
+
+          <span *ngSwitchCase="'badge'" class="batch-badge">
+            <mat-icon *ngIf="col.icon" class="badge-ico">{{ col.icon }}</mat-icon>
+            {{ getCellText(col, row) }}
+          </span>
+
+          <span *ngSwitchCase="'status'" class="status"
+            [class.is-positive]="isStatusPositive(col, row)" [class.is-neutral]="!isStatusPositive(col, row)">
+            {{ col.translateStatus ? (getStatusLabel(col, row) | translate) : getStatusLabel(col, row) }}
+          </span>
+
+          <span *ngSwitchDefault class="text-cell">
+            <mat-icon *ngIf="col.icon" class="cell-ico">{{ col.icon }}</mat-icon>
+            {{ getCellText(col, row) }}
+          </span>
+
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="__actions">
+      <th mat-header-cell *matHeaderCellDef class="actions-head">{{ actionsHeader | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row }"></ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="empty-row" *matNoDataRow>
+      <td class="empty" [attr.colspan]="displayedColumns.length">
+        <mat-icon>search_off</mat-icon>
+        <div>{{ 'NoRecordsFound' | translate }}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- MOBILE CARD VIEW -->
+<div *ngIf="isMobile" class="card-grid">
+  <mat-card class="p-card" *ngFor="let row of dataSource.filteredData" (click)="onRowClick(row)">
+    <div class="top" *ngIf="avatarColumn || badgeColumn">
+      <div class="avatar" [ngClass]="getAvatarClass(row)" *ngIf="avatarColumn">{{ getInitials(avatarColumn, row) }}</div>
+      <div class="pname" *ngIf="avatarColumn">{{ getCellText(avatarColumn, row) }}</div>
+      <span class="batch-badge" *ngIf="badgeColumn">
+        <mat-icon *ngIf="badgeColumn.icon" class="badge-ico">{{ badgeColumn.icon }}</mat-icon>
+        {{ getCellText(badgeColumn, row) }}
+      </span>
+    </div>
+
+    <div class="meta">
+      <div class="line" *ngFor="let col of mobileMetaColumns">
+        <ng-container [ngSwitch]="col.type">
+          <span *ngSwitchCase="'status'" class="status"
+            [class.is-positive]="isStatusPositive(col, row)" [class.is-neutral]="!isStatusPositive(col, row)">
+            {{ col.translateStatus ? (getStatusLabel(col, row) | translate) : getStatusLabel(col, row) }}
+          </span>
+          <ng-container *ngSwitchDefault>
+            <mat-icon inline *ngIf="col.icon">{{ col.icon }}</mat-icon>
+            <span>{{ getCellText(col, row) }}</span>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="actionsTemplate"></mat-divider>
+
+    <div class="foot" *ngIf="actionsTemplate">
+      <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row }"></ng-container>
+    </div>
+  </mat-card>
+
+  <div class="empty" *ngIf="dataSource.filteredData.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <div>{{ 'NoRecordsFound' | translate }}</div>
+  </div>
+</div>
+
+<!-- Paginator -->
+<mat-paginator
+  [length]="dataSource.filteredData.length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  showFirstLastButtons>
+</mat-paginator>
+
+<!-- Excel-style column filter menu (shared by all columns) -->
+<mat-menu #filterMenu="matMenu" class="col-filter-menu" xPosition="before">
+  <div class="cfm" *ngIf="activeMenuColumn as col" (click)="$event.stopPropagation()"
+    (keydown)="$event.stopPropagation()">
+    <div class="cfm-search">
+      <mat-icon>search</mat-icon>
+      <input type="text" [placeholder]="'Filter' | translate"
+        [value]="menuSearch[col.key] || ''" (input)="onMenuSearch(col.key, $event)" />
+    </div>
+
+    <label class="cfm-item cfm-all">
+      <mat-checkbox [checked]="isAllSelected(col)" [indeterminate]="isIndeterminate(col)"
+        (change)="toggleSelectAll(col, $event.checked)">
+        {{ 'SelectAll' | translate }}
+      </mat-checkbox>
+    </label>
+
+    <div class="cfm-list">
+      <label class="cfm-item" *ngFor="let v of getVisibleDistinct(col)">
+        <mat-checkbox [checked]="isValueSelected(col.key, v)"
+          (change)="toggleValue(col, v, $event.checked)">
+          {{ v || '—' }}
+        </mat-checkbox>
+      </label>
+      <div class="cfm-empty" *ngIf="getVisibleDistinct(col).length === 0">
+        {{ 'NoRecordsFound' | translate }}
+      </div>
+    </div>
+
+    <div class="cfm-actions">
+      <button type="button" mat-button class="cfm-clear" (click)="clearColumnFilter(col.key)">
+        <mat-icon>filter_alt_off</mat-icon> {{ 'Clear' | translate }}
+      </button>
+    </div>
+  </div>
+</mat-menu>

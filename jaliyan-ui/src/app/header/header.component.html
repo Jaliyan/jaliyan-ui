@@ -13,10 +13,10 @@
     </div>
 
     <mat-nav-list>
-      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="drawer.close()">
         <mat-icon>home</mat-icon> {{ 'HOME' | translate }}
       </a>
-      <a mat-list-item routerLink="/infodashboard" routerLinkActive="active">
+      <a mat-list-item routerLink="/infodashboard" routerLinkActive="active" (click)="drawer.close()">
         <mat-icon>dining</mat-icon> Menu Info
       </a>
       <!-- <a mat-list-item routerLink="/about" routerLinkActive="active">
@@ -27,25 +27,25 @@
       </a> -->
 
       <ng-container *ngIf="!isLoggedIn">
-        <a mat-list-item routerLink="/login" routerLinkActive="active">
+        <a mat-list-item routerLink="/login" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>login</mat-icon> Login
         </a>
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn">
-        <a mat-list-item routerLink="/padyatri/list" routerLinkActive="active">
+        <a mat-list-item routerLink="/padyatri/list" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>dashboard-cards</mat-icon> Dashboard
         </a>
-        <a mat-list-item routerLink="/attendance/qrscan" routerLinkActive="active">
+        <a mat-list-item routerLink="/attendance/qrscan" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>how_to_reg</mat-icon> Attendance
         </a>
-        <a mat-list-item routerLink="/report" routerLinkActive="active">
+        <a mat-list-item routerLink="/report" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>analytics</mat-icon> Reports
         </a>
-        <a mat-list-item routerLink="/insurance/list" routerLinkActive="active">
+        <a mat-list-item routerLink="/insurance/list" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>health_and_safety</mat-icon> Insurance
         </a>
-        <a mat-list-item routerLink="/admin" routerLinkActive="active">
+        <a mat-list-item routerLink="/admin" routerLinkActive="active" (click)="drawer.close()">
           <mat-icon>admin_panel_settings</mat-icon> {{ 'ADMIN.TITLE' | translate }}
         </a>
         <!-- <a mat-list-item routerLink="/foodmenu" routerLinkActive="active">
@@ -55,10 +55,15 @@
           <mat-icon>calendar_today</mat-icon> Menu Planner
         </a> -->
 
-        <a mat-list-item (click)="logout()">
+        <a mat-list-item (click)="logout(); drawer.close()">
           <mat-icon>logout</mat-icon> Logout
         </a>
       </ng-container>
+
+      <a mat-list-item class="install-nav-item" *ngIf="pwa.installable$ | async"
+         (click)="installApp(); drawer.close()">
+        <mat-icon>install_mobile</mat-icon> {{ 'PWA.INSTALL_BUTTON' | translate }}
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
@@ -69,8 +74,22 @@
         <mat-icon class="hamburger-icon">menu</mat-icon>
       </button>
 
-      <a routerLink="/" class="logo-text">Shree Jalaram Padyatra</a>
+      <a routerLink="/" class="brand">
+        <span class="brand-mark">
+          <img src="../../assets/images/Logo.jpg" alt="" />
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Shree Jalaram Padyatra</span>
+          <span class="brand-sub">Sudamapuri · Virpurdham</span>
+        </span>
+      </a>
       <span class="spacer"></span>
+
+      <button mat-flat-button class="toolbar-install-btn" *ngIf="pwa.installable$ | async"
+        (click)="installApp()">
+        <mat-icon>install_mobile</mat-icon>
+        <span class="install-label">{{ 'PWA.INSTALL_BUTTON' | translate }}</span>
+      </button>
 
       <!-- <mat-select [(value)]="selectedLang" (selectionChange)="changeLanguage($event.value)" class="lang-select">
     <mat-option value="en">English</mat-option>
@@ -122,9 +141,10 @@
           </a> -->
 
           <!-- Dropdown Menu Trigger -->
+          <span class="nav-divider"></span>
           <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
             <img src="../../assets/images/Logo.jpg" alt="User Avatar" class="avatar-img" />
-            <span>Welcome, Jalaram</span>
+            <span class="user-name">Jalaram</span>
             <mat-icon class="dropdown-icon">expand_more</mat-icon>
           </button>
         </ng-container>
@@ -132,9 +152,10 @@
     </mat-toolbar>
 
     <!-- Dropdown Menu (Only when logged in) -->
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon> Logout
+    <mat-menu #userMenu="matMenu" class="user-menu-panel" xPosition="before">
+      <button mat-menu-item (click)="logout()" class="logout-menu-item">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
       </button>
     </mat-menu>
 

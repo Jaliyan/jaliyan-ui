@@ -1,5 +1,10 @@
 <div class="dashboard-wrapper">
-  <h1 class="dashboard-header">ભોજન કાર્યક્રમ</h1>
+
+  <div class="dashboard-head">
+    <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+    <h1 class="dashboard-header">ભોજન કાર્યક્રમ</h1>
+    <p class="dashboard-sub">દરેક દિવસ માટે ભોજન પ્રકાર, મેનુ અને સ્થળની માહિતી</p>
+  </div>
 
   <ng-container *ngIf="loading">
     <p class="loading">લોડ થઇ રહ્યું છે...</p>
@@ -10,10 +15,16 @@
   </ng-container>
 
   <ng-container *ngIf="!loading && !error">
+    <div class="empty" *ngIf="itinerary.length === 0">
+      <mat-icon>restaurant_menu</mat-icon>
+      <div>કોઈ ભોજન કાર્યક્રમ ઉપલબ્ધ નથી.</div>
+    </div>
+
     <mat-accordion multi>
-      <mat-expansion-panel *ngFor="let day of itinerary">
+      <mat-expansion-panel *ngFor="let day of itinerary" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title class="date-header">
+            <span class="date-chip"><mat-icon>calendar_today</mat-icon></span>
             {{ day.date }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -29,23 +40,20 @@
 
           <tbody>
             <tr *ngFor="let meal of day.meals">
-              <td data-label="ભોજન પ્રકાર">{{ meal.type }}</td>
+              <td data-label="ભોજન પ્રકાર"><span class="meal-type">{{ meal.type }}</span></td>
               <td data-label="મેનુ">
                 <ng-container *ngIf="meal.menu?.length; else noMenu">
                   {{ meal.menu.join(', ') }}
                 </ng-container>
-                <ng-template #noMenu>મેનુ ઉપલબ્ધ નથી</ng-template>
+                <ng-template #noMenu><span class="muted">મેનુ ઉપલબ્ધ નથી</span></ng-template>
               </td>
               <td data-label="સ્થળ">
                 <ng-container *ngIf="meal.location; else noLocation">
-                  <!-- <a href="https://www.google.com/maps/search/?api=1&query={{ meal.location.lat }},{{ meal.location.lng }}" target="_blank" rel="noopener">
-                    {{ meal.location.name }}
-                  </a> -->
-                  <a [href]="meal.location.mapUrl" target="_blank" rel="noopener">
-                    {{ meal.location.name }}
+                  <a class="map-link" [href]="meal.location.mapUrl" target="_blank" rel="noopener">
+                    <mat-icon>place</mat-icon> {{ meal.location.name }}
                   </a>
                 </ng-container>
-                <ng-template #noLocation>સ્થળ ઉપલબ્ધ નથી</ng-template>
+                <ng-template #noLocation><span class="muted">સ્થળ ઉપલબ્ધ નથી</span></ng-template>
               </td>
             </tr>
           </tbody>

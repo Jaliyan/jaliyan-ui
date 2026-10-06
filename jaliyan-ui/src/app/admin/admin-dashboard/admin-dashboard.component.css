@@ -1,87 +1,171 @@
+/* =========================================================
+   ADMIN DASHBOARD — Sandy Shores, mobile-first.
+========================================================= */
+
 .admin-dashboard {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
 }
 
-.admin-header h1 {
+/* ---------- PAGE HEADER ---------- */
+.page-header .heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--color-primary-dark, var(--color-primary));
+}
+
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold, #CBA378), transparent);
+}
+
+.title {
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.admin-header .subtitle {
-  color: rgba(0, 0, 0, 0.6);
-  margin-top: 0;
-}
-
-.active-banner {
-  margin: 12px 0 24px;
-  padding: 12px 16px;
-}
-
-.active-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.active-info.warn .active-name {
-  color: #b26a00;
-}
-
-.active-icon {
-  color: #2e7d32;
-}
-
-.active-info.warn .active-icon {
-  color: #b26a00;
-}
-
-.active-name {
+  gap: 10px;
+  font-family: var(--font-serif, serif);
   font-weight: 600;
-  font-size: 1.05rem;
+  color: var(--deep, var(--color-primary));
+  font-size: 26px;
+  line-height: 1.15;
 }
 
-.active-dates {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.9rem;
+.title mat-icon {
+  color: var(--color-primary);
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
 }
 
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-soft, #766B5E);
+}
+
+/* ---------- NO ACTIVE PADYATRA ---------- */
+.no-active {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md, 14px);
+  background: #fdf3e6;
+  border: 1px solid #f0d9b5;
+  color: #b26a00;
+  font-weight: 600;
+}
+
+.no-active mat-icon {
+  color: #d98324;
+}
+
+/* ---------- TILES ---------- */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 560px) {
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .tiles {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .tile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
   cursor: pointer;
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  padding: 18px;
+  border-radius: var(--radius-lg, 20px);
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  background: var(--color-surface, #fff);
+  box-shadow: var(--shadow-1, 0 1px 3px rgba(0, 0, 0, .08));
+  transition: transform .18s var(--ease, ease), box-shadow .18s var(--ease, ease), border-color .18s ease;
 }
 
 .tile:hover,
-.tile:focus {
+.tile:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-2, 0 6px 18px rgba(0, 0, 0, .08));
+  border-color: var(--color-primary);
   outline: none;
 }
 
 .tile-icon {
-  font-size: 42px;
-  height: 42px;
-  width: 42px;
-  color: #3f51b5;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--color-primary, #C86D39);
+  box-shadow: 0 6px 16px rgba(200, 109, 57, .28);
 }
 
-.tile h3 {
-  margin: 12px 0 6px;
+.tile-icon mat-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
 }
 
-.tile p {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.88rem;
-  margin: 0;
+.tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tile-title {
+  font-family: var(--font-serif, serif);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--deep, var(--color-primary));
+}
+
+.tile-desc {
+  font-size: 13px;
+  color: var(--color-text-soft, #766B5E);
+  line-height: 1.35;
+}
+
+.tile-go {
+  flex-shrink: 0;
+  color: var(--gold, #CBA378);
+  transition: transform .18s ease, color .18s ease;
+}
+
+.tile:hover .tile-go {
+  color: var(--color-primary);
+  transform: translateX(3px);
 }

@@ -241,14 +241,857 @@ button.mat-stroked-button:disabled {
   color: rgba(0, 0, 0, 0.26);
 }
 
-/* Change dropdown background and text color for MDC mat-select */
-.mat-mdc-select-panel {
-  background-color: #ffffff !important; /* white background */
-  color: #333333 !important;           /* dark text */
-  border-radius: 8px;
+/* Dropdown panel + option styling is defined once, lower down (themed block). */
+
+/* ==========================================================
+   UI POLISH — eyebrow, dropdowns, paginator, toast, footer
+========================================================== */
+
+/* ---- Symmetric eyebrow: decorative line on BOTH sides ---- */
+.eyebrow::after {
+  content: "";
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(270deg, var(--gold, #CBA378), transparent);
 }
 
-/* Hover effect for options */
-.mat-mdc-option:hover {
-  background-color: #e0e0e0 !important;
+/* ---- Detail dialogs: flush, rounded surface ---- */
+.padyatri-dialog .mat-mdc-dialog-surface,
+.mobile-card-dialog .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+}
+@media (max-width: 600px) {
+  .mobile-card-dialog .mat-mdc-dialog-surface {
+    border-radius: 16px !important;
+  }
+}
+
+/* ---- Admin add/edit dialogs: rounded, on-brand surface ---- */
+.admin-form-dialog .mat-mdc-dialog-surface {
+  border-radius: 20px !important;
+  padding: 0 !important;
+  font-family: var(--font-sans, inherit) !important;
+  background: var(--color-surface, #fff) !important;
+  box-shadow: 0 24px 60px rgba(44, 41, 39, .34) !important;
+  overflow: hidden;
+}
+.admin-form-dialog .mat-mdc-dialog-content {
+  font-family: var(--font-sans, inherit);
+  color: var(--color-text, #2C2927);
+  max-height: 62vh;
+}
+
+/* ===== Shared admin dialog chrome (header/body/sections/footer) =====
+   Any dialog opened with panelClass 'admin-form-dialog' + these class
+   names (.dialog-head, .dialog-body, .form-section, .hint, .btn-cancel,
+   .btn-save) automatically gets the same enterprise look. */
+
+/* Header: deep ocean blue, gold eyebrow, white serif title, clay accent */
+.admin-form-dialog .dialog-head {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0;
+  padding: 24px 22px 20px;
+  background: var(--deep, #2E4C63);
+  border-bottom: 3px solid var(--color-primary, #C86D39);
+  overflow: hidden;
+}
+.admin-form-dialog .dialog-head::after {
+  content: "";
+  position: absolute;
+  right: -50px;
+  top: -70px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 1px solid rgba(203, 163, 120, .22);
+  pointer-events: none;
+}
+.admin-form-dialog .dialog-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+.admin-form-dialog .dialog-head .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--gold, #CBA378);
+  line-height: 1.2;
+}
+.admin-form-dialog .dialog-head .eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold, #CBA378), transparent);
+}
+.admin-form-dialog .dialog-head h2.mat-mdc-dialog-title {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-serif, serif);
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: normal;
+}
+.admin-form-dialog .dialog-head h2.mat-mdc-dialog-title::before {
+  content: none;
+}
+.admin-form-dialog .head-close.mat-mdc-icon-button {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: rgba(255, 255, 255, .85);
+  border-radius: 10px;
+  transition: background .18s ease, color .18s ease;
+}
+.admin-form-dialog .head-close.mat-mdc-icon-button:hover {
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+}
+
+/* Body */
+.admin-form-dialog .dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 22px 10px !important;
+  background: var(--color-surface, #fff);
+}
+.admin-form-dialog .form-section {
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  border-radius: 16px;
+  background: var(--ivory, #FBF6EC);
+  padding: 16px 16px 6px;
+}
+.admin-form-dialog .section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 2px 12px;
+  font-family: var(--font-sans, inherit);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--deep, var(--color-primary));
+}
+.admin-form-dialog .section-head mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary, #C86D39);
+}
+
+/* Info note inside a section (matches manage screen hint) */
+.admin-form-dialog .hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 2px 14px;
+  color: var(--color-text-soft, #766B5E);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 14px;
+  font-family: var(--font-sans, inherit);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.admin-form-dialog .hint mat-icon {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+}
+
+.admin-form-dialog .dialog-body .mat-mdc-form-field {
+  width: 100%;
+  font-family: var(--font-sans, inherit);
+}
+.admin-form-dialog .dialog-body input.mat-mdc-input-element,
+.admin-form-dialog .dialog-body textarea.mat-mdc-input-element {
+  font-family: var(--font-sans, inherit);
+  font-size: 14.5px;
+  color: var(--color-text, #2C2927);
+}
+.admin-form-dialog .dialog-body .mat-mdc-form-field mat-icon[matprefix],
+.admin-form-dialog .dialog-body .mat-mdc-form-field mat-icon[matPrefix] {
+  color: var(--gold, #CBA378);
+  margin-right: 8px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+.admin-form-dialog .full {
+  width: 100%;
+}
+.admin-form-dialog .row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.admin-form-dialog .row mat-form-field {
+  flex: 1;
+  min-width: 140px;
+}
+.admin-form-dialog .range-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c0392b;
+  font-family: var(--font-sans, inherit);
+  font-size: 12.5px;
+  font-weight: 500;
+  margin: 2px 2px 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(192, 57, 43, .08);
+  border: 1px solid rgba(192, 57, 43, .2);
+}
+.admin-form-dialog .range-error mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+/* Footer */
+.admin-form-dialog .mat-mdc-dialog-actions {
+  padding: 15px 22px 18px !important;
+  border-top: 1px solid var(--gold-soft, #E7D6BC);
+  background: var(--ivory, #FBF6EC);
+  gap: 12px;
+}
+.admin-form-dialog .btn-cancel.mat-mdc-button {
+  --mdc-text-button-label-text-weight: 400;
+  color: var(--color-text-soft, #766B5E);
+  font-weight: 400;
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  background: var(--color-surface, #fff);
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.admin-form-dialog .btn-cancel.mat-mdc-button:hover {
+  background: var(--sand, #F3EBDC);
+  color: var(--color-primary-dark, var(--color-primary));
+  border-color: var(--gold, #CBA378);
+}
+.admin-form-dialog .btn-save.mat-mdc-unelevated-button {
+  --mdc-filled-button-label-text-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  height: 46px;
+  padding: 0 26px;
+  font-weight: 400;
+  letter-spacing: .3px;
+  color: #fff;
+  background: var(--color-primary, #C86D39) !important;
+  box-shadow: 0 10px 22px rgba(200, 109, 57, .34);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.admin-form-dialog .btn-save.mat-mdc-unelevated-button:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(200, 109, 57, .42);
+  filter: brightness(1.04);
+}
+.admin-form-dialog .btn-save.mat-mdc-unelevated-button[disabled] {
+  opacity: .6;
+  box-shadow: none;
+}
+.admin-form-dialog .btn-save mat-icon {
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+}
+
+@media (max-width: 600px) {
+  .admin-form-dialog .dialog-head {
+    padding: 18px 18px 18px;
+    gap: 13px;
+  }
+  .admin-form-dialog .dialog-head h2.mat-mdc-dialog-title {
+    font-size: 21px;
+  }
+  .admin-form-dialog .dialog-body {
+    padding: 18px 16px 8px !important;
+    gap: 14px;
+  }
+  .admin-form-dialog .row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .admin-form-dialog .mat-mdc-dialog-actions {
+    padding: 14px 16px 16px !important;
+  }
+}
+
+
+/* ---- Unified field error text (same style/font everywhere) ---- */
+.mat-mdc-form-field-error {
+  font-family: var(--font-sans, inherit) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: .1px;
+  color: #c0392b !important;
+}
+
+/* ---- Datepicker calendar: enterprise, on-brand ---- */
+.mat-datepicker-content {
+  --mat-datepicker-calendar-container-background-color: var(--color-surface, #fff);
+  --mat-datepicker-calendar-container-text-color: var(--color-text, #2C2927);
+  --mat-datepicker-calendar-container-shape: 16px;
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--color-primary, #C86D39);
+  --mat-datepicker-calendar-date-selected-state-text-color: #fff;
+  --mat-datepicker-calendar-date-hover-state-background-color: var(--sand, #F3EBDC);
+  --mat-datepicker-calendar-date-focus-state-background-color: rgba(200, 109, 57, .18);
+  --mat-datepicker-calendar-date-today-outline-color: var(--color-primary, #C86D39);
+  --mat-datepicker-calendar-date-in-range-state-background-color: rgba(200, 109, 57, .12);
+  --mat-datepicker-calendar-date-text-color: var(--color-text, #2C2927);
+  --mat-datepicker-calendar-body-label-text-color: var(--color-text-soft, #766B5E);
+  --mat-datepicker-calendar-period-button-text-color: var(--deep, #2E4C63);
+  --mat-datepicker-calendar-navigation-button-icon-color: var(--color-primary-dark, #A9552A);
+  --mat-datepicker-calendar-header-text-color: var(--color-text-soft, #766B5E);
+
+  background: var(--color-surface, #fff) !important;
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  border-radius: 16px !important;
+  box-shadow: 0 18px 44px rgba(44, 41, 39, .26) !important;
+  font-family: var(--font-sans, inherit) !important;
+  overflow: hidden;
+}
+
+.mat-datepicker-content .mat-calendar {
+  font-family: var(--font-sans, inherit) !important;
+}
+
+.mat-calendar-period-button {
+  font-weight: 700 !important;
+  color: var(--deep, #2E4C63) !important;
+}
+
+.mat-calendar-arrow {
+  fill: var(--deep, #2E4C63) !important;
+}
+
+.mat-calendar-table-header th {
+  color: var(--color-text-soft, #766B5E) !important;
+  font-weight: 600;
+}
+
+.mat-calendar-body-cell-content {
+  border-radius: 10px !important;
+}
+
+.mat-calendar-body-selected {
+  background: var(--color-primary, #C86D39) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(200, 109, 57, .35);
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: var(--color-primary, #C86D39) !important;
+}
+
+/* Datepicker toggle icon inside the field — clay + aligned */
+.mat-datepicker-toggle {
+  color: var(--color-primary, #C86D39);
+}
+.mat-mdc-form-field-icon-suffix .mat-datepicker-toggle .mat-mdc-icon-button.mat-mdc-button-base {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  --mdc-icon-button-state-layer-size: 40px;
+}
+
+/* ---- Header user dropdown: on-brand, rounded, elegant ---- */
+.user-menu-panel.mat-mdc-menu-panel {
+  min-width: 180px;
+  border-radius: 14px !important;
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  background: var(--color-surface, #fff);
+  box-shadow: 0 14px 34px rgba(44, 41, 39, .2) !important;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.user-menu-panel .mat-mdc-menu-content {
+  padding: 6px !important;
+}
+.user-menu-panel .logout-menu-item.mat-mdc-menu-item {
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--color-text, #2C2927);
+  transition: background-color .18s ease, color .18s ease;
+}
+.user-menu-panel .logout-menu-item .mat-icon {
+  color: var(--color-primary, #C86D39);
+  margin-right: 4px;
+}
+.user-menu-panel .logout-menu-item.mat-mdc-menu-item:hover {
+  background: rgba(200, 109, 57, .1);
+  color: var(--color-primary-dark, #A9552A);
+}
+.user-menu-panel .logout-menu-item.mat-mdc-menu-item:hover .mat-icon {
+  color: var(--color-primary-dark, #A9552A);
+}
+
+/* ---- Solid, bold action buttons app-wide (no gradients) ----
+   `html` prefix raises specificity above component-scoped
+   [_ngcontent] rules so gradients are overridden everywhere. */
+html .mdc-button.mat-mdc-unelevated-button.mat-mdc-button-base,
+html .mdc-button.mat-mdc-raised-button.mat-mdc-button-base {
+  background: var(--color-primary, #C86D39) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  letter-spacing: .2px;
+  transition: background-color .2s ease, box-shadow .2s ease !important;
+}
+html .mdc-button.mat-mdc-unelevated-button.mat-mdc-button-base:hover,
+html .mdc-button.mat-mdc-raised-button.mat-mdc-button-base:hover {
+  background: var(--deep, #2E4C63) !important;
+  box-shadow: 0 6px 16px rgba(38, 64, 79, .35) !important;
+}
+html .mdc-button.mat-mdc-unelevated-button.mat-mdc-button-base .mdc-button__label,
+html .mdc-button.mat-mdc-raised-button.mat-mdc-button-base .mdc-button__label,
+html .mdc-button.mat-mdc-unelevated-button.mat-mdc-button-base .mat-icon,
+html .mdc-button.mat-mdc-raised-button.mat-mdc-button-base .mat-icon {
+  color: #fff !important;
+}
+html .mdc-button.mat-mdc-unelevated-button.mat-mdc-button-base[disabled] {
+  opacity: .6;
+}
+
+/* ---- Tighter, consistent icon/text spacing inside buttons ---- */
+.mat-mdc-button-base .mdc-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mat-mdc-button-base .mat-icon,
+.mat-mdc-button-base .material-icons {
+  margin: 0 !important;
+}
+/* Header profile button: comfortable gap between avatar, name, arrow */
+.user-menu-button .mdc-button__label {
+  gap: 9px;
+}
+
+/* ---- Tooltip: on-brand deep surface with ivory text ---- */
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  background: var(--deep, #2E4C63) !important;
+  color: var(--ivory, #FBF6EC) !important;
+  font-family: var(--font-sans, inherit) !important;
+  font-size: 12.5px !important;
+  font-weight: 500;
+  letter-spacing: .2px;
+  border-radius: 8px !important;
+  padding: 7px 12px !important;
+  box-shadow: 0 6px 18px rgba(44, 41, 39, .22);
+}
+
+/* ---- Rounded outline for every Material field app-wide ---- */
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  border-radius: 12px;
+}
+.mdc-notched-outline__leading {
+  border-radius: 12px 0 0 12px !important;
+  width: 12px !important;
+}
+.mdc-notched-outline__trailing {
+  border-radius: 0 12px 12px 0 !important;
+}
+
+/* =========================================================
+   SELECT — "Variant A · Refined Pill" (Sandy Shores)
+   CLEAN, token-only theming. We do NOT touch Material's internal
+   layout (infix / trigger / arrow-wrapper), so the arrow keeps its
+   native, correctly-aligned position INSIDE the field. Only colours,
+   fill, focus ring and the dropdown panel are themed.
+========================================================= */
+.mat-mdc-select {
+  font-family: var(--font-sans, inherit);
+  --mat-select-trigger-text-color: var(--color-text, #2C2927);
+  --mat-select-enabled-trigger-text-color: var(--color-text, #2C2927);
+  --mat-select-placeholder-text-color: var(--color-text-soft, #766B5E);
+  --mat-select-enabled-arrow-color: var(--color-text-soft, #766B5E);
+  --mat-select-focused-arrow-color: var(--color-primary, #C86D39);
+  --mat-select-disabled-arrow-color: rgba(0, 0, 0, .26);
+  --mat-select-invalid-arrow-color: var(--color-warn, #C0432B);
+}
+
+/* Outline colours: gold hairline -> gold-dark hover -> clay focus. */
+.mat-mdc-form-field-type-mat-select {
+  --mdc-outlined-text-field-outline-color: var(--color-border, rgba(203, 163, 120, .5));
+  --mdc-outlined-text-field-hover-outline-color: var(--gold-dark, #B98F63);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-primary, #C86D39);
+  --mdc-outlined-text-field-label-text-color: var(--color-text-soft, #766B5E);
+  --mdc-outlined-text-field-hover-label-text-color: var(--color-primary, #C86D39);
+  --mdc-outlined-text-field-focus-label-text-color: var(--color-primary-dark, #A9552A);
+}
+
+/* Variant A pill fill + clay focus ring (visual only — no layout changes). */
+.mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper {
+  background: var(--ivory, #FBF6EC);
+  transition: box-shadow .18s ease, background .18s ease;
+}
+.mat-mdc-form-field-type-mat-select:hover .mat-mdc-text-field-wrapper {
+  background: var(--ivory-warm, #F1E7D4);
+}
+.mat-mdc-form-field-type-mat-select.mat-focused .mat-mdc-text-field-wrapper {
+  background: var(--ivory, #FBF6EC);
+  box-shadow: 0 0 0 3px rgba(200, 109, 57, .14);
+}
+
+/* Prefix icon = gold accent. */
+.mat-mdc-form-field-type-mat-select .mat-mdc-form-field-icon-prefix {
+  color: var(--gold-dark, #B98F63);
+}
+
+/* ---- ARROW: give it clear breathing room from the right edge and a
+   slightly larger, cleanly-centred glyph so it reads as aligned. ---- */
+.mat-mdc-form-field-type-mat-select .mat-mdc-form-field-infix {
+  padding-right: 10px;
+}
+/* Left breathing room so the value never touches the outline.
+   Only when there is NO prefix icon (prefix already provides the gap). */
+.mat-mdc-form-field-type-mat-select:not(:has(.mat-mdc-form-field-icon-prefix)) .mat-mdc-form-field-infix {
+  padding-left: 14px;
+}
+.mat-mdc-form-field-type-mat-select .mat-mdc-select-arrow-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-mdc-form-field-type-mat-select .mat-mdc-select-arrow {
+  width: 12px;
+  height: 12px;
+}
+.mat-mdc-form-field-type-mat-select .mat-mdc-select-arrow svg {
+  width: 22px;
+  height: 22px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Dropdown panel — themed surface + soft elevation. */
+.mat-mdc-select-panel {
+  --mat-select-panel-background-color: var(--color-surface, #FBF6EC);
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-lg, 0 16px 40px rgba(60, 48, 36, .16)) !important;
+  border: 1px solid var(--color-border, rgba(203, 163, 120, .34));
+}
+
+/* Options — themed states via Material's own layer tokens. */
+.mat-mdc-option {
+  --mat-option-label-text-color: var(--color-text, #2C2927);
+  --mat-option-selected-state-label-text-color: var(--color-primary-dark, #A9552A);
+  --mat-option-selected-state-layer-color: rgba(200, 109, 57, .12);
+  --mat-option-hover-state-layer-color: rgba(203, 163, 120, .16);
+  --mat-option-focus-state-layer-color: rgba(203, 163, 120, .22);
+  font-family: var(--font-sans, inherit);
+}
+
+/* Multi-select checkbox: clay when checked (on-brand accent). */
+.mat-mdc-option .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+.mat-mdc-option .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
+  background: var(--color-primary, #C86D39) !important;
+  border-color: var(--color-primary, #C86D39) !important;
+}
+
+/* ---- ngx-mat-select-search: themed sticky search box inside dropdown ---- */
+.planner-select-panel .mat-mdc-option.search-option,
+.mat-mdc-select-panel .mat-mdc-option.contains-mat-select-search {
+  padding: 6px 8px 8px !important;
+  min-height: 0 !important;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-surface, #fff) !important;
+  border-bottom: 1px solid var(--gold-soft, #E7D6BC);
+  border-radius: 0 !important;
+}
+.planner-select-panel .mat-mdc-option.search-option:hover,
+.mat-mdc-select-panel .mat-mdc-option.contains-mat-select-search:hover {
+  background: var(--color-surface, #fff) !important;
+}
+.mat-select-search-inner {
+  border: 1px solid var(--color-border, rgba(203, 163, 120, 0.5)) !important;
+  border-radius: 999px !important;
+  background: var(--sand, #F3EBDC) !important;
+  box-shadow: none !important;
+  padding: 0 6px 0 10px;
+}
+.mat-select-search-input.mat-mdc-input-element,
+input.mat-select-search-input {
+  font-family: var(--font-sans, inherit) !important;
+  color: var(--color-text, #2C2927) !important;
+  height: 40px;
+}
+.mat-select-search-input::placeholder {
+  color: var(--color-text-soft, #766B5E) !important;
+}
+.mat-select-search-clear .mat-icon,
+.mat-select-search-clear mat-icon {
+  color: var(--color-primary, #C86D39) !important;
+}
+.mat-select-search-no-entries-found {
+  font-family: var(--font-sans, inherit) !important;
+  color: var(--color-text-soft, #766B5E) !important;
+  padding: 12px !important;
+}
+
+/* ---- Paginator: premium look ---- */
+.mat-mdc-paginator {
+  font-family: var(--font-sans, inherit);
+  color: var(--ink, var(--color-text));
+  border-radius: 14px;
+}
+.mat-mdc-paginator .mat-mdc-paginator-range-label,
+.mat-mdc-paginator .mat-mdc-paginator-page-size-label {
+  font-weight: 600;
+  color: var(--color-text-soft, #766B5E);
+}
+.mat-mdc-paginator .mat-mdc-icon-button {
+  border-radius: 10px;
+  color: var(--color-primary-dark, var(--color-primary));
+  transition: background .16s ease, color .16s ease;
+}
+.mat-mdc-paginator .mat-mdc-icon-button:not([disabled]):hover {
+  background: var(--sand, #F3EBDC);
+}
+.mat-mdc-paginator .mat-mdc-icon-button[disabled] {
+  color: var(--gold-soft, #E7D6BC);
+}
+
+/* Page-size select: one clean rounded chip (no double border, arrow inside) */
+.mat-mdc-paginator-page-size-select {
+  width: auto;
+}
+.mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  border-radius: 999px;
+  padding: 0 10px 0 14px;
+}
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__leading,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__notch,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__trailing {
+  border: none !important;
+}
+.mat-mdc-paginator-page-size-select .mat-mdc-form-field-infix {
+  min-width: 34px;
+  width: auto;
+}
+.mat-mdc-paginator-page-size-select .mat-mdc-form-field-flex {
+  align-items: center;
+}
+.mat-mdc-paginator-page-size-select .mat-mdc-select-arrow-wrapper {
+  margin-left: 4px;
+}
+
+/* ---- Past Data (archive) tabs: clay active underline (indicator is a
+   Material-generated element outside component encapsulation) ---- */
+.archive .mdc-tab-indicator--active .mdc-tab-indicator__content--underline {
+  border-color: var(--color-primary, #C86D39) !important;
+  border-top-width: 3px;
+  border-radius: 3px 3px 0 0;
+}
+.archive .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--color-primary-dark, #A9552A);
+}
+
+/* ---- Snackbar / toast: rounded premium with accent bar ---- */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 14px !important;
+  box-shadow: 0 14px 40px rgba(44, 41, 39, .22) !important;
+  overflow: hidden;
+}
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action {
+  color: rgba(255, 255, 255, .92) !important;
+  font-weight: 700;
+  border-radius: 8px;
+}
+/* Keep the white "X" visible on hover/focus by darkening the button instead of whitening it */
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action:hover,
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action:focus {
+  background: rgba(0, 0, 0, .22) !important;
+  color: #fff !important;
+}
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action .mat-mdc-button-persistent-ripple::before {
+  background-color: rgba(0, 0, 0, .28) !important;
+}
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action .mdc-button__label {
+  color: #fff !important;
+}
+.snackbar-success .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #3a9d54, #2f7d43) !important;
+  color: #fff !important;
+  border-left: 5px solid #bce7c8 !important;
+}
+.snackbar-error .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #e05646, #c0392b) !important;
+  color: #fff !important;
+  border-left: 5px solid #f6c9c3 !important;
+}
+.snackbar-warning .mdc-snackbar__surface {
+  background: linear-gradient(135deg, var(--clay-light, #DB8A5B), var(--color-primary, #C86D39)) !important;
+  color: #fff !important;
+  border-left: 5px solid #f2dcc7 !important;
+}
+.snackbar-info .mdc-snackbar__surface {
+  background: linear-gradient(135deg, #3d6079, var(--deep, #2E4C63)) !important;
+  color: #fff !important;
+  border-left: 5px solid #cdd8e0 !important;
+}
+
+/* ---- Footer: mobile-friendly ---- */
+@media (max-width: 600px) {
+  footer {
+    height: auto !important;
+    min-height: 54px;
+    padding: 12px 16px !important;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  footer > div {
+    font-size: 12px;
+    line-height: 1.55;
+    white-space: normal;
+    word-break: normal;
+  }
+}
+
+/* ==========================
+   DATA GRID — Excel-style column filter menu
+   (rendered in a global overlay, so styled here)
+========================== */
+.col-filter-menu.mat-mdc-menu-panel {
+  max-width: none;
+  background: var(--color-surface, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--gold-soft);
+  box-shadow: var(--shadow-3, 0 14px 40px rgba(44, 41, 39, .18));
+  overflow: hidden;
+}
+
+.col-filter-menu .mat-mdc-menu-content {
+  padding: 0;
+  background: var(--color-surface, #ffffff);
+}
+
+.col-filter-menu .cfm {
+  width: 240px;
+  background: var(--color-surface, #ffffff);
+  font-family: var(--font-sans);
+}
+
+.col-filter-menu .cfm-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--gold-soft);
+}
+
+.col-filter-menu .cfm-search mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-soft);
+}
+
+.col-filter-menu .cfm-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.col-filter-menu .cfm-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.col-filter-menu .cfm-item:hover {
+  background: rgba(231, 214, 188, .3);
+}
+
+.col-filter-menu .cfm-all {
+  border-bottom: 1px solid var(--gold-soft);
+  font-weight: 600;
+}
+
+.col-filter-menu .cfm-list {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.col-filter-menu .cfm-item .mat-mdc-checkbox {
+  width: 100%;
+}
+
+.col-filter-menu .cfm-item .mdc-label {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.col-filter-menu .cfm-empty {
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.col-filter-menu .cfm-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 8px;
+  border-top: 1px solid var(--gold-soft);
+}
+
+.col-filter-menu .cfm-clear.mat-mdc-button {
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  height: 34px;
+}
+
+.col-filter-menu .cfm-clear .mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
 }

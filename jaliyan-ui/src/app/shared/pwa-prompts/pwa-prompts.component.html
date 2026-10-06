@@ -1,0 +1,45 @@
+<!-- Offline banner -->
+<div class="pwa-offline-banner" *ngIf="offline" role="status" aria-live="polite">
+  <mat-icon aria-hidden="true">cloud_off</mat-icon>
+  <span>{{ 'PWA.OFFLINE_BANNER' | translate }}</span>
+</div>
+
+<!-- Update available toast -->
+<div class="pwa-update-toast" *ngIf="updateAvailable" role="alert">
+  <mat-icon class="pwa-update-icon" aria-hidden="true">system_update_alt</mat-icon>
+  <div class="pwa-update-text">
+    <strong>{{ 'PWA.UPDATE_TITLE' | translate }}</strong>
+    <span>{{ 'PWA.UPDATE_BODY' | translate }}</span>
+  </div>
+  <button mat-flat-button class="pwa-update-btn" (click)="reload()">
+    {{ 'PWA.UPDATE_BUTTON' | translate }}
+  </button>
+</div>
+
+<!-- Custom install popup -->
+<div class="pwa-install-scrim" *ngIf="showInstallPopup" (click)="dismiss()"></div>
+<div class="pwa-install-card" *ngIf="showInstallPopup" role="dialog" aria-modal="true"
+     aria-labelledby="pwaInstallTitle">
+  <button class="pwa-close" type="button" (click)="dismiss()" aria-label="Close">
+    <mat-icon aria-hidden="true">close</mat-icon>
+  </button>
+
+  <div class="pwa-install-head">
+    <div class="pwa-icon-ring">
+      <img src="assets/icons/icon-192x192.png" alt="" class="pwa-app-icon" />
+    </div>
+    <span class="pwa-eyebrow">Shree Jalaram Padyatra</span>
+    <h3 id="pwaInstallTitle" class="pwa-title">{{ 'PWA.INSTALL_TITLE' | translate }}</h3>
+    <p class="pwa-body">{{ 'PWA.INSTALL_BODY' | translate }}</p>
+  </div>
+
+  <div class="pwa-actions">
+    <button mat-stroked-button class="pwa-later" type="button" (click)="dismiss()">
+      {{ 'PWA.INSTALL_LATER' | translate }}
+    </button>
+    <button mat-flat-button class="pwa-install-btn" type="button" (click)="install()">
+      <mat-icon aria-hidden="true">install_mobile</mat-icon>
+      {{ 'PWA.INSTALL_BUTTON' | translate }}
+    </button>
+  </div>
+</div>

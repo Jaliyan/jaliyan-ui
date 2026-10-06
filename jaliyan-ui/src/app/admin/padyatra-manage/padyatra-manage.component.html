@@ -1,10 +1,15 @@
 <div class="padyatra-manage">
-  <div class="page-head">
-    <button mat-stroked-button routerLink="/admin">
-      <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
-    </button>
-    <h1>{{ 'ADMIN.PADYATRA.TITLE' | translate }}</h1>
-    <button mat-raised-button color="primary" (click)="openForm()">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="heading">
+      <a mat-button class="back-link" routerLink="/admin">
+        <mat-icon>arrow_back</mat-icon> {{ 'ADMIN.BACK' | translate }}
+      </a>
+      <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+      <h1 class="title">{{ 'ADMIN.PADYATRA.TITLE' | translate }}</h1>
+    </div>
+    <button mat-flat-button class="btn-add" (click)="openForm()">
       <mat-icon>add</mat-icon> {{ 'ADMIN.PADYATRA.ADD' | translate }}
     </button>
   </div>
@@ -20,12 +25,12 @@
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
-  <div class="table-wrap" *ngIf="!loading">
-    <table mat-table [dataSource]="padyatras" class="mat-elevation-z1">
+  <div class="table-card" *ngIf="!loading">
+    <table mat-table [dataSource]="padyatras">
 
       <ng-container matColumnDef="year">
         <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.YEAR' | translate }}</th>
-        <td mat-cell *matCellDef="let p">{{ p.year }}</td>
+        <td mat-cell *matCellDef="let p"><span class="year-badge">{{ p.year }}</span></td>
       </ng-container>
 
       <ng-container matColumnDef="name">
@@ -39,45 +44,52 @@
       <ng-container matColumnDef="dates">
         <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PADYATRA.DATES' | translate }}</th>
         <td mat-cell *matCellDef="let p">
-          {{ p.startDate | date:'dd MMM yyyy' }} &rarr; {{ p.endDate | date:'dd MMM yyyy' }}
+          <span class="date-cell">
+            <mat-icon>event</mat-icon>
+            {{ p.startDate | date:'dd MMM yyyy' }} &rarr; {{ p.endDate | date:'dd MMM yyyy' }}
+          </span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="registrations">
         <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PADYATRA.REGISTRATIONS' | translate }}</th>
-        <td mat-cell *matCellDef="let p">{{ p.totalRegistrations || 0 }}</td>
+        <td mat-cell *matCellDef="let p">
+          <span class="reg-cell"><mat-icon>groups</mat-icon> {{ p.totalRegistrations || 0 }}</span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.STATUS' | translate }}</th>
         <td mat-cell *matCellDef="let p">
-          <span class="badge active" *ngIf="p.isActive">{{ 'ADMIN.ACTIVE' | translate }}</span>
-          <span class="badge inactive" *ngIf="!p.isActive">{{ 'ADMIN.INACTIVE' | translate }}</span>
+          <span class="status is-positive" *ngIf="p.isActive">{{ 'ADMIN.ACTIVE' | translate }}</span>
+          <span class="status is-neutral" *ngIf="!p.isActive">{{ 'ADMIN.INACTIVE' | translate }}</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="actions-col">{{ 'ADMIN.ACTIONS' | translate }}</th>
         <td mat-cell *matCellDef="let p" class="actions-col">
-          <button mat-icon-button color="primary" *ngIf="!p.isActive"
-                  (click)="activate(p)" [matTooltip]="'ADMIN.PADYATRA.ACTIVATE' | translate">
-            <mat-icon>power_settings_new</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" *ngIf="p.isActive"
-                  (click)="deactivate(p)" [matTooltip]="'ADMIN.PADYATRA.DEACTIVATE' | translate">
-            <mat-icon>toggle_off</mat-icon>
-          </button>
-          <a mat-icon-button *ngIf="!p.isActive" routerLink="/admin/archive"
-             [matTooltip]="'ADMIN.PADYATRA.VIEW_PAST' | translate">
-            <mat-icon>history</mat-icon>
-          </a>
-          <button mat-icon-button (click)="openForm(p)" [matTooltip]="'ADMIN.EDIT' | translate">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="remove(p)"
-                  [matTooltip]="'ADMIN.DELETE' | translate">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="row-actions">
+            <button mat-icon-button class="icon-btn act-activate" *ngIf="!p.isActive"
+                    (click)="activate(p)" [matTooltip]="'ADMIN.PADYATRA.ACTIVATE' | translate">
+              <mat-icon>power_settings_new</mat-icon>
+            </button>
+            <button mat-icon-button class="icon-btn act-deactivate" *ngIf="p.isActive"
+                    (click)="deactivate(p)" [matTooltip]="'ADMIN.PADYATRA.DEACTIVATE' | translate">
+              <mat-icon>toggle_off</mat-icon>
+            </button>
+            <a mat-icon-button class="icon-btn act-history" *ngIf="!p.isActive" routerLink="/admin/archive"
+               [matTooltip]="'ADMIN.PADYATRA.VIEW_PAST' | translate">
+              <mat-icon>history</mat-icon>
+            </a>
+            <button mat-icon-button class="icon-btn act-edit" (click)="openForm(p)" [matTooltip]="'ADMIN.EDIT' | translate">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="icon-btn act-delete" (click)="remove(p)"
+                    [matTooltip]="'ADMIN.DELETE' | translate">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </td>
       </ng-container>
 
@@ -87,7 +99,8 @@
     </table>
 
     <div class="empty" *ngIf="padyatras.length === 0">
-      {{ 'ADMIN.PADYATRA.EMPTY' | translate }}
+      <mat-icon>event_busy</mat-icon>
+      <div>{{ 'ADMIN.PADYATRA.EMPTY' | translate }}</div>
     </div>
   </div>
 </div>

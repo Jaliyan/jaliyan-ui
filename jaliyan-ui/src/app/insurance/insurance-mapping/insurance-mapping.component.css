@@ -1,16 +1,87 @@
 .insurance-container {
   max-width: 1000px;
-  margin: 20px auto;
-  padding: 0 12px;
+  margin: 0 auto;
+  padding: 16px 12px 28px;
+}
+
+/* Flush card so the warm theme background shows (matches dashboard) */
+.insurance-container .mat-mdc-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  --mdc-elevated-card-container-color: transparent;
 }
 
 .text-center {
   text-align: center;
 }
 
-mat-card-subtitle.text-center {
-  margin-top: 4px;
+/* Page header (eyebrow + heading) — matches the dashboard / padyatri list */
+.page-header {
   margin-bottom: 16px;
+}
+
+.page-header .heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--color-primary-dark, var(--color-primary));
+}
+
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold, #CBA378), transparent);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif, serif);
+  font-weight: 600;
+  color: var(--deep, var(--color-primary));
+  font-size: 24px;
+  line-height: 1.15;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.count-pill {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary-dark, var(--color-primary));
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--gold-soft, #E7D6BC);
+  padding: 3px 11px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-1, 0 1px 3px rgba(0, 0, 0, .08));
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--color-text-soft, #766B5E);
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 30px;
+  }
 }
 
 /* Summary */
@@ -30,7 +101,7 @@ mat-card-subtitle.text-center {
 }
 
 .summary-item.total {
-  background: #455a64;
+  background: var(--deep, #455a64);
 }
 
 .summary-item.received {
@@ -38,7 +109,7 @@ mat-card-subtitle.text-center {
 }
 
 .summary-item.pending {
-  background: #ef6c00;
+  background: var(--color-primary, #ef6c00);
 }
 
 /* Coverage progress */
@@ -60,92 +131,17 @@ mat-card-subtitle.text-center {
   white-space: nowrap;
 }
 
-/* Filters */
-.filter-toggle-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.search-field {
-  width: 100%;
-  margin-bottom: 12px;
-}
-
 .loading-row {
   display: flex;
   justify-content: center;
   padding: 32px 0;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 32px 0;
-  color: #757575;
-}
-
-/* Table */
-.table-container {
-  border-radius: 8px;
-  overflow: auto;
-}
-
-.full-width-table {
-  width: 100%;
-}
-
-.done-row {
-  background: rgba(46, 125, 50, 0.06);
-}
-
-/* Status badges */
-.status {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status.received {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.status.pending {
-  background: #fff3e0;
-  color: #ef6c00;
-}
-
-/* Mobile cards */
-.mobile-card {
-  margin-bottom: 10px;
-}
-
-.mobile-card.done {
-  background: rgba(46, 125, 50, 0.06);
-}
-
-.mobile-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.mobile-row .name {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.mobile-row .sub {
-  font-size: 13px;
-  color: #555;
-}
-
-.mobile-row .right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
+/* Projected grid action button */
+.mark-btn.mat-mdc-raised-button.mat-mdc-button-base {
+  white-space: nowrap;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-weight: 500 !important;
 }

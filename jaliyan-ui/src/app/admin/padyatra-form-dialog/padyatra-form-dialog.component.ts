@@ -45,8 +45,8 @@ export class PadyatraFormDialogComponent implements OnInit {
         this.data?.year ?? currentYear,
         [Validators.required, Validators.min(2000), Validators.max(2100)]
       ],
-      startDate: [this.data?.startDate ?? '', Validators.required],
-      endDate: [this.data?.endDate ?? '', Validators.required],
+      startDate: [this.data?.startDate ? new Date(this.data.startDate) : null, Validators.required],
+      endDate: [this.data?.endDate ? new Date(this.data.endDate) : null, Validators.required],
       descriptionEn: [this.data?.descriptionEn ?? '', Validators.maxLength(500)],
       descriptionGu: [this.data?.descriptionGu ?? '', Validators.maxLength(500)]
     }, { validators: [this.dateRangeValidator] });

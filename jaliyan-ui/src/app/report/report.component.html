@@ -1,6 +1,11 @@
 <div class="report-container">
-  <mat-card>
-    <mat-card-title class="text-center">Padyatri Reports</mat-card-title>
+  <mat-card class="report-card">
+    <div class="page-header">
+      <div class="heading">
+        <span class="eyebrow">{{ 'ShreeJalaramPadyatra' | translate }}</span>
+        <h2 class="title">Padyatri Reports</h2>
+      </div>
+    </div>
     <mat-card-content>
 
       <!-- Tabs -->
@@ -9,15 +14,14 @@
         <mat-tab label="Item Distribution"></mat-tab>
       </mat-tab-group> -->
 
-      <!-- TAB STYLE TOGGLE -->
-      <div class="tab-toggle-container">
-        <div class="tab-toggle" [class.active]="activeTab === 'attendance'" (click)="switchTab('attendance')">
-          Attendance
-        </div>
-
-        <div class="tab-toggle" [class.active]="activeTab === 'item'" (click)="switchTab('item')">
-          Item Distribution
-        </div>
+      <!-- Segmented tabs -->
+      <div class="segmented">
+        <button type="button" class="seg" [class.active]="activeTab === 'attendance'" (click)="switchTab('attendance')">
+          <mat-icon>how_to_reg</mat-icon> Attendance
+        </button>
+        <button type="button" class="seg" [class.active]="activeTab === 'item'" (click)="switchTab('item')">
+          <mat-icon>redeem</mat-icon> Item Distribution
+        </button>
       </div>
 
 
@@ -25,29 +29,31 @@
       <div class="filter-row" *ngIf="activeTab === 'attendance'">
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Select Stop</mat-label>
+          <mat-icon matPrefix>place</mat-icon>
           <mat-select [(ngModel)]="selectedStopId">
             <mat-option *ngFor="let loc of locations" [value]="loc.stopId">{{ loc.nameGu || loc.nameEn || loc.stopName }}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" (click)="loadAttendanceReport()"
-          [disabled]="!selectedStopId || loading" style="margin-bottom: 30px;">
-          {{ loading ? 'Loading...' : 'Show Report' }}
+        <button mat-flat-button class="btn-run" (click)="loadAttendanceReport()"
+          [disabled]="!selectedStopId || loading">
+          <mat-icon>bar_chart</mat-icon> {{ loading ? 'Loading...' : 'Show Report' }}
         </button>
       </div>
 
       <div class="filter-row" *ngIf="activeTab === 'item'">
-        <button mat-raised-button color="primary" (click)="loadItemReport()" [disabled]="loading">
-          {{ loading ? 'Loading...' : 'Load Item Report' }}
+        <button mat-flat-button class="btn-run" (click)="loadItemReport()" [disabled]="loading">
+          <mat-icon>inventory_2</mat-icon> {{ loading ? 'Loading...' : 'Load Item Report' }}
         </button>
       </div>
 
       <!-- Search -->
-      <mat-form-field appearance="outline" class="search-field" *ngIf="currentDataSource.data.length">
-        <mat-label>{{ 'SearchByNameOrBatch' | translate }}</mat-label>
-        <input matInput (keyup)="applyFilter($event)" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+      <div class="grid-toolbar" *ngIf="currentDataSource.data.length">
+        <div class="grid-search">
+          <mat-icon>search</mat-icon>
+          <input type="text" [placeholder]="'SearchByNameOrBatch' | translate" (keyup)="applyFilter($event)" />
+        </div>
+      </div>
 
       <!-- Summary -->
       <div *ngIf="!loading && activeTab === 'attendance' && totalCount > 0" class="summary-bar sticky-summary">
@@ -107,7 +113,7 @@
       </div>
 
       <!-- DESKTOP/TABLET TABLE VIEW -->
-      <div class="table-container mat-elevation-z2" *ngIf="!isMobile && currentDataSource.data.length && !loading">
+      <div class="table-container" *ngIf="!isMobile && currentDataSource.data.length && !loading">
 
         <table mat-table [dataSource]="currentDataSource" matSort class="full-width-table">
 
@@ -120,7 +126,9 @@
 
             <ng-container matColumnDef="fullName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-              <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+              <td mat-cell *matCellDef="let row">
+                <span class="name-cell"><mat-icon class="name-ico">person</mat-icon>{{ row.fullName }}</span>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="attendanceTime">
@@ -153,7 +161,7 @@
                   </ng-container>
 
                   <ng-container *ngIf="col === 'fullName'">
-                    {{ row[col] }}
+                    <span class="name-cell"><mat-icon class="name-ico">person</mat-icon>{{ row[col] }}</span>
                   </ng-container>
 
                   <ng-container *ngIf="col !== 'batchId' && col !== 'fullName'">

@@ -1,9 +1,8 @@
 <div class="padyatra-banner" *ngIf="padyatra">
   <img src="assets/images/Logo.jpg" alt="Logo" class="banner-logo" />
   <div class="banner-text">
-    <div class="banner-title">{{ padyatra.nameGu }} - {{ yearGu }}</div>
-    <div class="banner-dates" *ngIf="dateRangeGu">{{ dateRangeGu }}</div>
-    <div class="banner-en">{{ padyatra.nameEn }} {{ padyatra.year }}</div>
+    <span class="banner-title">{{ padyatra.nameGu }} - {{ yearGu }}</span>
+    <span class="banner-dates" *ngIf="dateRangeGu">{{ dateRangeGu }}</span>
   </div>
   <span class="banner-flag" *ngIf="padyatra.isActive">
     <mat-icon>check_circle</mat-icon> {{ 'ADMIN.ACTIVE' | translate }}

@@ -30,24 +30,71 @@
    TOP TOOLBAR
 ============================================================ */
 .mat-toolbar {
-  background: linear-gradient(135deg, var(--clay) 0%, var(--clay-dark) 100%);
+  background: var(--clay, #C86D39);
   color: #fff;
-  padding: 0 clamp(12px, 3vw, 24px);
+  padding: 0 clamp(14px, 3vw, 28px);
   height: var(--header-height);
-  box-shadow: var(--shadow-md);
+  border-bottom: 1px solid rgba(203, 163, 120, 0.45);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
 }
 
-.logo-text {
+/* ---------- BRAND ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.brand-mark {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1.5px var(--gold, #CBA378), 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  min-width: 0;
+}
+
+.brand-name {
   font-family: var(--font-serif);
   font-weight: 600;
   color: #ffffff;
-  font-size: clamp(18px, 2.4vw, 22px);
-  letter-spacing: 0.3px;
-  text-decoration: none;
-  transition: color var(--dur) var(--ease);
+  font-size: clamp(16px, 2.2vw, 20px);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
 }
 
-.logo-text:hover {
+.brand-sub {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--gold-soft, #E7D6BC);
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.brand:hover .brand-name {
   color: var(--gold-soft);
 }
 
@@ -61,29 +108,51 @@
 .desktop-menu {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
 
 .desktop-menu a.mat-button,
 .desktop-menu a.mat-mdc-button {
-  color: #fff;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+  position: relative;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.2px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .desktop-menu a.mat-button:hover,
 .desktop-menu a.mat-mdc-button:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  color: var(--gold-soft);
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #fff;
 }
 
-/* Active route highlight */
+/* Active route highlight — deep pill + gold underline */
 .desktop-menu a.active {
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 -2px 0 var(--gold-soft);
+  background: linear-gradient(140deg, #35566E 0%, var(--deep, #2E4C63) 55%, #24404F 100%);
+  box-shadow: inset 0 0 0 1px rgba(203, 163, 120, 0.45), 0 5px 14px rgba(38, 64, 79, 0.4);
+  font-weight: 700;
+}
+
+.desktop-menu a.active::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 3px;
+  height: 2.5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+  box-shadow: 0 0 10px rgba(203, 163, 120, 0.7);
+  animation: navUnderline var(--dur) var(--ease);
+}
+
+@keyframes navUnderline {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
 }
 
 .desktop-menu .mat-button mat-icon,
@@ -105,33 +174,48 @@
 }
 
 /* ============================================================
-   SIDENAV NAV LIST
+   SIDENAV NAV LIST  (Angular Material 19 / MDC class names)
 ============================================================ */
-.mat-nav-list a {
-  color: var(--ink);
-  font-weight: 500;
-  border-radius: var(--radius-sm);
+mat-sidenav .mat-mdc-nav-list {
+  padding: 8px 10px;
+  /* MDC label tokens -> match Sandy Shores body font & ink */
+  --mdc-list-list-item-label-text-font: var(--font-sans);
+  --mdc-list-list-item-label-text-color: var(--ink);
+  --mdc-list-list-item-label-text-weight: 500;
+  --mdc-list-list-item-label-text-size: 14.5px;
+}
+
+mat-sidenav a.mat-mdc-list-item {
+  border-radius: var(--radius-md, 12px);
+  margin: 2px 0;
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.mat-nav-list a:hover {
+mat-sidenav a.mat-mdc-list-item .mat-icon {
+  color: var(--deep);
+  margin-right: 14px;
+}
+
+/* Hover */
+mat-sidenav a.mat-mdc-list-item:hover {
   background-color: rgba(200, 109, 57, 0.10);
+  --mdc-list-list-item-label-text-color: var(--clay);
+}
+
+mat-sidenav a.mat-mdc-list-item:hover .mat-icon {
   color: var(--clay);
 }
 
-.mat-nav-list a.active {
-  background-color: rgba(200, 109, 57, 0.12);
-  color: var(--clay-dark);
-  font-weight: 600;
+/* Active route */
+mat-sidenav a.mat-mdc-list-item.active {
+  background: linear-gradient(135deg, rgba(200, 109, 57, 0.14), rgba(203, 163, 120, 0.16));
+  box-shadow: inset 3px 0 0 var(--clay);
+  --mdc-list-list-item-label-text-color: var(--clay-dark);
+  --mdc-list-list-item-label-text-weight: 600;
 }
 
-.mat-sidenav .mat-nav-list mat-icon {
-  color: var(--deep) !important;
-}
-
-.mat-sidenav .mat-nav-list a:hover mat-icon,
-.mat-sidenav .mat-nav-list a.active mat-icon {
-  color: var(--clay) !important;
+mat-sidenav a.mat-mdc-list-item.active .mat-icon {
+  color: var(--clay);
 }
 
 /* ============================================================
@@ -146,32 +230,37 @@
   color: #fff !important;
 }
 
-@media (max-width: 1024px) {
-  .desktop-menu a.mat-button:nth-child(n + 6),
-  .desktop-menu a.mat-mdc-button:nth-child(n + 6) {
-    display: none;
-  }
-  .more-menu-button {
-    display: inline-flex;
-  }
-}
-
 /* ============================================================
    USER MENU
 ============================================================ */
+.nav-divider {
+  width: 1px;
+  height: 26px;
+  margin: 0 6px 0 8px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 1px;
+}
+
 .user-menu-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: #fff;
   font-weight: 500;
-  padding: 6px 12px;
+  padding: 4px 10px 4px 5px;
   border-radius: var(--radius-pill);
-  transition: background-color var(--dur) var(--ease);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 
 .user-menu-button:hover {
   background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(203, 163, 120, 0.5);
+}
+
+.user-name {
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 .avatar-img {
@@ -190,7 +279,7 @@
 /* ============================================================
    MOBILE STYLES
 ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .desktop-menu {
     display: none;
   }
@@ -258,7 +347,7 @@
   margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .sidebar-user-info {
     flex-direction: column;
     text-align: center;
@@ -273,11 +362,11 @@
     align-items: center;
   }
 
-  .mat-sidenav .mat-list-item {
-    padding: 10px 16px;
+  .mat-sidenav .mat-mdc-list-item {
+    padding: 4px 8px;
   }
 
-  .mat-sidenav .mat-list-item mat-icon {
+  .mat-sidenav .mat-mdc-list-item .mat-icon {
     font-size: 22px;
   }
 
@@ -285,3 +374,28 @@
     justify-content: flex-start !important;
   }
 }
+
+/* ============ PWA Install button ============ */
+.toolbar-install-btn.mat-mdc-unelevated-button {
+  --mdc-filled-button-container-color: rgba(255, 255, 255, 0.16);
+  --mdc-filled-button-label-text-color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  margin-right: 6px;
+  height: 38px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.toolbar-install-btn.mat-mdc-unelevated-button:hover {
+  --mdc-filled-button-container-color: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
+}
+.toolbar-install-btn mat-icon {
+  margin-right: 4px;
+}
+@media (max-width: 640px) {
+  .toolbar-install-btn .install-label { display: none; }
+  .toolbar-install-btn.mat-mdc-unelevated-button { min-width: 0; padding: 0 10px; }
+}
+.install-nav-item mat-icon { color: var(--clay); }

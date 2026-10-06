@@ -24,6 +24,7 @@ import { PrintAllIdCardsDialogComponent } from './print-all-id-cards-dialog/prin
 import { MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { PadyatriViewDialogComponent } from './padyatri-view-dialog/padyatri-view-dialog.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Translation
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -63,14 +64,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSidenavContent,
     MatSidenavContainer,
     MatChipsModule,
+    MatTooltipModule,
     SharedModule,
-    TranslateModule.forRoot({
+    TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       },
-      defaultLanguage: 'en'
+      extend: true
     })
   ]
 })
